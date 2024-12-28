@@ -106,7 +106,7 @@ def parameter_generation():
 
     # Training parameters
     training_parameters = {
-    'data_dir':'path/to/dataset/speech_commands_v0.02',
+    'data_dir':'../dataset',
     'data_url':'https://storage.googleapis.com/download.tensorflow.org/data/speech_commands_v0.02.tar.gz',
     'epochs':40,
     'batch_size':128,
