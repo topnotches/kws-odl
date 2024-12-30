@@ -1,9 +1,9 @@
 class Config:
     def __init__(self,
-                batch_size=512,
+                batch_size=256,
                 input_size=24,
-                hidden_size=512,
-                num_classes=1211,
+                hidden_size=256,
+                num_classes=2361,
                 x_vector_size=512,
                 x_vec_extract_layer=6,
                 learning_rate=0.001,

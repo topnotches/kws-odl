@@ -51,22 +51,18 @@ class Dataset(Dataset):
         """
         vox_train_path = self.data_folder_path + '/VoxCeleb/vox1_dev_wav/*/*.wav'
         vox_test_path = self.data_folder_path + '/VoxCeleb/vox1_test_wav/*/*.wav'
-        print(vox_train_path)
-        print(vox_train_path)
-        print(vox_train_path)
-        print(vox_train_path)
-        print(vox_train_path)
-        print(vox_train_path)
+
         # Get the paths to all train and val data samples
         globs = glob.glob(vox_train_path)
         print('collectiong training and validation samples')
         
         # Gat the list of samples and labels
         samples = [(sample, 'none') for sample in globs]
-        labels = [os.path.basename(os.path.dirname(os.path.dirname(f))) for f in globs]
+        labels = [os.path.basename(os.path.dirname(f)) for f in globs]
+
         for i in range(self.augmentations_per_sample):
             samples = samples + [(sample, random.choice(['music', 'speech', 'noise', 'rir'])) for sample in globs]
-            labels = labels + [os.path.basename(os.path.dirname(os.path.dirname(f))) for f in globs]
+            labels = labels + [os.path.basename(os.path.dirname(f)) for f in globs]
 
         unique_labels = np.unique(labels)
         print('found:')
@@ -95,7 +91,7 @@ class Dataset(Dataset):
         
         # Gat the list of samples and labels
         test_samples = [(sample, 'none') for sample in globs]
-        test_labels = [os.path.basename(os.path.dirname(os.path.dirname(f))) for f in globs]
+        test_labels = [os.path.basename(os.path.dirname(f)) for f in globs]
             
         unique_labels = np.unique(test_labels)
         print('found:')
@@ -385,7 +381,7 @@ class Dataset(Dataset):
         aug_sample: ndarray
             The sample with the added noise
         """
-        rir_noise_path = self.data_folder_path + '/RIRS_NOISES/simulated_rirs/*/*/*.wav'
+        rir_noise_path = self.data_folder_path + '/rir_noises/RIRS_NOISES/simulated_rirs/*/*/*.wav'
         #print('load sample: augmenting with rir')
 
         rir_path = random.choice(glob.glob(rir_noise_path))

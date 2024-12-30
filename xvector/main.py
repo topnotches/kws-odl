@@ -23,10 +23,10 @@ from tdnn_layer import TdnnLayer
 class XVectorModel(pl.LightningModule):
     def __init__(self, input_size=24,
                 hidden_size=512,
-                num_classes=1211,
+                num_classes=2361,
                 x_vector_size=512,
                 x_vec_extract_layer=6,
-                batch_size=512,
+                batch_size=256,
                 learning_rate=0.001,
                 batch_norm=True,
                 dropout_p=0.0,
@@ -107,12 +107,13 @@ class XVectorModel(pl.LightningModule):
         self.log('train_step_acc', self.accuracy)
         return {'loss': outputs['loss'], 'acc': accuracy}
 
-    # Create graph and histogram for the logger
     def training_epoch_end(self, outputs):
-        if(self.current_epoch == 0):
-            sample = torch.rand((1, 299, 24))
-            self.logger.experiment.add_graph(XVectorModel(), sample)
+        if self.current_epoch == 0:  # Log the graph only on the first epoch
+            # Ensure the sample has the correct dimensions (batch_size, seq_len, input_size)
+            sample = torch.rand((1, 299, 24), device=self.device)
+            self.logger.experiment.add_graph(self, sample)
 
+        # Log histograms for parameters
         for name, params in self.named_parameters():
             self.logger.experiment.add_histogram(name, params, self.current_epoch)
 
@@ -196,10 +197,7 @@ if __name__ == "__main__":
     tb_logger = pl_loggers.TensorBoardLogger(save_dir="testlogs/")
     early_stopping_callback = EarlyStopping(monitor="val_step_loss", mode="min")
     checkpoint_callback = ModelCheckpoint(monitor='val_step_loss', save_top_k=10, save_last=True, verbose=True)
-    print(config.checkpoint_path)
-    print(config.checkpoint_path)
-    print(config.checkpoint_path)
-    print(config.checkpoint_path)
+
     if(config.checkpoint_path == 'none'):
         model = XVectorModel(input_size=config.input_size,
                             hidden_size=config.hidden_size,
