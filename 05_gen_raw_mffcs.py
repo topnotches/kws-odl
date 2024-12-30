@@ -7,6 +7,7 @@ import os.path
 import random
 import shutil
 import os
+import logging
 import re
 import glob
 import time
@@ -224,28 +225,48 @@ class AudioProcessor(object):
         else:
             data_augmentation_parameters["foreground_volume"] = 1
 
+        # Configure logging
+        logging.basicConfig(
+            level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
+        )
         # Load data
         try:
             sf_loader, _ = sf.read(data_augmentation_parameters["wav_filename"])
             wav_file = torch.Tensor(np.array([sf_loader]))
-        except:
-            pass
+        except Exception as e:
+            print(f"Error loading WAV file '{data_augmentation_parameters['wav_filename']}': {e}")
+            wav_file = None  # Explicitly set wav_file to None if reading fails
+
+        # Ensure wav_file is assigned before further processing
+        if wav_file is None:
+            raise ValueError(f"wav_file is None. Failed to load '{data_augmentation_parameters['wav_filename']}'.")
 
         # Ensure data length is equal to the number of desired samples
-        if len(wav_file[0]) < self.data_processing_parameters["desired_samples"]:
-            wav_file = torch.nn.ConstantPad1d(
-                (
+        try:
+            desired_samples = self.data_processing_parameters["desired_samples"]
+            if len(wav_file[0]) < desired_samples:
+                wav_file = torch.nn.ConstantPad1d(
+                    (
+                        0,
+                        desired_samples - len(wav_file[0]),
+                    ),
                     0,
-                    self.data_processing_parameters["desired_samples"]
-                    - len(wav_file[0]),
-                ),
-                0,
-            )(wav_file[0])
-        else:
-            wav_file = wav_file[0][: self.data_processing_parameters["desired_samples"]]
-        scaled_foreground = torch.mul(
-            wav_file, data_augmentation_parameters["foreground_volume"]
-        )
+                )(wav_file[0])
+            else:
+                wav_file = wav_file[0][:desired_samples]
+        except Exception as e:
+            print(f"Error processing WAV file data length: {e}")
+            raise
+
+        # Scale foreground
+        try:
+            scaled_foreground = torch.mul(
+                wav_file, data_augmentation_parameters["foreground_volume"]
+            )
+        except Exception as e:
+            print(f"Error scaling foreground: {e}")
+            raise
+
 
         # Padding wrt the time shift offset
         pad_tuple = tuple(data_augmentation_parameters["time_shift_padding"][0])
@@ -317,16 +338,20 @@ class AudioProcessor(object):
 
         for word_path in word_paths:
             # path = os.path.join(dataset_path_raw_mfccs, raw_mfccs_path)
-            somepath = dataset_path_raw_mfccs + "/" + word_path.split("/")[-1]
-            os.mkdir(somepath)
-            wav_paths = [f.path for f in os.scandir(word_path)]
+            if word_path[-1] != '_':
+                somepath = dataset_path_raw_mfccs + "/" + word_path.split("/")[-1]
+                os.mkdir(somepath)
+                wav_paths = [f.path for f in os.scandir(word_path)]
 
-            for wav_path in wav_paths:
-                someotherpath = (
-                    somepath + "/" + wav_path.split("/")[-1].split(".wav")[0]
-                )
-                _, mfccs = self.compute_mfccs_sample(wav_path)
-                mfccs.numpy().tofile(someotherpath)
+                for wav_path in wav_paths:
+                    someotherpath = (
+                        somepath + "/" + wav_path.split("/")[-1].split(".wav")[0]
+                    )
+                    _, mfccs = self.compute_mfccs_sample(wav_path)
+                    mfccs.numpy().tofile(someotherpath)
+            else:
+                print("skipping word: " + word_path)
+
 
 if __name__ == "__main__":
 
