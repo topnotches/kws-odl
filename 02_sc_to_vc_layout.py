@@ -5,6 +5,7 @@ import shutil
 from pathlib import Path
 import random
 
+
 def create_voxceleb_layout(speech_commands_path, output_path):
     # Define paths
     speech_commands_path = Path(speech_commands_path)
@@ -21,7 +22,11 @@ def create_voxceleb_layout(speech_commands_path, output_path):
         shutil.rmtree(test_path)
     if output_path.exists():
         for item in output_path.iterdir():
-            if item.is_dir() and item.name != "vox1_dev_wav" and item.name != "vox1_test_wav":
+            if (
+                item.is_dir()
+                and item.name != "vox1_dev_wav"
+                and item.name != "vox1_test_wav"
+            ):
                 shutil.rmtree(item)
 
     dev_path.mkdir(parents=True, exist_ok=True)
@@ -83,20 +88,33 @@ def create_voxceleb_layout(speech_commands_path, output_path):
 
             if speaker_id not in used_speakers:
                 # Create multiple pairs for the speaker
-                same_files = [f for f in test_files if f.parts[-2] == speaker_id and f != file1]
-                diff_files = [f for f in test_files if f.parts[-2] != speaker_id and f.stem.split("_")[1] == file1.stem.split("_")[1]]
+                same_files = [
+                    f for f in test_files if f.parts[-2] == speaker_id and f != file1
+                ]
+                diff_files = [
+                    f
+                    for f in test_files
+                    if f.parts[-2] != speaker_id
+                    and f.stem.split("_")[1] == file1.stem.split("_")[1]
+                ]
 
                 # Limit to 5 pairs each to avoid excessive runtime
                 same_files = same_files[:20]
                 diff_files = diff_files[:20]
 
                 for same_file in same_files:
-                    veri_file.write(f"1 {file1.parent.name}/{file1.name} {same_file.parent.name}/{same_file.name}\n")
+                    veri_file.write(
+                        f"1 {file1.parent.name}/{file1.name} {same_file.parent.name}/{same_file.name}\n"
+                    )
 
                 for diff_file in diff_files:
-                    veri_file.write(f"0 {file1.parent.name}/{file1.name} {diff_file.parent.name}/{diff_file.name}\n")
+                    veri_file.write(
+                        f"0 {file1.parent.name}/{file1.name} {diff_file.parent.name}/{diff_file.name}\n"
+                    )
 
                 used_speakers.add(speaker_id)
+
+
 if __name__ == "__main__":
     # Path to the Speech Commands dataset (v0.0.2)
     speech_commands_path = "./dataset"
@@ -106,4 +124,6 @@ if __name__ == "__main__":
 
     create_voxceleb_layout(speech_commands_path, output_path)
 
-    print(f"Converted Speech Commands dataset to VoxCeleb layout with train/dev split by speaker ID in {output_path}")
+    print(
+        f"Converted Speech Commands dataset to VoxCeleb layout with train/dev split by speaker ID in {output_path}"
+    )
