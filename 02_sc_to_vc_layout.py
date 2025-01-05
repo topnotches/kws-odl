@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-
 import os
 import shutil
 from pathlib import Path
 import random
-
 
 def create_voxceleb_layout(speech_commands_path, output_path):
     # Define paths
@@ -44,8 +42,11 @@ def create_voxceleb_layout(speech_commands_path, output_path):
                 speaker_id = audio_file.stem.split("_")[0]
                 speaker_ids.add(speaker_id)
 
-    speaker_ids = list(speaker_ids)
+    speaker_ids = sorted(speaker_ids)
     random.shuffle(speaker_ids)  # Shuffle the speaker IDs for randomness
+
+    # Assign numeric IDs to ensure proper formatting
+    formatted_speaker_ids = {sid: f"id{int(i + 1):07d}" for i, sid in enumerate(speaker_ids)}
 
     # Split speaker IDs into 90% for dev and 10% for test
     split_index = int(len(speaker_ids) * 0.9)
@@ -58,6 +59,7 @@ def create_voxceleb_layout(speech_commands_path, output_path):
         for audio_file in audio_files:
             # Extract the speaker ID from the filename
             speaker_id = audio_file.stem.split("_")[0]
+            formatted_speaker_id = formatted_speaker_ids[speaker_id]
 
             # Append the keyword (word) to the file name
             word = keyword.name
@@ -65,55 +67,47 @@ def create_voxceleb_layout(speech_commands_path, output_path):
 
             # Determine whether the file belongs to dev or test set
             if speaker_id in dev_speakers:
-                speaker_dir = dev_path / f"id{speaker_id}"
+                speaker_dir = dev_path / formatted_speaker_id
             else:
-                speaker_dir = test_path / f"id{speaker_id}"
+                speaker_dir = test_path / formatted_speaker_id
 
             # Create the directory if it doesn't exist
             speaker_dir.mkdir(parents=True, exist_ok=True)
 
             # Copy the audio file to the appropriate directory
             shutil.copy(audio_file, speaker_dir / new_file_name)
-    # Generate the veri_test2.txt file
 
     # Generate the veri_test2.txt file
     veri_test_path = output_path / "veri_test2.txt"
     with veri_test_path.open("w") as veri_file:
         test_files = list(test_path.glob("**/*.wav"))
-        used_speakers = set()
+        random.shuffle(test_files)  # Shuffle the test files for diversity
 
-        # Iterate over test files and create multiple pairs per speaker
+        # Create pairs for verification
         for file1 in test_files:
-            speaker_id = file1.parts[-2]
+            speaker_id1 = file1.parts[-2]
 
-            if speaker_id not in used_speakers:
-                # Create multiple pairs for the speaker
-                same_files = [
-                    f for f in test_files if f.parts[-2] == speaker_id and f != file1
-                ]
-                diff_files = [
-                    f
-                    for f in test_files
-                    if f.parts[-2] != speaker_id
-                    and f.stem.split("_")[1] == file1.stem.split("_")[1]
-                ]
+            # Same speaker pairs
+            same_files = [
+                f for f in test_files if f.parts[-2] == speaker_id1 and f != file1
+            ]
+            random.shuffle(same_files)
+            same_files = same_files[:200]  # Limit to 20 pairs per speaker
 
-                # Limit to 5 pairs each to avoid excessive runtime
-                same_files = same_files[:20]
-                diff_files = diff_files[:20]
+            for same_file in same_files:
+                veri_file.write(
+                    f"1 {file1.parent.parent.name}/{file1.parent.name}/{file1.name} {same_file.parent.parent.name}/{same_file.parent.name}/{same_file.name}\n"
+                )
 
-                for same_file in same_files:
-                    veri_file.write(
-                        f"1 {file1.parent.name}/{file1.name} {same_file.parent.name}/{same_file.name}\n"
-                    )
+            # Different speaker pairs
+            diff_files = [f for f in test_files if f.parts[-2] != speaker_id1]
+            random.shuffle(diff_files)
+            diff_files = diff_files[:200]  # Limit to 20 pairs per speaker
 
-                for diff_file in diff_files:
-                    veri_file.write(
-                        f"0 {file1.parent.name}/{file1.name} {diff_file.parent.name}/{diff_file.name}\n"
-                    )
-
-                used_speakers.add(speaker_id)
-
+            for diff_file in diff_files:
+                veri_file.write(
+                    f"0 {file1.parent.parent.name}/{file1.parent.name}/{file1.name} {diff_file.parent.parent.name}/{diff_file.parent.name}/{diff_file.name}\n"
+                )
 
 if __name__ == "__main__":
     # Path to the Speech Commands dataset (v0.0.2)

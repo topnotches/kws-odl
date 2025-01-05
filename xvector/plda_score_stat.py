@@ -65,18 +65,18 @@ class plda_score_stat_object():
             is_match = bool(int(pair.split(" ")[0].rstrip().split(".")[0].strip()))
             enrol_id = pair.split(" ")[1].strip()
             test_id = pair.split(" ")[2].strip()
-
+            
             i = int(np.where(self.plda_scores.modelset == enrol_id)[0][0])
             if(not enrol_id in checked_list):
                 checked_list.append(enrol_id)
                 self.checked_xvec.append(np.array(self.x_vectors_test.loc[self.x_vectors_test['id'] == enrol_id, 'xvector'].item()[1:-1].split(), dtype=np.float64))
-                self.checked_label.append(int(enrol_id.split(".")[0].split("/")[0][2:]))
+                self.checked_label.append(int(enrol_id.split(".")[0].split("/")[1][2:]))
                 
             j = int(np.where(self.plda_scores.segset == test_id)[0][0])
             if(not test_id in checked_list):
                 checked_list.append(test_id)
                 self.checked_xvec.append(np.array(self.x_vectors_test.loc[self.x_vectors_test['id'] == test_id, 'xvector'].item()[1:-1].split(), dtype=np.float64))
-                self.checked_label.append(int(test_id.split(".")[0].split("/")[0][2:]))
+                self.checked_label.append(int(test_id.split(".")[0].split("/")[1][2:]))
 
             current_score = float(self.plda_scores.scoremat[i,j])
             if(is_match):
@@ -94,7 +94,7 @@ class plda_score_stat_object():
         Calculate the EER and minDCF.
         """
         self.eer, self.eer_th = EER(torch.tensor(self.positive_scores), torch.tensor(self.negative_scores))
-        self.min_dcf, self.min_dcf_th = minDCF(torch.tensor(self.positive_scores), torch.tensor(self.negative_scores), p_target=0.5)
+        self.min_dcf, self.min_dcf_th = minDCF(torch.tensor(self.positive_scores), torch.tensor(self.negative_scores), p_target=0.01)
 
     def plot_images(self, writer):
         """
@@ -106,7 +106,7 @@ class plda_score_stat_object():
         """
         split_xvec = []
         split_label = []
-        group_kfold = sklearn.model_selection.GroupKFold(n_splits=2)
+        group_kfold = sklearn.model_selection.GroupKFold(n_splits=1)
         groups1234 = np.where(self.checked_label<10290, 0, 1)
         for g12, g34 in group_kfold.split(self.checked_xvec, self.checked_label, groups1234):
             x12, x34 = self.checked_xvec[g12], self.checked_xvec[g34]
