@@ -54,28 +54,30 @@ def create_voxceleb_layout(speech_commands_path, output_path):
     test_speakers = set(speaker_ids[split_index:])
 
     for keyword in keywords:
-        audio_files = list(keyword.glob("*.wav"))
+        if keyword.name != "dataset/_background_noise_":
+            
+            audio_files = list(keyword.glob("*.wav"))
 
-        for audio_file in audio_files:
-            # Extract the speaker ID from the filename
-            speaker_id = audio_file.stem.split("_")[0]
-            formatted_speaker_id = formatted_speaker_ids[speaker_id]
+            for audio_file in audio_files:
+                # Extract the speaker ID from the filename
+                speaker_id = audio_file.stem.split("_")[0]
+                formatted_speaker_id = formatted_speaker_ids[speaker_id]
 
-            # Append the keyword (word) to the file name
-            word = keyword.name
-            new_file_name = f"{audio_file.stem}_{word}{audio_file.suffix}"
+                # Append the keyword (word) to the file name
+                word = keyword.name
+                new_file_name = f"{audio_file.stem}_{word}{audio_file.suffix}"
 
-            # Determine whether the file belongs to dev or test set
-            if speaker_id in dev_speakers:
-                speaker_dir = dev_path / formatted_speaker_id
-            else:
-                speaker_dir = test_path / formatted_speaker_id
+                # Determine whether the file belongs to dev or test set
+                if speaker_id in dev_speakers:
+                    speaker_dir = dev_path / formatted_speaker_id
+                else:
+                    speaker_dir = test_path / formatted_speaker_id
 
-            # Create the directory if it doesn't exist
-            speaker_dir.mkdir(parents=True, exist_ok=True)
+                # Create the directory if it doesn't exist
+                speaker_dir.mkdir(parents=True, exist_ok=True)
 
-            # Copy the audio file to the appropriate directory
-            shutil.copy(audio_file, speaker_dir / new_file_name)
+                # Copy the audio file to the appropriate directory
+                shutil.copy(audio_file, speaker_dir / new_file_name)
 
     # Generate the veri_test2.txt file
     veri_test_path = output_path / "veri_test2.txt"
@@ -92,7 +94,7 @@ def create_voxceleb_layout(speech_commands_path, output_path):
                 f for f in test_files if f.parts[-2] == speaker_id1 and f != file1
             ]
             random.shuffle(same_files)
-            same_files = same_files[:200]  # Limit to 20 pairs per speaker
+            same_files = same_files[:40]  # Limit to 20 pairs per speaker
 
             for same_file in same_files:
                 veri_file.write(
@@ -102,7 +104,7 @@ def create_voxceleb_layout(speech_commands_path, output_path):
             # Different speaker pairs
             diff_files = [f for f in test_files if f.parts[-2] != speaker_id1]
             random.shuffle(diff_files)
-            diff_files = diff_files[:200]  # Limit to 20 pairs per speaker
+            diff_files = diff_files[:40]  # Limit to 20 pairs per speaker
 
             for diff_file in diff_files:
                 veri_file.write(

@@ -65,7 +65,12 @@ class plda_score_stat_object():
             is_match = bool(int(pair.split(" ")[0].rstrip().split(".")[0].strip()))
             enrol_id = pair.split(" ")[1].strip()
             test_id = pair.split(" ")[2].strip()
-            
+            print("ARGHHH")
+            print(self.plda_scores.modelset)
+            print("likasæejfoisejf")
+            print(enrol_id)
+            print("eadf<xjklm,.wadjklxmdxeajklæm")
+            print(np.where(self.plda_scores.modelset == enrol_id))
             i = int(np.where(self.plda_scores.modelset == enrol_id)[0][0])
             if(not enrol_id in checked_list):
                 checked_list.append(enrol_id)

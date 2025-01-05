@@ -187,7 +187,7 @@ if __name__ == "__main__":
     config = Config(data_folder_path='../dataset_xvector',
                     checkpoint_path='/home/topnotches/thesis/kws-odl/version_12/checkpoints/epoch=7-step=7984.ckpt',
                     train_x_vector_model = False,
-                    extract_x_vectors = True,
+                    extract_x_vectors = False,
                     train_plda = True,
                     test_plda = True,
                     x_vec_extract_layer=6,
