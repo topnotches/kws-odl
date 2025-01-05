@@ -1,2 +1,11 @@
 dataset*
 *.log
+version_*
+*.gz
+*.tar
+*.zip
+__pycache__
+.vscode
+simulation/bin/
+
+*copy*
