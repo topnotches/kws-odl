@@ -185,9 +185,9 @@ if __name__ == "__main__":
     # earlier parts of the programm must have been executed at least once
     print('setting up model and trainer parameters')
     config = Config(data_folder_path='../dataset_xvector',
-                    checkpoint_path='/home/topnotches/thesis/kws-odl/version_12/checkpoints/epoch=7-step=7984.ckpt',
+                    checkpoint_path='/home/topnotches/thesis/kws-odl/version_12/checkpoints/epoch=14-step=14970.ckpt',
                     train_x_vector_model = False,
-                    extract_x_vectors = False,
+                    extract_x_vectors = True,
                     train_plda = True,
                     test_plda = True,
                     x_vec_extract_layer=6,
@@ -245,11 +245,11 @@ if __name__ == "__main__":
         if(config.train_x_vector_model):
             trainer.test(model)
             x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv('x_vectors/x_vector_train_v1_5_l7relu.csv')#TODO set to default name
+            x_vector.to_csv('x_vectors/TRAINING_EXTRACTED.csv')#TODO set to default name
         elif(config.checkpoint_path != 'none'):
             trainer.test(model, ckpt_path=config.checkpoint_path)
             x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv('x_vectors/x_vector_train_v1_5_l7relu.csv')#TODO set to default name
+            x_vector.to_csv('x_vectors/TRAINING_EXTRACTED.csv')#TODO set to default name
         else:
             print('could not extract train x-vectors')
 
@@ -259,11 +259,11 @@ if __name__ == "__main__":
         if(config.train_x_vector_model):
             trainer.test(model)
             x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv('x_vectors/x_vector_test_v1_5_l7relu.csv')#TODO set to default name
+            x_vector.to_csv('x_vectors/jespers_sanity_test_my_faith.csv')#TODO set to default name
         elif(config.checkpoint_path != 'none'):
             trainer.test(model, ckpt_path=config.checkpoint_path)
             x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv('x_vectors/x_vector_test_v1_5_l7relu.csv')#TODO set to default name
+            x_vector.to_csv('x_vectors/jespers_sanity_test_my_faith.csv')#TODO set to default name
         else:
             print('could not extract test x-vectors')
     
@@ -274,7 +274,7 @@ if __name__ == "__main__":
         if not os.path.exists('plda'):
             os.makedirs('plda')
         # Extract the x-vectors, labels and id from the csv
-        x_vectors_train = pd.read_csv('x_vectors/x_vector_train_v1_5_l7relu.csv')#TODO set to default name
+        x_vectors_train = pd.read_csv('x_vectors/TRAINING_EXTRACTED.csv')#TODO set to default name
         x_id_train = np.array(x_vectors_train.iloc[:, 1])
         x_label_train = np.array(x_vectors_train.iloc[:, 2], dtype=int)
         x_vec_train = np.array([np.array(x_vec[1:-1].split(), dtype=np.float64) for x_vec in x_vectors_train.iloc[:, 3]])
@@ -315,7 +315,7 @@ if __name__ == "__main__":
     if(config.test_plda):
         # Extract the x-vectors, labels and id from the csv
         print('loading x_vector data')
-        x_vectors_test = pd.read_csv('x_vectors/x_vector_test_v1_5_l7relu.csv')#TODO set to default name
+        x_vectors_test = pd.read_csv('x_vectors/jespers_sanity_test_my_faith.csv')#TODO set to default name
         x_vectors_test.columns = ['index', 'id', 'label', 'xvector']
         score = plda_score_stat_object(x_vectors_test)
 

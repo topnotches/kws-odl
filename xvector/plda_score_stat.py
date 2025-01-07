@@ -71,7 +71,20 @@ class plda_score_stat_object():
             print(enrol_id)
             print("eadf<xjklm,.wadjklxmdxeajklæm")
             print(np.where(self.plda_scores.modelset == enrol_id))
-            i = int(np.where(self.plda_scores.modelset == enrol_id)[0][0])
+            # Assuming self.plda_scores.modelset is a list-like iterable
+
+            try:
+                # Try finding the index of `enrol_id` in `self.plda_scores.modelset`
+                i = int(np.where(self.plda_scores.modelset == enrol_id)[0][0])
+            except Exception as e:
+                # If it fails, write `self.plda_scores.modelset` to a file
+                output_file = "modelset_output.txt"
+                with open(output_file, "w") as file:
+                    for item in self.plda_scores.modelset:
+                        file.write(f"{item}\n")
+                print(f"An error occurred: {e}")
+                print(f"Modelset items have been written to {output_file}")
+                
             if(not enrol_id in checked_list):
                 checked_list.append(enrol_id)
                 self.checked_xvec.append(np.array(self.x_vectors_test.loc[self.x_vectors_test['id'] == enrol_id, 'xvector'].item()[1:-1].split(), dtype=np.float64))
