@@ -13,13 +13,14 @@ void test_conv_layer_sequential() {
     const uint8_t kernel_width = 3;
     const uint8_t kernel_height = 3;
     const uint8_t output_feature_count = 4;
+    const uint8_t batch_size = 2;
 
     // Calculate output dimensions
     const uint16_t output_width = (input_width - kernel_width) / stride + 1;
     const uint16_t output_height = (input_height - kernel_height) / stride + 1;
 
     // Initialize input features
-    float input_features[input_width * input_height * input_depth] = {
+    float input_features[batch_size * input_width * input_height * input_depth] = {
         0, 1, 2, 3,
         1, 0, 1, 2,
         2, 1, 0, 1,
@@ -38,7 +39,27 @@ void test_conv_layer_sequential() {
         3, 2, 1, 0,
         2, 1, 0, 1,
         1, 0, 1, 2,
-        0, 1, 2, 3
+        0, 1, 2, 3,
+
+        0, 1, 2, 3,
+        1, 0, 1, 2,
+        2, 1, 0, 1,
+        3, 2, 1, 0,
+
+        0, 1, 2, 3,
+        1, 0, 1, 2,
+        2, 1, 0, 1,
+        3, 2, 1, 0,
+
+        3, 2, 1, 0,
+        2, 1, 0, 1,
+        1, 0, 1, 2,
+        0, 1, 2, 3,
+            
+        3, 2, 1, 0,
+        2, 1, 0, 1,
+        1, 0, 1, 2,
+        0, 1, 2, 3,
     };
 
     // Initialize convolution kernel
@@ -114,7 +135,15 @@ void test_conv_layer_sequential() {
     };
 
     // Expected output features
-    float expected_output_features[output_width * output_height * output_feature_count] = {
+    float expected_output_features[batch_size * output_width * output_height * output_feature_count] = {
+        0.000000, -16.000000, 
+        16.000000, 0.000000, 
+        0.000000, 16.000000, 
+        -16.000000, 0.000000, 
+        16.000000, 0.000000, 
+        0.000000, -16.000000, 
+        38.000000, 38.000000, 
+        38.000000, 38.000000,
         0.000000, -16.000000, 
         16.000000, 0.000000, 
         0.000000, 16.000000, 
@@ -126,12 +155,12 @@ void test_conv_layer_sequential() {
     };
 
     // Allocate memory for output features
-    float output_features[output_width * output_height * output_feature_count];
+    float output_features[batch_size * output_width * output_height * output_feature_count];
 
     // Run the convolution layer
     conv_layer_sequential(input_features, output_features, conv_kernels,
                           input_width, input_height, input_depth,
-                          stride, kernel_width, kernel_height, output_feature_count);
+                          stride, kernel_width, kernel_height, output_feature_count, batch_size);
 
     // Validate the output features
     for (uint16_t slopper = 0; slopper < output_feature_count; slopper++) {
@@ -139,6 +168,7 @@ void test_conv_layer_sequential() {
             for (uint16_t col = 0; col < output_width; col++) {
                 uint16_t index = slopper * output_width * output_height + row * output_width + col;
                 // printf("%f ", output_features[index]);
+                // printf("%f \n", expected_output_features[index]);
                 assert(fabs(output_features[index] - expected_output_features[index]) < 1e-6);
             }
             // printf("\n");
