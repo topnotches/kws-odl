@@ -1,0 +1,35 @@
+
+Note:
+This is from running commit 9b31960d9082cbe0232305946071fe6bbced57da BEFORE AND AFTER setting inverting/scrambling 754 and 6056 labels
+
+Note some small scrambling calculations,
+p_target = 10e-2
+scramble #0
+total_labels = 42874
+inverted_labels = 754
+noise_percentage = inverted_labels/total_labels = 754/42874 -> 1.7586416 %
+err_before = 6.58 %
+err_after  = 7.27 %
+err_diff   = err_after - err_before = (7.27 - 6.58) % = 0.69 %
+
+scramble #1
+total_labels = 42874
+inverted_labels = 6056
+noise_percentage = inverted_labels/total_labels = 6056/42874 -> 14.1251108 %
+err_before = 6.58 %
+err_after  = 9.66 %
+err_diff   = err_after - err_before = (9.66 - 6.58) % = 3.08 %
+
+calculating EER and minDCF
+EER:  0.0658441074192524    threshold:  -0.5910077691078186
+minDCF:  0.0057156942784786224    threshold:  12.807829856872559
+
+calculating EER and minDCF
+EER:  0.07272465154528618    threshold:  -0.3195821940898895
+minDCF:  0.009856093674898148    threshold:  36.47148132324219
+
+calculating EER and minDCF
+EER:  0.09665534645318985    threshold:  -0.8972190022468567
+minDCF:  0.009995374828577042    threshold:  110.49053192138672
+
+

@@ -1,0 +1,1134 @@
+1,2c1,2
+< 1 vox1_test_wav/id0002549/2aca1e72_nohash_4_up.wav vox1_test_wav/id0002549/2aca1e72_nohash_1_one.wav
+< 1 vox1_test_wav/id0002549/2aca1e72_nohash_4_up.wav vox1_test_wav/id0002549/2aca1e72_nohash_5_zero.wav
+---
+> 0 vox1_test_wav/id0002549/2aca1e72_nohash_4_up.wav vox1_test_wav/id0002549/2aca1e72_nohash_1_one.wav
+> 0 vox1_test_wav/id0002549/2aca1e72_nohash_4_up.wav vox1_test_wav/id0002549/2aca1e72_nohash_5_zero.wav
+5,6c5,6
+< 1 vox1_test_wav/id0002384/1746d7b6_nohash_0_nine.wav vox1_test_wav/id0002384/1746d7b6_nohash_1_happy.wav
+< 1 vox1_test_wav/id0002384/1746d7b6_nohash_0_nine.wav vox1_test_wav/id0002384/1746d7b6_nohash_0_five.wav
+---
+> 0 vox1_test_wav/id0002384/1746d7b6_nohash_0_nine.wav vox1_test_wav/id0002384/1746d7b6_nohash_1_happy.wav
+> 0 vox1_test_wav/id0002384/1746d7b6_nohash_0_nine.wav vox1_test_wav/id0002384/1746d7b6_nohash_0_five.wav
+9,10c9,10
+< 1 vox1_test_wav/id0002620/63f7a489_nohash_0_dog.wav vox1_test_wav/id0002620/63f7a489_nohash_1_eight.wav
+< 1 vox1_test_wav/id0002620/63f7a489_nohash_0_dog.wav vox1_test_wav/id0002620/63f7a489_nohash_0_down.wav
+---
+> 0 vox1_test_wav/id0002620/63f7a489_nohash_0_dog.wav vox1_test_wav/id0002620/63f7a489_nohash_1_eight.wav
+> 0 vox1_test_wav/id0002620/63f7a489_nohash_0_dog.wav vox1_test_wav/id0002620/63f7a489_nohash_0_down.wav
+13,14c13,14
+< 1 vox1_test_wav/id0002394/8e05039f_nohash_4_three.wav vox1_test_wav/id0002394/8e05039f_nohash_0_tree.wav
+< 1 vox1_test_wav/id0002394/8e05039f_nohash_4_three.wav vox1_test_wav/id0002394/8e05039f_nohash_3_off.wav
+---
+> 0 vox1_test_wav/id0002394/8e05039f_nohash_4_three.wav vox1_test_wav/id0002394/8e05039f_nohash_0_tree.wav
+> 0 vox1_test_wav/id0002394/8e05039f_nohash_4_three.wav vox1_test_wav/id0002394/8e05039f_nohash_3_off.wav
+17,18c17,18
+< 1 vox1_test_wav/id0002362/e8d562ca_nohash_0_off.wav vox1_test_wav/id0002362/e8d562ca_nohash_1_no.wav
+< 1 vox1_test_wav/id0002362/e8d562ca_nohash_0_off.wav vox1_test_wav/id0002362/e8d562ca_nohash_0_house.wav
+---
+> 0 vox1_test_wav/id0002362/e8d562ca_nohash_0_off.wav vox1_test_wav/id0002362/e8d562ca_nohash_1_no.wav
+> 0 vox1_test_wav/id0002362/e8d562ca_nohash_0_off.wav vox1_test_wav/id0002362/e8d562ca_nohash_0_house.wav
+21,22c21,22
+< 1 vox1_test_wav/id0002618/c79159aa_nohash_0_zero.wav vox1_test_wav/id0002618/c79159aa_nohash_4_one.wav
+< 1 vox1_test_wav/id0002618/c79159aa_nohash_0_zero.wav vox1_test_wav/id0002618/c79159aa_nohash_2_yes.wav
+---
+> 0 vox1_test_wav/id0002618/c79159aa_nohash_0_zero.wav vox1_test_wav/id0002618/c79159aa_nohash_4_one.wav
+> 0 vox1_test_wav/id0002618/c79159aa_nohash_0_zero.wav vox1_test_wav/id0002618/c79159aa_nohash_2_yes.wav
+25,26c25,26
+< 1 vox1_test_wav/id0002463/118261a9_nohash_1_marvin.wav vox1_test_wav/id0002463/118261a9_nohash_1_sheila.wav
+< 1 vox1_test_wav/id0002463/118261a9_nohash_1_marvin.wav vox1_test_wav/id0002463/118261a9_nohash_0_up.wav
+---
+> 0 vox1_test_wav/id0002463/118261a9_nohash_1_marvin.wav vox1_test_wav/id0002463/118261a9_nohash_1_sheila.wav
+> 0 vox1_test_wav/id0002463/118261a9_nohash_1_marvin.wav vox1_test_wav/id0002463/118261a9_nohash_0_up.wav
+29,30c29,30
+< 1 vox1_test_wav/id0002474/422f8cf1_nohash_1_eight.wav vox1_test_wav/id0002474/422f8cf1_nohash_0_eight.wav
+< 1 vox1_test_wav/id0002474/422f8cf1_nohash_1_eight.wav vox1_test_wav/id0002474/422f8cf1_nohash_0_bird.wav
+---
+> 0 vox1_test_wav/id0002474/422f8cf1_nohash_1_eight.wav vox1_test_wav/id0002474/422f8cf1_nohash_0_eight.wav
+> 0 vox1_test_wav/id0002474/422f8cf1_nohash_1_eight.wav vox1_test_wav/id0002474/422f8cf1_nohash_0_bird.wav
+33,34c33,34
+< 1 vox1_test_wav/id0002510/20174140_nohash_0_five.wav vox1_test_wav/id0002510/20174140_nohash_0_off.wav
+< 1 vox1_test_wav/id0002510/20174140_nohash_0_five.wav vox1_test_wav/id0002510/20174140_nohash_1_house.wav
+---
+> 0 vox1_test_wav/id0002510/20174140_nohash_0_five.wav vox1_test_wav/id0002510/20174140_nohash_0_off.wav
+> 0 vox1_test_wav/id0002510/20174140_nohash_0_five.wav vox1_test_wav/id0002510/20174140_nohash_1_house.wav
+37,38c37,38
+< 1 vox1_test_wav/id0002549/2aca1e72_nohash_2_seven.wav vox1_test_wav/id0002549/2aca1e72_nohash_3_two.wav
+< 1 vox1_test_wav/id0002549/2aca1e72_nohash_2_seven.wav vox1_test_wav/id0002549/2aca1e72_nohash_13_backward.wav
+---
+> 0 vox1_test_wav/id0002549/2aca1e72_nohash_2_seven.wav vox1_test_wav/id0002549/2aca1e72_nohash_3_two.wav
+> 0 vox1_test_wav/id0002549/2aca1e72_nohash_2_seven.wav vox1_test_wav/id0002549/2aca1e72_nohash_13_backward.wav
+41,42c41,42
+< 1 vox1_test_wav/id0002553/cc2f1a85_nohash_0_left.wav vox1_test_wav/id0002553/cc2f1a85_nohash_1_six.wav
+< 1 vox1_test_wav/id0002553/cc2f1a85_nohash_0_left.wav vox1_test_wav/id0002553/cc2f1a85_nohash_1_up.wav
+---
+> 0 vox1_test_wav/id0002553/cc2f1a85_nohash_0_left.wav vox1_test_wav/id0002553/cc2f1a85_nohash_1_six.wav
+> 0 vox1_test_wav/id0002553/cc2f1a85_nohash_0_left.wav vox1_test_wav/id0002553/cc2f1a85_nohash_1_up.wav
+42162c42162
+< 0 vox1_test_wav/id0002467/352ffbe3_nohash_0_bird.wav vox1_test_wav/id0002410/c692524d_nohash_0_zero.wav
+---
+> 1 vox1_test_wav/id0002467/352ffbe3_nohash_0_bird.wav vox1_test_wav/id0002410/c692524d_nohash_0_zero.wav
+42165,42166c42165,42166
+< 0 vox1_test_wav/id0002383/cd7f8c1b_nohash_4_four.wav vox1_test_wav/id0002614/f035e2ea_nohash_2_down.wav
+< 0 vox1_test_wav/id0002383/cd7f8c1b_nohash_4_four.wav vox1_test_wav/id0002373/c6ee87a7_nohash_3_no.wav
+---
+> 1 vox1_test_wav/id0002383/cd7f8c1b_nohash_4_four.wav vox1_test_wav/id0002614/f035e2ea_nohash_2_down.wav
+> 1 vox1_test_wav/id0002383/cd7f8c1b_nohash_4_four.wav vox1_test_wav/id0002373/c6ee87a7_nohash_3_no.wav
+42169,42170c42169,42170
+< 0 vox1_test_wav/id0002447/daf230ac_nohash_0_dog.wav vox1_test_wav/id0002508/9a69672b_nohash_3_go.wav
+< 0 vox1_test_wav/id0002447/daf230ac_nohash_0_dog.wav vox1_test_wav/id0002569/5cf1ecce_nohash_4_one.wav
+---
+> 1 vox1_test_wav/id0002447/daf230ac_nohash_0_dog.wav vox1_test_wav/id0002508/9a69672b_nohash_3_go.wav
+> 1 vox1_test_wav/id0002447/daf230ac_nohash_0_dog.wav vox1_test_wav/id0002569/5cf1ecce_nohash_4_one.wav
+42173,42174c42173,42174
+< 0 vox1_test_wav/id0002434/3d53244b_nohash_2_right.wav vox1_test_wav/id0002423/69a1a79f_nohash_3_stop.wav
+< 0 vox1_test_wav/id0002434/3d53244b_nohash_2_right.wav vox1_test_wav/id0002590/fbb56351_nohash_3_one.wav
+---
+> 1 vox1_test_wav/id0002434/3d53244b_nohash_2_right.wav vox1_test_wav/id0002423/69a1a79f_nohash_3_stop.wav
+> 1 vox1_test_wav/id0002434/3d53244b_nohash_2_right.wav vox1_test_wav/id0002590/fbb56351_nohash_3_one.wav
+42177,42178c42177,42178
+< 0 vox1_test_wav/id0002403/a5d485dc_nohash_0_house.wav vox1_test_wav/id0002560/c2dccf38_nohash_0_four.wav
+< 0 vox1_test_wav/id0002403/a5d485dc_nohash_0_house.wav vox1_test_wav/id0002525/322d17d3_nohash_0_backward.wav
+---
+> 1 vox1_test_wav/id0002403/a5d485dc_nohash_0_house.wav vox1_test_wav/id0002560/c2dccf38_nohash_0_four.wav
+> 1 vox1_test_wav/id0002403/a5d485dc_nohash_0_house.wav vox1_test_wav/id0002525/322d17d3_nohash_0_backward.wav
+42181,42182c42181,42182
+< 0 vox1_test_wav/id0002393/1aeef15e_nohash_2_three.wav vox1_test_wav/id0002411/cb72dfb6_nohash_2_up.wav
+< 0 vox1_test_wav/id0002393/1aeef15e_nohash_2_three.wav vox1_test_wav/id0002502/90804775_nohash_0_sheila.wav
+---
+> 1 vox1_test_wav/id0002393/1aeef15e_nohash_2_three.wav vox1_test_wav/id0002411/cb72dfb6_nohash_2_up.wav
+> 1 vox1_test_wav/id0002393/1aeef15e_nohash_2_three.wav vox1_test_wav/id0002502/90804775_nohash_0_sheila.wav
+42185,42186c42185,42186
+< 0 vox1_test_wav/id0002412/a1c63f25_nohash_2_no.wav vox1_test_wav/id0002549/2aca1e72_nohash_4_nine.wav
+< 0 vox1_test_wav/id0002412/a1c63f25_nohash_2_no.wav vox1_test_wav/id0002554/6a700f9d_nohash_0_tree.wav
+---
+> 1 vox1_test_wav/id0002412/a1c63f25_nohash_2_no.wav vox1_test_wav/id0002549/2aca1e72_nohash_4_nine.wav
+> 1 vox1_test_wav/id0002412/a1c63f25_nohash_2_no.wav vox1_test_wav/id0002554/6a700f9d_nohash_0_tree.wav
+42189,42190c42189,42190
+< 0 vox1_test_wav/id0002480/fbe51750_nohash_0_right.wav vox1_test_wav/id0002596/f568162b_nohash_1_six.wav
+< 0 vox1_test_wav/id0002480/fbe51750_nohash_0_right.wav vox1_test_wav/id0002525/322d17d3_nohash_2_stop.wav
+---
+> 1 vox1_test_wav/id0002480/fbe51750_nohash_0_right.wav vox1_test_wav/id0002596/f568162b_nohash_1_six.wav
+> 1 vox1_test_wav/id0002480/fbe51750_nohash_0_right.wav vox1_test_wav/id0002525/322d17d3_nohash_2_stop.wav
+42193,42194c42193,42194
+< 0 vox1_test_wav/id0002544/41dce6f5_nohash_0_bed.wav vox1_test_wav/id0002568/be91a00a_nohash_1_down.wav
+< 0 vox1_test_wav/id0002544/41dce6f5_nohash_0_bed.wav vox1_test_wav/id0002378/cfbedff9_nohash_0_wow.wav
+---
+> 1 vox1_test_wav/id0002544/41dce6f5_nohash_0_bed.wav vox1_test_wav/id0002568/be91a00a_nohash_1_down.wav
+> 1 vox1_test_wav/id0002544/41dce6f5_nohash_0_bed.wav vox1_test_wav/id0002378/cfbedff9_nohash_0_wow.wav
+42197,42198c42197,42198
+< 0 vox1_test_wav/id0002394/8e05039f_nohash_3_no.wav vox1_test_wav/id0002373/c6ee87a7_nohash_0_go.wav
+< 0 vox1_test_wav/id0002394/8e05039f_nohash_3_no.wav vox1_test_wav/id0002383/cd7f8c1b_nohash_1_one.wav
+---
+> 1 vox1_test_wav/id0002394/8e05039f_nohash_3_no.wav vox1_test_wav/id0002373/c6ee87a7_nohash_0_go.wav
+> 1 vox1_test_wav/id0002394/8e05039f_nohash_3_no.wav vox1_test_wav/id0002383/cd7f8c1b_nohash_1_one.wav
+42201,42202c42201,42202
+< 0 vox1_test_wav/id0002423/69a1a79f_nohash_0_learn.wav vox1_test_wav/id0002405/f7879738_nohash_1_cat.wav
+< 0 vox1_test_wav/id0002423/69a1a79f_nohash_0_learn.wav vox1_test_wav/id0002550/a6d586b7_nohash_1_no.wav
+---
+> 1 vox1_test_wav/id0002423/69a1a79f_nohash_0_learn.wav vox1_test_wav/id0002405/f7879738_nohash_1_cat.wav
+> 1 vox1_test_wav/id0002423/69a1a79f_nohash_0_learn.wav vox1_test_wav/id0002550/a6d586b7_nohash_1_no.wav
+42205,42206c42205,42206
+< 0 vox1_test_wav/id0002620/63f7a489_nohash_3_zero.wav vox1_test_wav/id0002405/f7879738_nohash_0_marvin.wav
+< 0 vox1_test_wav/id0002620/63f7a489_nohash_3_zero.wav vox1_test_wav/id0002406/9fac5701_nohash_0_learn.wav
+---
+> 1 vox1_test_wav/id0002620/63f7a489_nohash_3_zero.wav vox1_test_wav/id0002405/f7879738_nohash_0_marvin.wav
+> 1 vox1_test_wav/id0002620/63f7a489_nohash_3_zero.wav vox1_test_wav/id0002406/9fac5701_nohash_0_learn.wav
+42209,42210c42209,42210
+< 0 vox1_test_wav/id0002579/adebe223_nohash_0_seven.wav vox1_test_wav/id0002374/0132a06d_nohash_0_five.wav
+< 0 vox1_test_wav/id0002579/adebe223_nohash_0_seven.wav vox1_test_wav/id0002487/c578beb0_nohash_1_tree.wav
+---
+> 1 vox1_test_wav/id0002579/adebe223_nohash_0_seven.wav vox1_test_wav/id0002374/0132a06d_nohash_0_five.wav
+> 1 vox1_test_wav/id0002579/adebe223_nohash_0_seven.wav vox1_test_wav/id0002487/c578beb0_nohash_1_tree.wav
+42213,42214c42213,42214
+< 0 vox1_test_wav/id0002473/67bdbf56_nohash_1_left.wav vox1_test_wav/id0002542/1b4c9b89_nohash_0_marvin.wav
+< 0 vox1_test_wav/id0002473/67bdbf56_nohash_1_left.wav vox1_test_wav/id0002603/31f01a8d_nohash_1_backward.wav
+---
+> 1 vox1_test_wav/id0002473/67bdbf56_nohash_1_left.wav vox1_test_wav/id0002542/1b4c9b89_nohash_0_marvin.wav
+> 1 vox1_test_wav/id0002473/67bdbf56_nohash_1_left.wav vox1_test_wav/id0002603/31f01a8d_nohash_1_backward.wav
+42217,42218c42217,42218
+< 0 vox1_test_wav/id0002526/5e25eeef_nohash_0_one.wav vox1_test_wav/id0002394/8e05039f_nohash_3_six.wav
+< 0 vox1_test_wav/id0002526/5e25eeef_nohash_0_one.wav vox1_test_wav/id0002619/96c66ab7_nohash_0_dog.wav
+---
+> 1 vox1_test_wav/id0002526/5e25eeef_nohash_0_one.wav vox1_test_wav/id0002394/8e05039f_nohash_3_six.wav
+> 1 vox1_test_wav/id0002526/5e25eeef_nohash_0_one.wav vox1_test_wav/id0002619/96c66ab7_nohash_0_dog.wav
+42221,42222c42221,42222
+< 0 vox1_test_wav/id0002434/3d53244b_nohash_0_stop.wav vox1_test_wav/id0002516/51f7a034_nohash_2_six.wav
+< 0 vox1_test_wav/id0002434/3d53244b_nohash_0_stop.wav vox1_test_wav/id0002510/20174140_nohash_1_go.wav
+---
+> 1 vox1_test_wav/id0002434/3d53244b_nohash_0_stop.wav vox1_test_wav/id0002516/51f7a034_nohash_2_six.wav
+> 1 vox1_test_wav/id0002434/3d53244b_nohash_0_stop.wav vox1_test_wav/id0002510/20174140_nohash_1_go.wav
+42225,42226c42225,42226
+< 0 vox1_test_wav/id0002437/c25a032b_nohash_0_stop.wav vox1_test_wav/id0002423/69a1a79f_nohash_1_nine.wav
+< 0 vox1_test_wav/id0002437/c25a032b_nohash_0_stop.wav vox1_test_wav/id0002532/b49caed3_nohash_1_left.wav
+---
+> 1 vox1_test_wav/id0002437/c25a032b_nohash_0_stop.wav vox1_test_wav/id0002423/69a1a79f_nohash_1_nine.wav
+> 1 vox1_test_wav/id0002437/c25a032b_nohash_0_stop.wav vox1_test_wav/id0002532/b49caed3_nohash_1_left.wav
+42229,42230c42229,42230
+< 0 vox1_test_wav/id0002518/42a99aec_nohash_2_off.wav vox1_test_wav/id0002427/40738a2d_nohash_3_eight.wav
+< 0 vox1_test_wav/id0002518/42a99aec_nohash_2_off.wav vox1_test_wav/id0002411/cb72dfb6_nohash_0_nine.wav
+---
+> 1 vox1_test_wav/id0002518/42a99aec_nohash_2_off.wav vox1_test_wav/id0002427/40738a2d_nohash_3_eight.wav
+> 1 vox1_test_wav/id0002518/42a99aec_nohash_2_off.wav vox1_test_wav/id0002411/cb72dfb6_nohash_0_nine.wav
+42233,42234c42233,42234
+< 0 vox1_test_wav/id0002525/322d17d3_nohash_4_follow.wav vox1_test_wav/id0002455/e54a0f16_nohash_4_five.wav
+< 0 vox1_test_wav/id0002525/322d17d3_nohash_4_follow.wav vox1_test_wav/id0002468/dc75148d_nohash_1_left.wav
+---
+> 1 vox1_test_wav/id0002525/322d17d3_nohash_4_follow.wav vox1_test_wav/id0002455/e54a0f16_nohash_4_five.wav
+> 1 vox1_test_wav/id0002525/322d17d3_nohash_4_follow.wav vox1_test_wav/id0002468/dc75148d_nohash_1_left.wav
+42237,42238c42237,42238
+< 0 vox1_test_wav/id0002439/016e2c6d_nohash_0_zero.wav vox1_test_wav/id0002448/8442ea62_nohash_0_six.wav
+< 0 vox1_test_wav/id0002439/016e2c6d_nohash_0_zero.wav vox1_test_wav/id0002542/1b4c9b89_nohash_0_wow.wav
+---
+> 1 vox1_test_wav/id0002439/016e2c6d_nohash_0_zero.wav vox1_test_wav/id0002448/8442ea62_nohash_0_six.wav
+> 1 vox1_test_wav/id0002439/016e2c6d_nohash_0_zero.wav vox1_test_wav/id0002542/1b4c9b89_nohash_0_wow.wav
+42241,42242c42241,42242
+< 0 vox1_test_wav/id0002606/187af8be_nohash_2_five.wav vox1_test_wav/id0002381/57de2379_nohash_0_house.wav
+< 0 vox1_test_wav/id0002606/187af8be_nohash_2_five.wav vox1_test_wav/id0002378/cfbedff9_nohash_3_yes.wav
+---
+> 1 vox1_test_wav/id0002606/187af8be_nohash_2_five.wav vox1_test_wav/id0002381/57de2379_nohash_0_house.wav
+> 1 vox1_test_wav/id0002606/187af8be_nohash_2_five.wav vox1_test_wav/id0002378/cfbedff9_nohash_3_yes.wav
+42245,42246c42245,42246
+< 0 vox1_test_wav/id0002373/c6ee87a7_nohash_0_off.wav vox1_test_wav/id0002406/9fac5701_nohash_1_stop.wav
+< 0 vox1_test_wav/id0002373/c6ee87a7_nohash_0_off.wav vox1_test_wav/id0002525/322d17d3_nohash_1_two.wav
+---
+> 1 vox1_test_wav/id0002373/c6ee87a7_nohash_0_off.wav vox1_test_wav/id0002406/9fac5701_nohash_1_stop.wav
+> 1 vox1_test_wav/id0002373/c6ee87a7_nohash_0_off.wav vox1_test_wav/id0002525/322d17d3_nohash_1_two.wav
+42249,42250c42249,42250
+< 0 vox1_test_wav/id0002508/9a69672b_nohash_2_seven.wav vox1_test_wav/id0002528/ad63d93c_nohash_3_off.wav
+< 0 vox1_test_wav/id0002508/9a69672b_nohash_2_seven.wav vox1_test_wav/id0002503/e39a8ddc_nohash_0_tree.wav
+---
+> 1 vox1_test_wav/id0002508/9a69672b_nohash_2_seven.wav vox1_test_wav/id0002528/ad63d93c_nohash_3_off.wav
+> 1 vox1_test_wav/id0002508/9a69672b_nohash_2_seven.wav vox1_test_wav/id0002503/e39a8ddc_nohash_0_tree.wav
+42253,42254c42253,42254
+< 0 vox1_test_wav/id0002420/c4cfbe43_nohash_0_down.wav vox1_test_wav/id0002487/c578beb0_nohash_0_seven.wav
+< 0 vox1_test_wav/id0002420/c4cfbe43_nohash_0_down.wav vox1_test_wav/id0002541/b4bef564_nohash_0_tree.wav
+---
+> 1 vox1_test_wav/id0002420/c4cfbe43_nohash_0_down.wav vox1_test_wav/id0002487/c578beb0_nohash_0_seven.wav
+> 1 vox1_test_wav/id0002420/c4cfbe43_nohash_0_down.wav vox1_test_wav/id0002541/b4bef564_nohash_0_tree.wav
+42257,42258c42257,42258
+< 0 vox1_test_wav/id0002619/96c66ab7_nohash_1_cat.wav vox1_test_wav/id0002365/6889b21f_nohash_0_eight.wav
+< 0 vox1_test_wav/id0002619/96c66ab7_nohash_1_cat.wav vox1_test_wav/id0002611/ee23b031_nohash_0_off.wav
+---
+> 1 vox1_test_wav/id0002619/96c66ab7_nohash_1_cat.wav vox1_test_wav/id0002365/6889b21f_nohash_0_eight.wav
+> 1 vox1_test_wav/id0002619/96c66ab7_nohash_1_cat.wav vox1_test_wav/id0002611/ee23b031_nohash_0_off.wav
+42261,42262c42261,42262
+< 0 vox1_test_wav/id0002578/42ccb57a_nohash_0_right.wav vox1_test_wav/id0002585/439c84f4_nohash_4_stop.wav
+< 0 vox1_test_wav/id0002578/42ccb57a_nohash_0_right.wav vox1_test_wav/id0002410/c692524d_nohash_1_no.wav
+---
+> 1 vox1_test_wav/id0002578/42ccb57a_nohash_0_right.wav vox1_test_wav/id0002585/439c84f4_nohash_4_stop.wav
+> 1 vox1_test_wav/id0002578/42ccb57a_nohash_0_right.wav vox1_test_wav/id0002410/c692524d_nohash_1_no.wav
+42265,42266c42265,42266
+< 0 vox1_test_wav/id0002620/63f7a489_nohash_2_right.wav vox1_test_wav/id0002403/a5d485dc_nohash_1_five.wav
+< 0 vox1_test_wav/id0002620/63f7a489_nohash_2_right.wav vox1_test_wav/id0002534/888a0c49_nohash_4_two.wav
+---
+> 1 vox1_test_wav/id0002620/63f7a489_nohash_2_right.wav vox1_test_wav/id0002403/a5d485dc_nohash_1_five.wav
+> 1 vox1_test_wav/id0002620/63f7a489_nohash_2_right.wav vox1_test_wav/id0002534/888a0c49_nohash_4_two.wav
+42269,42270c42269,42270
+< 0 vox1_test_wav/id0002490/8281a2a8_nohash_2_six.wav vox1_test_wav/id0002615/d4082f3e_nohash_0_happy.wav
+< 0 vox1_test_wav/id0002490/8281a2a8_nohash_2_six.wav vox1_test_wav/id0002596/f568162b_nohash_4_follow.wav
+---
+> 1 vox1_test_wav/id0002490/8281a2a8_nohash_2_six.wav vox1_test_wav/id0002615/d4082f3e_nohash_0_happy.wav
+> 1 vox1_test_wav/id0002490/8281a2a8_nohash_2_six.wav vox1_test_wav/id0002596/f568162b_nohash_4_follow.wav
+42273,42274c42273,42274
+< 0 vox1_test_wav/id0002569/5cf1ecce_nohash_0_no.wav vox1_test_wav/id0002547/a97c6445_nohash_2_follow.wav
+< 0 vox1_test_wav/id0002569/5cf1ecce_nohash_0_no.wav vox1_test_wav/id0002412/a1c63f25_nohash_2_no.wav
+---
+> 1 vox1_test_wav/id0002569/5cf1ecce_nohash_0_no.wav vox1_test_wav/id0002547/a97c6445_nohash_2_follow.wav
+> 1 vox1_test_wav/id0002569/5cf1ecce_nohash_0_no.wav vox1_test_wav/id0002412/a1c63f25_nohash_2_no.wav
+42277,42278c42277,42278
+< 0 vox1_test_wav/id0002476/16db1582_nohash_2_right.wav vox1_test_wav/id0002384/1746d7b6_nohash_1_five.wav
+< 0 vox1_test_wav/id0002476/16db1582_nohash_2_right.wav vox1_test_wav/id0002592/8bf6acb9_nohash_1_on.wav
+---
+> 1 vox1_test_wav/id0002476/16db1582_nohash_2_right.wav vox1_test_wav/id0002384/1746d7b6_nohash_1_five.wav
+> 1 vox1_test_wav/id0002476/16db1582_nohash_2_right.wav vox1_test_wav/id0002592/8bf6acb9_nohash_1_on.wav
+42281,42282c42281,42282
+< 0 vox1_test_wav/id0002566/022cd682_nohash_1_left.wav vox1_test_wav/id0002423/69a1a79f_nohash_0_left.wav
+< 0 vox1_test_wav/id0002566/022cd682_nohash_1_left.wav vox1_test_wav/id0002482/ee07dcb9_nohash_1_happy.wav
+---
+> 1 vox1_test_wav/id0002566/022cd682_nohash_1_left.wav vox1_test_wav/id0002423/69a1a79f_nohash_0_left.wav
+> 1 vox1_test_wav/id0002566/022cd682_nohash_1_left.wav vox1_test_wav/id0002482/ee07dcb9_nohash_1_happy.wav
+42285,42286c42285,42286
+< 0 vox1_test_wav/id0002608/bd8412df_nohash_0_no.wav vox1_test_wav/id0002502/90804775_nohash_0_zero.wav
+< 0 vox1_test_wav/id0002608/bd8412df_nohash_0_no.wav vox1_test_wav/id0002549/2aca1e72_nohash_5_off.wav
+---
+> 1 vox1_test_wav/id0002608/bd8412df_nohash_0_no.wav vox1_test_wav/id0002502/90804775_nohash_0_zero.wav
+> 1 vox1_test_wav/id0002608/bd8412df_nohash_0_no.wav vox1_test_wav/id0002549/2aca1e72_nohash_5_off.wav
+42289,42290c42289,42290
+< 0 vox1_test_wav/id0002427/40738a2d_nohash_1_five.wav vox1_test_wav/id0002466/c50225fa_nohash_0_go.wav
+< 0 vox1_test_wav/id0002427/40738a2d_nohash_1_five.wav vox1_test_wav/id0002429/cc554de3_nohash_0_zero.wav
+---
+> 1 vox1_test_wav/id0002427/40738a2d_nohash_1_five.wav vox1_test_wav/id0002466/c50225fa_nohash_0_go.wav
+> 1 vox1_test_wav/id0002427/40738a2d_nohash_1_five.wav vox1_test_wav/id0002429/cc554de3_nohash_0_zero.wav
+42293,42294c42293,42294
+< 0 vox1_test_wav/id0002525/322d17d3_nohash_1_right.wav vox1_test_wav/id0002511/c137814b_nohash_1_marvin.wav
+< 0 vox1_test_wav/id0002525/322d17d3_nohash_1_right.wav vox1_test_wav/id0002528/ad63d93c_nohash_0_one.wav
+---
+> 1 vox1_test_wav/id0002525/322d17d3_nohash_1_right.wav vox1_test_wav/id0002511/c137814b_nohash_1_marvin.wav
+> 1 vox1_test_wav/id0002525/322d17d3_nohash_1_right.wav vox1_test_wav/id0002528/ad63d93c_nohash_0_one.wav
+42297,42298c42297,42298
+< 0 vox1_test_wav/id0002614/f035e2ea_nohash_3_no.wav vox1_test_wav/id0002560/c2dccf38_nohash_0_zero.wav
+< 0 vox1_test_wav/id0002614/f035e2ea_nohash_3_no.wav vox1_test_wav/id0002513/d103dd6e_nohash_0_tree.wav
+---
+> 1 vox1_test_wav/id0002614/f035e2ea_nohash_3_no.wav vox1_test_wav/id0002560/c2dccf38_nohash_0_zero.wav
+> 1 vox1_test_wav/id0002614/f035e2ea_nohash_3_no.wav vox1_test_wav/id0002513/d103dd6e_nohash_0_tree.wav
+42301,42302c42301,42302
+< 0 vox1_test_wav/id0002605/db9d52d2_nohash_2_tree.wav vox1_test_wav/id0002498/6f2c6f7e_nohash_0_go.wav
+< 0 vox1_test_wav/id0002605/db9d52d2_nohash_2_tree.wav vox1_test_wav/id0002413/f736ab63_nohash_0_forward.wav
+---
+> 1 vox1_test_wav/id0002605/db9d52d2_nohash_2_tree.wav vox1_test_wav/id0002498/6f2c6f7e_nohash_0_go.wav
+> 1 vox1_test_wav/id0002605/db9d52d2_nohash_2_tree.wav vox1_test_wav/id0002413/f736ab63_nohash_0_forward.wav
+42305,42306c42305,42306
+< 0 vox1_test_wav/id0002406/9fac5701_nohash_2_up.wav vox1_test_wav/id0002373/c6ee87a7_nohash_0_three.wav
+< 0 vox1_test_wav/id0002406/9fac5701_nohash_2_up.wav vox1_test_wav/id0002603/31f01a8d_nohash_4_nine.wav
+---
+> 1 vox1_test_wav/id0002406/9fac5701_nohash_2_up.wav vox1_test_wav/id0002373/c6ee87a7_nohash_0_three.wav
+> 1 vox1_test_wav/id0002406/9fac5701_nohash_2_up.wav vox1_test_wav/id0002603/31f01a8d_nohash_4_nine.wav
+42309,42310c42309,42310
+< 0 vox1_test_wav/id0002422/7eee5973_nohash_1_stop.wav vox1_test_wav/id0002542/1b4c9b89_nohash_4_seven.wav
+< 0 vox1_test_wav/id0002422/7eee5973_nohash_1_stop.wav vox1_test_wav/id0002590/fbb56351_nohash_3_forward.wav
+---
+> 1 vox1_test_wav/id0002422/7eee5973_nohash_1_stop.wav vox1_test_wav/id0002542/1b4c9b89_nohash_4_seven.wav
+> 1 vox1_test_wav/id0002422/7eee5973_nohash_1_stop.wav vox1_test_wav/id0002590/fbb56351_nohash_3_forward.wav
+42313,42314c42313,42314
+< 0 vox1_test_wav/id0002549/2aca1e72_nohash_1_yes.wav vox1_test_wav/id0002516/51f7a034_nohash_3_six.wav
+< 0 vox1_test_wav/id0002549/2aca1e72_nohash_1_yes.wav vox1_test_wav/id0002612/e5d2e09d_nohash_0_happy.wav
+---
+> 1 vox1_test_wav/id0002549/2aca1e72_nohash_1_yes.wav vox1_test_wav/id0002516/51f7a034_nohash_3_six.wav
+> 1 vox1_test_wav/id0002549/2aca1e72_nohash_1_yes.wav vox1_test_wav/id0002612/e5d2e09d_nohash_0_happy.wav
+42317,42318c42317,42318
+< 0 vox1_test_wav/id0002508/9a69672b_nohash_0_marvin.wav vox1_test_wav/id0002372/b528edb3_nohash_3_down.wav
+< 0 vox1_test_wav/id0002508/9a69672b_nohash_0_marvin.wav vox1_test_wav/id0002489/73124b26_nohash_0_bed.wav
+---
+> 1 vox1_test_wav/id0002508/9a69672b_nohash_0_marvin.wav vox1_test_wav/id0002372/b528edb3_nohash_3_down.wav
+> 1 vox1_test_wav/id0002508/9a69672b_nohash_0_marvin.wav vox1_test_wav/id0002489/73124b26_nohash_0_bed.wav
+42321,42322c42321,42322
+< 0 vox1_test_wav/id0002414/07c5129e_nohash_1_sheila.wav vox1_test_wav/id0002438/ff0e27c3_nohash_0_on.wav
+< 0 vox1_test_wav/id0002414/07c5129e_nohash_1_sheila.wav vox1_test_wav/id0002604/10c6d873_nohash_1_dog.wav
+---
+> 1 vox1_test_wav/id0002414/07c5129e_nohash_1_sheila.wav vox1_test_wav/id0002438/ff0e27c3_nohash_0_on.wav
+> 1 vox1_test_wav/id0002414/07c5129e_nohash_1_sheila.wav vox1_test_wav/id0002604/10c6d873_nohash_1_dog.wav
+42325,42326c42325,42326
+< 0 vox1_test_wav/id0002437/c25a032b_nohash_0_yes.wav vox1_test_wav/id0002459/8134f43f_nohash_0_go.wav
+< 0 vox1_test_wav/id0002437/c25a032b_nohash_0_yes.wav vox1_test_wav/id0002561/fb9d6d23_nohash_0_seven.wav
+---
+> 1 vox1_test_wav/id0002437/c25a032b_nohash_0_yes.wav vox1_test_wav/id0002459/8134f43f_nohash_0_go.wav
+> 1 vox1_test_wav/id0002437/c25a032b_nohash_0_yes.wav vox1_test_wav/id0002561/fb9d6d23_nohash_0_seven.wav
+42329,42330c42329,42330
+< 0 vox1_test_wav/id0002403/a5d485dc_nohash_0_go.wav vox1_test_wav/id0002610/78884794_nohash_0_eight.wav
+< 0 vox1_test_wav/id0002403/a5d485dc_nohash_0_go.wav vox1_test_wav/id0002614/f035e2ea_nohash_3_three.wav
+---
+> 1 vox1_test_wav/id0002403/a5d485dc_nohash_0_go.wav vox1_test_wav/id0002610/78884794_nohash_0_eight.wav
+> 1 vox1_test_wav/id0002403/a5d485dc_nohash_0_go.wav vox1_test_wav/id0002614/f035e2ea_nohash_3_three.wav
+42333,42334c42333,42334
+< 0 vox1_test_wav/id0002525/322d17d3_nohash_2_nine.wav vox1_test_wav/id0002475/cd68e997_nohash_0_dog.wav
+< 0 vox1_test_wav/id0002525/322d17d3_nohash_2_nine.wav vox1_test_wav/id0002549/2aca1e72_nohash_0_one.wav
+---
+> 1 vox1_test_wav/id0002525/322d17d3_nohash_2_nine.wav vox1_test_wav/id0002475/cd68e997_nohash_0_dog.wav
+> 1 vox1_test_wav/id0002525/322d17d3_nohash_2_nine.wav vox1_test_wav/id0002549/2aca1e72_nohash_0_one.wav
+42337,42338c42337,42338
+< 0 vox1_test_wav/id0002383/cd7f8c1b_nohash_0_yes.wav vox1_test_wav/id0002593/56eb74ae_nohash_4_go.wav
+< 0 vox1_test_wav/id0002383/cd7f8c1b_nohash_0_yes.wav vox1_test_wav/id0002417/e0344f60_nohash_0_marvin.wav
+---
+> 1 vox1_test_wav/id0002383/cd7f8c1b_nohash_0_yes.wav vox1_test_wav/id0002593/56eb74ae_nohash_4_go.wav
+> 1 vox1_test_wav/id0002383/cd7f8c1b_nohash_0_yes.wav vox1_test_wav/id0002417/e0344f60_nohash_0_marvin.wav
+42341,42342c42341,42342
+< 0 vox1_test_wav/id0002599/9f4098cb_nohash_0_five.wav vox1_test_wav/id0002537/d264f7b6_nohash_1_eight.wav
+< 0 vox1_test_wav/id0002599/9f4098cb_nohash_0_five.wav vox1_test_wav/id0002607/a929f9b9_nohash_2_go.wav
+---
+> 1 vox1_test_wav/id0002599/9f4098cb_nohash_0_five.wav vox1_test_wav/id0002537/d264f7b6_nohash_1_eight.wav
+> 1 vox1_test_wav/id0002599/9f4098cb_nohash_0_five.wav vox1_test_wav/id0002607/a929f9b9_nohash_2_go.wav
+42345,42346c42345,42346
+< 0 vox1_test_wav/id0002560/c2dccf38_nohash_2_down.wav vox1_test_wav/id0002477/ae32324a_nohash_1_off.wav
+< 0 vox1_test_wav/id0002560/c2dccf38_nohash_2_down.wav vox1_test_wav/id0002426/bfb10243_nohash_0_up.wav
+---
+> 1 vox1_test_wav/id0002560/c2dccf38_nohash_2_down.wav vox1_test_wav/id0002477/ae32324a_nohash_1_off.wav
+> 1 vox1_test_wav/id0002560/c2dccf38_nohash_2_down.wav vox1_test_wav/id0002426/bfb10243_nohash_0_up.wav
+42349,42350c42349,42350
+< 0 vox1_test_wav/id0002614/f035e2ea_nohash_2_one.wav vox1_test_wav/id0002492/97e0c576_nohash_0_house.wav
+< 0 vox1_test_wav/id0002614/f035e2ea_nohash_2_one.wav vox1_test_wav/id0002374/0132a06d_nohash_2_zero.wav
+---
+> 1 vox1_test_wav/id0002614/f035e2ea_nohash_2_one.wav vox1_test_wav/id0002492/97e0c576_nohash_0_house.wav
+> 1 vox1_test_wav/id0002614/f035e2ea_nohash_2_one.wav vox1_test_wav/id0002374/0132a06d_nohash_2_zero.wav
+42353,42354c42353,42354
+< 0 vox1_test_wav/id0002403/a5d485dc_nohash_0_left.wav vox1_test_wav/id0002386/3209ec42_nohash_1_happy.wav
+< 0 vox1_test_wav/id0002403/a5d485dc_nohash_0_left.wav vox1_test_wav/id0002550/a6d586b7_nohash_2_seven.wav
+---
+> 1 vox1_test_wav/id0002403/a5d485dc_nohash_0_left.wav vox1_test_wav/id0002386/3209ec42_nohash_1_happy.wav
+> 1 vox1_test_wav/id0002403/a5d485dc_nohash_0_left.wav vox1_test_wav/id0002550/a6d586b7_nohash_2_seven.wav
+42357,42358c42357,42358
+< 0 vox1_test_wav/id0002373/c6ee87a7_nohash_4_no.wav vox1_test_wav/id0002522/4beff0c5_nohash_0_bed.wav
+< 0 vox1_test_wav/id0002373/c6ee87a7_nohash_4_no.wav vox1_test_wav/id0002482/ee07dcb9_nohash_0_three.wav
+---
+> 1 vox1_test_wav/id0002373/c6ee87a7_nohash_4_no.wav vox1_test_wav/id0002522/4beff0c5_nohash_0_bed.wav
+> 1 vox1_test_wav/id0002373/c6ee87a7_nohash_4_no.wav vox1_test_wav/id0002482/ee07dcb9_nohash_0_three.wav
+42361,42362c42361,42362
+< 0 vox1_test_wav/id0002378/cfbedff9_nohash_0_dog.wav vox1_test_wav/id0002423/69a1a79f_nohash_1_up.wav
+< 0 vox1_test_wav/id0002378/cfbedff9_nohash_0_dog.wav vox1_test_wav/id0002404/4abefdf5_nohash_0_eight.wav
+---
+> 1 vox1_test_wav/id0002378/cfbedff9_nohash_0_dog.wav vox1_test_wav/id0002423/69a1a79f_nohash_1_up.wav
+> 1 vox1_test_wav/id0002378/cfbedff9_nohash_0_dog.wav vox1_test_wav/id0002404/4abefdf5_nohash_0_eight.wav
+42365,42366c42365,42366
+< 0 vox1_test_wav/id0002374/0132a06d_nohash_1_one.wav vox1_test_wav/id0002525/322d17d3_nohash_2_eight.wav
+< 0 vox1_test_wav/id0002374/0132a06d_nohash_1_one.wav vox1_test_wav/id0002426/bfb10243_nohash_1_six.wav
+---
+> 1 vox1_test_wav/id0002374/0132a06d_nohash_1_one.wav vox1_test_wav/id0002525/322d17d3_nohash_2_eight.wav
+> 1 vox1_test_wav/id0002374/0132a06d_nohash_1_one.wav vox1_test_wav/id0002426/bfb10243_nohash_1_six.wav
+42369,42370c42369,42370
+< 0 vox1_test_wav/id0002464/6aa8def4_nohash_0_stop.wav vox1_test_wav/id0002383/cd7f8c1b_nohash_3_down.wav
+< 0 vox1_test_wav/id0002464/6aa8def4_nohash_0_stop.wav vox1_test_wav/id0002549/2aca1e72_nohash_7_one.wav
+---
+> 1 vox1_test_wav/id0002464/6aa8def4_nohash_0_stop.wav vox1_test_wav/id0002383/cd7f8c1b_nohash_3_down.wav
+> 1 vox1_test_wav/id0002464/6aa8def4_nohash_0_stop.wav vox1_test_wav/id0002549/2aca1e72_nohash_7_one.wav
+42373,42374c42373,42374
+< 0 vox1_test_wav/id0002369/57376a4c_nohash_0_cat.wav vox1_test_wav/id0002621/637c702a_nohash_1_zero.wav
+< 0 vox1_test_wav/id0002369/57376a4c_nohash_0_cat.wav vox1_test_wav/id0002464/6aa8def4_nohash_4_backward.wav
+---
+> 1 vox1_test_wav/id0002369/57376a4c_nohash_0_cat.wav vox1_test_wav/id0002621/637c702a_nohash_1_zero.wav
+> 1 vox1_test_wav/id0002369/57376a4c_nohash_0_cat.wav vox1_test_wav/id0002464/6aa8def4_nohash_4_backward.wav
+42377,42378c42377,42378
+< 0 vox1_test_wav/id0002370/f4386675_nohash_1_tree.wav vox1_test_wav/id0002560/c2dccf38_nohash_1_two.wav
+< 0 vox1_test_wav/id0002370/f4386675_nohash_1_tree.wav vox1_test_wav/id0002419/c1e0e8e3_nohash_0_bed.wav
+---
+> 1 vox1_test_wav/id0002370/f4386675_nohash_1_tree.wav vox1_test_wav/id0002560/c2dccf38_nohash_1_two.wav
+> 1 vox1_test_wav/id0002370/f4386675_nohash_1_tree.wav vox1_test_wav/id0002419/c1e0e8e3_nohash_0_bed.wav
+42381,42382c42381,42382
+< 0 vox1_test_wav/id0002607/a929f9b9_nohash_4_six.wav vox1_test_wav/id0002502/90804775_nohash_1_sheila.wav
+< 0 vox1_test_wav/id0002607/a929f9b9_nohash_4_six.wav vox1_test_wav/id0002605/db9d52d2_nohash_0_nine.wav
+---
+> 1 vox1_test_wav/id0002607/a929f9b9_nohash_4_six.wav vox1_test_wav/id0002502/90804775_nohash_1_sheila.wav
+> 1 vox1_test_wav/id0002607/a929f9b9_nohash_4_six.wav vox1_test_wav/id0002605/db9d52d2_nohash_0_nine.wav
+42385,42386c42385,42386
+< 0 vox1_test_wav/id0002464/6aa8def4_nohash_2_one.wav vox1_test_wav/id0002451/8931f494_nohash_1_four.wav
+< 0 vox1_test_wav/id0002464/6aa8def4_nohash_2_one.wav vox1_test_wav/id0002560/c2dccf38_nohash_2_on.wav
+---
+> 1 vox1_test_wav/id0002464/6aa8def4_nohash_2_one.wav vox1_test_wav/id0002451/8931f494_nohash_1_four.wav
+> 1 vox1_test_wav/id0002464/6aa8def4_nohash_2_one.wav vox1_test_wav/id0002560/c2dccf38_nohash_2_on.wav
+42389,42390c42389,42390
+< 0 vox1_test_wav/id0002411/cb72dfb6_nohash_2_one.wav vox1_test_wav/id0002458/ffd2ba2f_nohash_1_yes.wav
+< 0 vox1_test_wav/id0002411/cb72dfb6_nohash_2_one.wav vox1_test_wav/id0002620/63f7a489_nohash_1_left.wav
+---
+> 1 vox1_test_wav/id0002411/cb72dfb6_nohash_2_one.wav vox1_test_wav/id0002458/ffd2ba2f_nohash_1_yes.wav
+> 1 vox1_test_wav/id0002411/cb72dfb6_nohash_2_one.wav vox1_test_wav/id0002620/63f7a489_nohash_1_left.wav
+42393,42394c42393,42394
+< 0 vox1_test_wav/id0002439/016e2c6d_nohash_0_marvin.wav vox1_test_wav/id0002598/fc6b15ea_nohash_0_learn.wav
+< 0 vox1_test_wav/id0002439/016e2c6d_nohash_0_marvin.wav vox1_test_wav/id0002591/645ed69d_nohash_2_yes.wav
+---
+> 1 vox1_test_wav/id0002439/016e2c6d_nohash_0_marvin.wav vox1_test_wav/id0002598/fc6b15ea_nohash_0_learn.wav
+> 1 vox1_test_wav/id0002439/016e2c6d_nohash_0_marvin.wav vox1_test_wav/id0002591/645ed69d_nohash_2_yes.wav
+42397,42398c42397,42398
+< 0 vox1_test_wav/id0002542/1b4c9b89_nohash_1_on.wav vox1_test_wav/id0002436/3903b558_nohash_0_tree.wav
+< 0 vox1_test_wav/id0002542/1b4c9b89_nohash_1_on.wav vox1_test_wav/id0002413/f736ab63_nohash_2_forward.wav
+---
+> 1 vox1_test_wav/id0002542/1b4c9b89_nohash_1_on.wav vox1_test_wav/id0002436/3903b558_nohash_0_tree.wav
+> 1 vox1_test_wav/id0002542/1b4c9b89_nohash_1_on.wav vox1_test_wav/id0002413/f736ab63_nohash_2_forward.wav
+42401c42401
+< 0 vox1_test_wav/id0002487/c578beb0_nohash_1_left.wav vox1_test_wav/id0002510/20174140_nohash_1_house.wav
+---
+> 1 vox1_test_wav/id0002487/c578beb0_nohash_1_left.wav vox1_test_wav/id0002510/20174140_nohash_1_house.wav
+42404c42404
+< 1 vox1_test_wav/id0002538/92e17cc4_nohash_0_stop.wav vox1_test_wav/id0002538/92e17cc4_nohash_1_dog.wav
+---
+> 0 vox1_test_wav/id0002538/92e17cc4_nohash_0_stop.wav vox1_test_wav/id0002538/92e17cc4_nohash_1_dog.wav
+42407,42408c42407,42408
+< 1 vox1_test_wav/id0002406/9fac5701_nohash_0_on.wav vox1_test_wav/id0002406/9fac5701_nohash_0_happy.wav
+< 1 vox1_test_wav/id0002406/9fac5701_nohash_0_on.wav vox1_test_wav/id0002406/9fac5701_nohash_1_six.wav
+---
+> 0 vox1_test_wav/id0002406/9fac5701_nohash_0_on.wav vox1_test_wav/id0002406/9fac5701_nohash_0_happy.wav
+> 0 vox1_test_wav/id0002406/9fac5701_nohash_0_on.wav vox1_test_wav/id0002406/9fac5701_nohash_1_six.wav
+42411,42412c42411,42412
+< 1 vox1_test_wav/id0002569/5cf1ecce_nohash_4_stop.wav vox1_test_wav/id0002569/5cf1ecce_nohash_3_down.wav
+< 1 vox1_test_wav/id0002569/5cf1ecce_nohash_4_stop.wav vox1_test_wav/id0002569/5cf1ecce_nohash_1_up.wav
+---
+> 0 vox1_test_wav/id0002569/5cf1ecce_nohash_4_stop.wav vox1_test_wav/id0002569/5cf1ecce_nohash_3_down.wav
+> 0 vox1_test_wav/id0002569/5cf1ecce_nohash_4_stop.wav vox1_test_wav/id0002569/5cf1ecce_nohash_1_up.wav
+42415,42416c42415,42416
+< 1 vox1_test_wav/id0002608/bd8412df_nohash_0_dog.wav vox1_test_wav/id0002608/bd8412df_nohash_0_zero.wav
+< 1 vox1_test_wav/id0002608/bd8412df_nohash_0_dog.wav vox1_test_wav/id0002608/bd8412df_nohash_0_left.wav
+---
+> 0 vox1_test_wav/id0002608/bd8412df_nohash_0_dog.wav vox1_test_wav/id0002608/bd8412df_nohash_0_zero.wav
+> 0 vox1_test_wav/id0002608/bd8412df_nohash_0_dog.wav vox1_test_wav/id0002608/bd8412df_nohash_0_left.wav
+42419,42420c42419,42420
+< 1 vox1_test_wav/id0002591/645ed69d_nohash_0_right.wav vox1_test_wav/id0002591/645ed69d_nohash_4_learn.wav
+< 1 vox1_test_wav/id0002591/645ed69d_nohash_0_right.wav vox1_test_wav/id0002591/645ed69d_nohash_0_house.wav
+---
+> 0 vox1_test_wav/id0002591/645ed69d_nohash_0_right.wav vox1_test_wav/id0002591/645ed69d_nohash_4_learn.wav
+> 0 vox1_test_wav/id0002591/645ed69d_nohash_0_right.wav vox1_test_wav/id0002591/645ed69d_nohash_0_house.wav
+42423,42424c42423,42424
+< 1 vox1_test_wav/id0002528/ad63d93c_nohash_3_right.wav vox1_test_wav/id0002528/ad63d93c_nohash_2_zero.wav
+< 1 vox1_test_wav/id0002528/ad63d93c_nohash_3_right.wav vox1_test_wav/id0002528/ad63d93c_nohash_2_on.wav
+---
+> 0 vox1_test_wav/id0002528/ad63d93c_nohash_3_right.wav vox1_test_wav/id0002528/ad63d93c_nohash_2_zero.wav
+> 0 vox1_test_wav/id0002528/ad63d93c_nohash_3_right.wav vox1_test_wav/id0002528/ad63d93c_nohash_2_on.wav
+42427,42428c42427,42428
+< 1 vox1_test_wav/id0002377/8769c34c_nohash_2_down.wav vox1_test_wav/id0002377/8769c34c_nohash_2_four.wav
+< 1 vox1_test_wav/id0002377/8769c34c_nohash_2_down.wav vox1_test_wav/id0002377/8769c34c_nohash_3_up.wav
+---
+> 0 vox1_test_wav/id0002377/8769c34c_nohash_2_down.wav vox1_test_wav/id0002377/8769c34c_nohash_2_four.wav
+> 0 vox1_test_wav/id0002377/8769c34c_nohash_2_down.wav vox1_test_wav/id0002377/8769c34c_nohash_3_up.wav
+42431,42432c42431,42432
+< 1 vox1_test_wav/id0002595/b7a6f709_nohash_1_no.wav vox1_test_wav/id0002595/b7a6f709_nohash_0_up.wav
+< 1 vox1_test_wav/id0002595/b7a6f709_nohash_1_no.wav vox1_test_wav/id0002595/b7a6f709_nohash_0_bed.wav
+---
+> 0 vox1_test_wav/id0002595/b7a6f709_nohash_1_no.wav vox1_test_wav/id0002595/b7a6f709_nohash_0_up.wav
+> 0 vox1_test_wav/id0002595/b7a6f709_nohash_1_no.wav vox1_test_wav/id0002595/b7a6f709_nohash_0_bed.wav
+42435,42436c42435,42436
+< 1 vox1_test_wav/id0002514/73f20b00_nohash_0_zero.wav vox1_test_wav/id0002514/73f20b00_nohash_0_left.wav
+< 1 vox1_test_wav/id0002514/73f20b00_nohash_0_zero.wav vox1_test_wav/id0002514/73f20b00_nohash_2_zero.wav
+---
+> 0 vox1_test_wav/id0002514/73f20b00_nohash_0_zero.wav vox1_test_wav/id0002514/73f20b00_nohash_0_left.wav
+> 0 vox1_test_wav/id0002514/73f20b00_nohash_0_zero.wav vox1_test_wav/id0002514/73f20b00_nohash_2_zero.wav
+42439,42440c42439,42440
+< 1 vox1_test_wav/id0002518/42a99aec_nohash_4_yes.wav vox1_test_wav/id0002518/42a99aec_nohash_3_two.wav
+< 1 vox1_test_wav/id0002518/42a99aec_nohash_4_yes.wav vox1_test_wav/id0002518/42a99aec_nohash_4_up.wav
+---
+> 0 vox1_test_wav/id0002518/42a99aec_nohash_4_yes.wav vox1_test_wav/id0002518/42a99aec_nohash_3_two.wav
+> 0 vox1_test_wav/id0002518/42a99aec_nohash_4_yes.wav vox1_test_wav/id0002518/42a99aec_nohash_4_up.wav
+42443,42444c42443,42444
+< 1 vox1_test_wav/id0002374/0132a06d_nohash_1_off.wav vox1_test_wav/id0002374/0132a06d_nohash_3_off.wav
+< 1 vox1_test_wav/id0002374/0132a06d_nohash_1_off.wav vox1_test_wav/id0002374/0132a06d_nohash_3_right.wav
+---
+> 0 vox1_test_wav/id0002374/0132a06d_nohash_1_off.wav vox1_test_wav/id0002374/0132a06d_nohash_3_off.wav
+> 0 vox1_test_wav/id0002374/0132a06d_nohash_1_off.wav vox1_test_wav/id0002374/0132a06d_nohash_3_right.wav
+42447,42448c42447,42448
+< 1 vox1_test_wav/id0002441/e882abb2_nohash_4_eight.wav vox1_test_wav/id0002441/e882abb2_nohash_4_three.wav
+< 1 vox1_test_wav/id0002441/e882abb2_nohash_4_eight.wav vox1_test_wav/id0002441/e882abb2_nohash_1_yes.wav
+---
+> 0 vox1_test_wav/id0002441/e882abb2_nohash_4_eight.wav vox1_test_wav/id0002441/e882abb2_nohash_4_three.wav
+> 0 vox1_test_wav/id0002441/e882abb2_nohash_4_eight.wav vox1_test_wav/id0002441/e882abb2_nohash_1_yes.wav
+42451,42452c42451,42452
+< 1 vox1_test_wav/id0002498/6f2c6f7e_nohash_0_five.wav vox1_test_wav/id0002498/6f2c6f7e_nohash_1_off.wav
+< 1 vox1_test_wav/id0002498/6f2c6f7e_nohash_0_five.wav vox1_test_wav/id0002498/6f2c6f7e_nohash_0_go.wav
+---
+> 0 vox1_test_wav/id0002498/6f2c6f7e_nohash_0_five.wav vox1_test_wav/id0002498/6f2c6f7e_nohash_1_off.wav
+> 0 vox1_test_wav/id0002498/6f2c6f7e_nohash_0_five.wav vox1_test_wav/id0002498/6f2c6f7e_nohash_0_go.wav
+42455,42456c42455,42456
+< 1 vox1_test_wav/id0002603/31f01a8d_nohash_1_one.wav vox1_test_wav/id0002603/31f01a8d_nohash_3_stop.wav
+< 1 vox1_test_wav/id0002603/31f01a8d_nohash_1_one.wav vox1_test_wav/id0002603/31f01a8d_nohash_4_learn.wav
+---
+> 0 vox1_test_wav/id0002603/31f01a8d_nohash_1_one.wav vox1_test_wav/id0002603/31f01a8d_nohash_3_stop.wav
+> 0 vox1_test_wav/id0002603/31f01a8d_nohash_1_one.wav vox1_test_wav/id0002603/31f01a8d_nohash_4_learn.wav
+42459,42460c42459,42460
+< 1 vox1_test_wav/id0002569/5cf1ecce_nohash_1_four.wav vox1_test_wav/id0002569/5cf1ecce_nohash_0_happy.wav
+< 1 vox1_test_wav/id0002569/5cf1ecce_nohash_1_four.wav vox1_test_wav/id0002569/5cf1ecce_nohash_0_off.wav
+---
+> 0 vox1_test_wav/id0002569/5cf1ecce_nohash_1_four.wav vox1_test_wav/id0002569/5cf1ecce_nohash_0_happy.wav
+> 0 vox1_test_wav/id0002569/5cf1ecce_nohash_1_four.wav vox1_test_wav/id0002569/5cf1ecce_nohash_0_off.wav
+42463,42464c42463,42464
+< 1 vox1_test_wav/id0002459/8134f43f_nohash_1_three.wav vox1_test_wav/id0002459/8134f43f_nohash_0_seven.wav
+< 1 vox1_test_wav/id0002459/8134f43f_nohash_1_three.wav vox1_test_wav/id0002459/8134f43f_nohash_4_two.wav
+---
+> 0 vox1_test_wav/id0002459/8134f43f_nohash_1_three.wav vox1_test_wav/id0002459/8134f43f_nohash_0_seven.wav
+> 0 vox1_test_wav/id0002459/8134f43f_nohash_1_three.wav vox1_test_wav/id0002459/8134f43f_nohash_4_two.wav
+42467,42468c42467,42468
+< 1 vox1_test_wav/id0002574/30137d34_nohash_0_go.wav vox1_test_wav/id0002574/30137d34_nohash_0_right.wav
+< 1 vox1_test_wav/id0002574/30137d34_nohash_0_go.wav vox1_test_wav/id0002574/30137d34_nohash_2_yes.wav
+---
+> 0 vox1_test_wav/id0002574/30137d34_nohash_0_go.wav vox1_test_wav/id0002574/30137d34_nohash_0_right.wav
+> 0 vox1_test_wav/id0002574/30137d34_nohash_0_go.wav vox1_test_wav/id0002574/30137d34_nohash_2_yes.wav
+42471,42472c42471,42472
+< 1 vox1_test_wav/id0002374/0132a06d_nohash_0_off.wav vox1_test_wav/id0002374/0132a06d_nohash_1_up.wav
+< 1 vox1_test_wav/id0002374/0132a06d_nohash_0_off.wav vox1_test_wav/id0002374/0132a06d_nohash_4_one.wav
+---
+> 0 vox1_test_wav/id0002374/0132a06d_nohash_0_off.wav vox1_test_wav/id0002374/0132a06d_nohash_1_up.wav
+> 0 vox1_test_wav/id0002374/0132a06d_nohash_0_off.wav vox1_test_wav/id0002374/0132a06d_nohash_4_one.wav
+42475,42476c42475,42476
+< 1 vox1_test_wav/id0002428/76e53db9_nohash_0_go.wav vox1_test_wav/id0002428/76e53db9_nohash_1_happy.wav
+< 1 vox1_test_wav/id0002428/76e53db9_nohash_0_go.wav vox1_test_wav/id0002428/76e53db9_nohash_0_no.wav
+---
+> 0 vox1_test_wav/id0002428/76e53db9_nohash_0_go.wav vox1_test_wav/id0002428/76e53db9_nohash_1_happy.wav
+> 0 vox1_test_wav/id0002428/76e53db9_nohash_0_go.wav vox1_test_wav/id0002428/76e53db9_nohash_0_no.wav
+42479,42480c42479,42480
+< 1 vox1_test_wav/id0002464/6aa8def4_nohash_0_right.wav vox1_test_wav/id0002464/6aa8def4_nohash_1_five.wav
+< 1 vox1_test_wav/id0002464/6aa8def4_nohash_0_right.wav vox1_test_wav/id0002464/6aa8def4_nohash_3_seven.wav
+---
+> 0 vox1_test_wav/id0002464/6aa8def4_nohash_0_right.wav vox1_test_wav/id0002464/6aa8def4_nohash_1_five.wav
+> 0 vox1_test_wav/id0002464/6aa8def4_nohash_0_right.wav vox1_test_wav/id0002464/6aa8def4_nohash_3_seven.wav
+42483,42484c42483,42484
+< 1 vox1_test_wav/id0002447/daf230ac_nohash_0_four.wav vox1_test_wav/id0002447/daf230ac_nohash_1_one.wav
+< 1 vox1_test_wav/id0002447/daf230ac_nohash_0_four.wav vox1_test_wav/id0002447/daf230ac_nohash_0_three.wav
+---
+> 0 vox1_test_wav/id0002447/daf230ac_nohash_0_four.wav vox1_test_wav/id0002447/daf230ac_nohash_1_one.wav
+> 0 vox1_test_wav/id0002447/daf230ac_nohash_0_four.wav vox1_test_wav/id0002447/daf230ac_nohash_0_three.wav
+42487,42488c42487,42488
+< 1 vox1_test_wav/id0002592/8bf6acb9_nohash_1_on.wav vox1_test_wav/id0002592/8bf6acb9_nohash_0_seven.wav
+< 1 vox1_test_wav/id0002592/8bf6acb9_nohash_1_on.wav vox1_test_wav/id0002592/8bf6acb9_nohash_0_down.wav
+---
+> 0 vox1_test_wav/id0002592/8bf6acb9_nohash_1_on.wav vox1_test_wav/id0002592/8bf6acb9_nohash_0_seven.wav
+> 0 vox1_test_wav/id0002592/8bf6acb9_nohash_1_on.wav vox1_test_wav/id0002592/8bf6acb9_nohash_0_down.wav
+42491,42492c42491,42492
+< 1 vox1_test_wav/id0002614/f035e2ea_nohash_1_forward.wav vox1_test_wav/id0002614/f035e2ea_nohash_1_go.wav
+< 1 vox1_test_wav/id0002614/f035e2ea_nohash_1_forward.wav vox1_test_wav/id0002614/f035e2ea_nohash_3_nine.wav
+---
+> 0 vox1_test_wav/id0002614/f035e2ea_nohash_1_forward.wav vox1_test_wav/id0002614/f035e2ea_nohash_1_go.wav
+> 0 vox1_test_wav/id0002614/f035e2ea_nohash_1_forward.wav vox1_test_wav/id0002614/f035e2ea_nohash_3_nine.wav
+42495,42496c42495,42496
+< 1 vox1_test_wav/id0002591/645ed69d_nohash_2_no.wav vox1_test_wav/id0002591/645ed69d_nohash_4_learn.wav
+< 1 vox1_test_wav/id0002591/645ed69d_nohash_2_no.wav vox1_test_wav/id0002591/645ed69d_nohash_1_follow.wav
+---
+> 0 vox1_test_wav/id0002591/645ed69d_nohash_2_no.wav vox1_test_wav/id0002591/645ed69d_nohash_4_learn.wav
+> 0 vox1_test_wav/id0002591/645ed69d_nohash_2_no.wav vox1_test_wav/id0002591/645ed69d_nohash_1_follow.wav
+42499,42500c42499,42500
+< 1 vox1_test_wav/id0002467/352ffbe3_nohash_0_six.wav vox1_test_wav/id0002467/352ffbe3_nohash_0_happy.wav
+< 1 vox1_test_wav/id0002467/352ffbe3_nohash_0_six.wav vox1_test_wav/id0002467/352ffbe3_nohash_0_down.wav
+---
+> 0 vox1_test_wav/id0002467/352ffbe3_nohash_0_six.wav vox1_test_wav/id0002467/352ffbe3_nohash_0_happy.wav
+> 0 vox1_test_wav/id0002467/352ffbe3_nohash_0_six.wav vox1_test_wav/id0002467/352ffbe3_nohash_0_down.wav
+42503,42504c42503,42504
+< 1 vox1_test_wav/id0002398/de4f7798_nohash_0_house.wav vox1_test_wav/id0002398/de4f7798_nohash_1_one.wav
+< 1 vox1_test_wav/id0002398/de4f7798_nohash_0_house.wav vox1_test_wav/id0002398/de4f7798_nohash_0_left.wav
+---
+> 0 vox1_test_wav/id0002398/de4f7798_nohash_0_house.wav vox1_test_wav/id0002398/de4f7798_nohash_1_one.wav
+> 0 vox1_test_wav/id0002398/de4f7798_nohash_0_house.wav vox1_test_wav/id0002398/de4f7798_nohash_0_left.wav
+42507,42508c42507,42508
+< 1 vox1_test_wav/id0002528/ad63d93c_nohash_0_no.wav vox1_test_wav/id0002528/ad63d93c_nohash_3_right.wav
+< 1 vox1_test_wav/id0002528/ad63d93c_nohash_0_no.wav vox1_test_wav/id0002528/ad63d93c_nohash_1_four.wav
+---
+> 0 vox1_test_wav/id0002528/ad63d93c_nohash_0_no.wav vox1_test_wav/id0002528/ad63d93c_nohash_3_right.wav
+> 0 vox1_test_wav/id0002528/ad63d93c_nohash_0_no.wav vox1_test_wav/id0002528/ad63d93c_nohash_1_four.wav
+42511,42512c42511,42512
+< 1 vox1_test_wav/id0002527/65f2531f_nohash_0_seven.wav vox1_test_wav/id0002527/65f2531f_nohash_0_eight.wav
+< 1 vox1_test_wav/id0002527/65f2531f_nohash_0_seven.wav vox1_test_wav/id0002527/65f2531f_nohash_1_one.wav
+---
+> 0 vox1_test_wav/id0002527/65f2531f_nohash_0_seven.wav vox1_test_wav/id0002527/65f2531f_nohash_0_eight.wav
+> 0 vox1_test_wav/id0002527/65f2531f_nohash_0_seven.wav vox1_test_wav/id0002527/65f2531f_nohash_1_one.wav
+42515,42516c42515,42516
+< 1 vox1_test_wav/id0002464/6aa8def4_nohash_1_backward.wav vox1_test_wav/id0002464/6aa8def4_nohash_2_eight.wav
+< 1 vox1_test_wav/id0002464/6aa8def4_nohash_1_backward.wav vox1_test_wav/id0002464/6aa8def4_nohash_1_go.wav
+---
+> 0 vox1_test_wav/id0002464/6aa8def4_nohash_1_backward.wav vox1_test_wav/id0002464/6aa8def4_nohash_2_eight.wav
+> 0 vox1_test_wav/id0002464/6aa8def4_nohash_1_backward.wav vox1_test_wav/id0002464/6aa8def4_nohash_1_go.wav
+42519,42520c42519,42520
+< 1 vox1_test_wav/id0002372/b528edb3_nohash_2_four.wav vox1_test_wav/id0002372/b528edb3_nohash_0_visual.wav
+< 1 vox1_test_wav/id0002372/b528edb3_nohash_2_four.wav vox1_test_wav/id0002372/b528edb3_nohash_1_seven.wav
+---
+> 0 vox1_test_wav/id0002372/b528edb3_nohash_2_four.wav vox1_test_wav/id0002372/b528edb3_nohash_0_visual.wav
+> 0 vox1_test_wav/id0002372/b528edb3_nohash_2_four.wav vox1_test_wav/id0002372/b528edb3_nohash_1_seven.wav
+42523,42524c42523,42524
+< 1 vox1_test_wav/id0002561/fb9d6d23_nohash_2_three.wav vox1_test_wav/id0002561/fb9d6d23_nohash_1_go.wav
+< 1 vox1_test_wav/id0002561/fb9d6d23_nohash_2_three.wav vox1_test_wav/id0002561/fb9d6d23_nohash_1_tree.wav
+---
+> 0 vox1_test_wav/id0002561/fb9d6d23_nohash_2_three.wav vox1_test_wav/id0002561/fb9d6d23_nohash_1_go.wav
+> 0 vox1_test_wav/id0002561/fb9d6d23_nohash_2_three.wav vox1_test_wav/id0002561/fb9d6d23_nohash_1_tree.wav
+42527,42528c42527,42528
+< 1 vox1_test_wav/id0002620/63f7a489_nohash_2_on.wav vox1_test_wav/id0002620/63f7a489_nohash_1_go.wav
+< 1 vox1_test_wav/id0002620/63f7a489_nohash_2_on.wav vox1_test_wav/id0002620/63f7a489_nohash_0_seven.wav
+---
+> 0 vox1_test_wav/id0002620/63f7a489_nohash_2_on.wav vox1_test_wav/id0002620/63f7a489_nohash_1_go.wav
+> 0 vox1_test_wav/id0002620/63f7a489_nohash_2_on.wav vox1_test_wav/id0002620/63f7a489_nohash_0_seven.wav
+42531,42532c42531,42532
+< 1 vox1_test_wav/id0002534/888a0c49_nohash_1_no.wav vox1_test_wav/id0002534/888a0c49_nohash_4_up.wav
+< 1 vox1_test_wav/id0002534/888a0c49_nohash_1_no.wav vox1_test_wav/id0002534/888a0c49_nohash_2_eight.wav
+---
+> 0 vox1_test_wav/id0002534/888a0c49_nohash_1_no.wav vox1_test_wav/id0002534/888a0c49_nohash_4_up.wav
+> 0 vox1_test_wav/id0002534/888a0c49_nohash_1_no.wav vox1_test_wav/id0002534/888a0c49_nohash_2_eight.wav
+42535,42536c42535,42536
+< 1 vox1_test_wav/id0002549/2aca1e72_nohash_1_seven.wav vox1_test_wav/id0002549/2aca1e72_nohash_5_nine.wav
+< 1 vox1_test_wav/id0002549/2aca1e72_nohash_1_seven.wav vox1_test_wav/id0002549/2aca1e72_nohash_1_yes.wav
+---
+> 0 vox1_test_wav/id0002549/2aca1e72_nohash_1_seven.wav vox1_test_wav/id0002549/2aca1e72_nohash_5_nine.wav
+> 0 vox1_test_wav/id0002549/2aca1e72_nohash_1_seven.wav vox1_test_wav/id0002549/2aca1e72_nohash_1_yes.wav
+42539,42540c42539,42540
+< 1 vox1_test_wav/id0002441/e882abb2_nohash_0_one.wav vox1_test_wav/id0002441/e882abb2_nohash_1_down.wav
+< 1 vox1_test_wav/id0002441/e882abb2_nohash_0_one.wav vox1_test_wav/id0002441/e882abb2_nohash_0_tree.wav
+---
+> 0 vox1_test_wav/id0002441/e882abb2_nohash_0_one.wav vox1_test_wav/id0002441/e882abb2_nohash_1_down.wav
+> 0 vox1_test_wav/id0002441/e882abb2_nohash_0_one.wav vox1_test_wav/id0002441/e882abb2_nohash_0_tree.wav
+42543,42544c42543,42544
+< 1 vox1_test_wav/id0002473/67bdbf56_nohash_0_nine.wav vox1_test_wav/id0002473/67bdbf56_nohash_1_zero.wav
+< 1 vox1_test_wav/id0002473/67bdbf56_nohash_0_nine.wav vox1_test_wav/id0002473/67bdbf56_nohash_0_down.wav
+---
+> 0 vox1_test_wav/id0002473/67bdbf56_nohash_0_nine.wav vox1_test_wav/id0002473/67bdbf56_nohash_1_zero.wav
+> 0 vox1_test_wav/id0002473/67bdbf56_nohash_0_nine.wav vox1_test_wav/id0002473/67bdbf56_nohash_0_down.wav
+42547,42548c42547,42548
+< 1 vox1_test_wav/id0002529/1c84a139_nohash_2_zero.wav vox1_test_wav/id0002529/1c84a139_nohash_4_five.wav
+< 1 vox1_test_wav/id0002529/1c84a139_nohash_2_zero.wav vox1_test_wav/id0002529/1c84a139_nohash_2_on.wav
+---
+> 0 vox1_test_wav/id0002529/1c84a139_nohash_2_zero.wav vox1_test_wav/id0002529/1c84a139_nohash_4_five.wav
+> 0 vox1_test_wav/id0002529/1c84a139_nohash_2_zero.wav vox1_test_wav/id0002529/1c84a139_nohash_2_on.wav
+42551,42552c42551,42552
+< 1 vox1_test_wav/id0002601/be7fa0a3_nohash_0_wow.wav vox1_test_wav/id0002601/be7fa0a3_nohash_1_one.wav
+< 1 vox1_test_wav/id0002601/be7fa0a3_nohash_0_wow.wav vox1_test_wav/id0002601/be7fa0a3_nohash_1_house.wav
+---
+> 0 vox1_test_wav/id0002601/be7fa0a3_nohash_0_wow.wav vox1_test_wav/id0002601/be7fa0a3_nohash_1_one.wav
+> 0 vox1_test_wav/id0002601/be7fa0a3_nohash_0_wow.wav vox1_test_wav/id0002601/be7fa0a3_nohash_1_house.wav
+42555,42556c42555,42556
+< 1 vox1_test_wav/id0002395/e269bac0_nohash_0_yes.wav vox1_test_wav/id0002395/e269bac0_nohash_1_sheila.wav
+< 1 vox1_test_wav/id0002395/e269bac0_nohash_0_yes.wav vox1_test_wav/id0002395/e269bac0_nohash_0_sheila.wav
+---
+> 0 vox1_test_wav/id0002395/e269bac0_nohash_0_yes.wav vox1_test_wav/id0002395/e269bac0_nohash_1_sheila.wav
+> 0 vox1_test_wav/id0002395/e269bac0_nohash_0_yes.wav vox1_test_wav/id0002395/e269bac0_nohash_0_sheila.wav
+42559,42560c42559,42560
+< 1 vox1_test_wav/id0002377/8769c34c_nohash_3_off.wav vox1_test_wav/id0002377/8769c34c_nohash_3_go.wav
+< 1 vox1_test_wav/id0002377/8769c34c_nohash_3_off.wav vox1_test_wav/id0002377/8769c34c_nohash_0_eight.wav
+---
+> 0 vox1_test_wav/id0002377/8769c34c_nohash_3_off.wav vox1_test_wav/id0002377/8769c34c_nohash_3_go.wav
+> 0 vox1_test_wav/id0002377/8769c34c_nohash_3_off.wav vox1_test_wav/id0002377/8769c34c_nohash_0_eight.wav
+42563,42564c42563,42564
+< 1 vox1_test_wav/id0002620/63f7a489_nohash_1_three.wav vox1_test_wav/id0002620/63f7a489_nohash_3_left.wav
+< 1 vox1_test_wav/id0002620/63f7a489_nohash_1_three.wav vox1_test_wav/id0002620/63f7a489_nohash_4_up.wav
+---
+> 0 vox1_test_wav/id0002620/63f7a489_nohash_1_three.wav vox1_test_wav/id0002620/63f7a489_nohash_3_left.wav
+> 0 vox1_test_wav/id0002620/63f7a489_nohash_1_three.wav vox1_test_wav/id0002620/63f7a489_nohash_4_up.wav
+42567,42568c42567,42568
+< 1 vox1_test_wav/id0002485/1b0ba6f1_nohash_0_wow.wav vox1_test_wav/id0002485/1b0ba6f1_nohash_1_wow.wav
+< 1 vox1_test_wav/id0002485/1b0ba6f1_nohash_0_wow.wav vox1_test_wav/id0002485/1b0ba6f1_nohash_0_eight.wav
+---
+> 0 vox1_test_wav/id0002485/1b0ba6f1_nohash_0_wow.wav vox1_test_wav/id0002485/1b0ba6f1_nohash_1_wow.wav
+> 0 vox1_test_wav/id0002485/1b0ba6f1_nohash_0_wow.wav vox1_test_wav/id0002485/1b0ba6f1_nohash_0_eight.wav
+42571,42572c42571,42572
+< 1 vox1_test_wav/id0002438/ff0e27c3_nohash_0_nine.wav vox1_test_wav/id0002438/ff0e27c3_nohash_2_dog.wav
+< 1 vox1_test_wav/id0002438/ff0e27c3_nohash_0_nine.wav vox1_test_wav/id0002438/ff0e27c3_nohash_0_tree.wav
+---
+> 0 vox1_test_wav/id0002438/ff0e27c3_nohash_0_nine.wav vox1_test_wav/id0002438/ff0e27c3_nohash_2_dog.wav
+> 0 vox1_test_wav/id0002438/ff0e27c3_nohash_0_nine.wav vox1_test_wav/id0002438/ff0e27c3_nohash_0_tree.wav
+42575,42576c42575,42576
+< 1 vox1_test_wav/id0002593/56eb74ae_nohash_2_five.wav vox1_test_wav/id0002593/56eb74ae_nohash_1_right.wav
+< 1 vox1_test_wav/id0002593/56eb74ae_nohash_2_five.wav vox1_test_wav/id0002593/56eb74ae_nohash_0_seven.wav
+---
+> 0 vox1_test_wav/id0002593/56eb74ae_nohash_2_five.wav vox1_test_wav/id0002593/56eb74ae_nohash_1_right.wav
+> 0 vox1_test_wav/id0002593/56eb74ae_nohash_2_five.wav vox1_test_wav/id0002593/56eb74ae_nohash_0_seven.wav
+42579,42580c42579,42580
+< 1 vox1_test_wav/id0002518/42a99aec_nohash_1_yes.wav vox1_test_wav/id0002518/42a99aec_nohash_4_no.wav
+< 1 vox1_test_wav/id0002518/42a99aec_nohash_1_yes.wav vox1_test_wav/id0002518/42a99aec_nohash_0_two.wav
+---
+> 0 vox1_test_wav/id0002518/42a99aec_nohash_1_yes.wav vox1_test_wav/id0002518/42a99aec_nohash_4_no.wav
+> 0 vox1_test_wav/id0002518/42a99aec_nohash_1_yes.wav vox1_test_wav/id0002518/42a99aec_nohash_0_two.wav
+42583,42584c42583,42584
+< 1 vox1_test_wav/id0002421/e8c3c5ca_nohash_0_marvin.wav vox1_test_wav/id0002421/e8c3c5ca_nohash_0_four.wav
+< 1 vox1_test_wav/id0002421/e8c3c5ca_nohash_0_marvin.wav vox1_test_wav/id0002421/e8c3c5ca_nohash_1_bed.wav
+---
+> 0 vox1_test_wav/id0002421/e8c3c5ca_nohash_0_marvin.wav vox1_test_wav/id0002421/e8c3c5ca_nohash_0_four.wav
+> 0 vox1_test_wav/id0002421/e8c3c5ca_nohash_0_marvin.wav vox1_test_wav/id0002421/e8c3c5ca_nohash_1_bed.wav
+42587,42588c42587,42588
+< 1 vox1_test_wav/id0002480/fbe51750_nohash_1_off.wav vox1_test_wav/id0002480/fbe51750_nohash_0_sheila.wav
+< 1 vox1_test_wav/id0002480/fbe51750_nohash_1_off.wav vox1_test_wav/id0002480/fbe51750_nohash_1_down.wav
+---
+> 0 vox1_test_wav/id0002480/fbe51750_nohash_1_off.wav vox1_test_wav/id0002480/fbe51750_nohash_0_sheila.wav
+> 0 vox1_test_wav/id0002480/fbe51750_nohash_1_off.wav vox1_test_wav/id0002480/fbe51750_nohash_1_down.wav
+42591,42592c42591,42592
+< 1 vox1_test_wav/id0002427/40738a2d_nohash_2_stop.wav vox1_test_wav/id0002427/40738a2d_nohash_3_eight.wav
+< 1 vox1_test_wav/id0002427/40738a2d_nohash_2_stop.wav vox1_test_wav/id0002427/40738a2d_nohash_1_one.wav
+---
+> 0 vox1_test_wav/id0002427/40738a2d_nohash_2_stop.wav vox1_test_wav/id0002427/40738a2d_nohash_3_eight.wav
+> 0 vox1_test_wav/id0002427/40738a2d_nohash_2_stop.wav vox1_test_wav/id0002427/40738a2d_nohash_1_one.wav
+42595,42596c42595,42596
+< 1 vox1_test_wav/id0002459/8134f43f_nohash_2_four.wav vox1_test_wav/id0002459/8134f43f_nohash_4_eight.wav
+< 1 vox1_test_wav/id0002459/8134f43f_nohash_2_four.wav vox1_test_wav/id0002459/8134f43f_nohash_3_yes.wav
+---
+> 0 vox1_test_wav/id0002459/8134f43f_nohash_2_four.wav vox1_test_wav/id0002459/8134f43f_nohash_4_eight.wav
+> 0 vox1_test_wav/id0002459/8134f43f_nohash_2_four.wav vox1_test_wav/id0002459/8134f43f_nohash_3_yes.wav
+42599,42600c42599,42600
+< 1 vox1_test_wav/id0002411/cb72dfb6_nohash_3_up.wav vox1_test_wav/id0002411/cb72dfb6_nohash_1_two.wav
+< 1 vox1_test_wav/id0002411/cb72dfb6_nohash_3_up.wav vox1_test_wav/id0002411/cb72dfb6_nohash_4_nine.wav
+---
+> 0 vox1_test_wav/id0002411/cb72dfb6_nohash_3_up.wav vox1_test_wav/id0002411/cb72dfb6_nohash_1_two.wav
+> 0 vox1_test_wav/id0002411/cb72dfb6_nohash_3_up.wav vox1_test_wav/id0002411/cb72dfb6_nohash_4_nine.wav
+42603,42604c42603,42604
+< 1 vox1_test_wav/id0002596/f568162b_nohash_0_four.wav vox1_test_wav/id0002596/f568162b_nohash_1_nine.wav
+< 1 vox1_test_wav/id0002596/f568162b_nohash_0_four.wav vox1_test_wav/id0002596/f568162b_nohash_0_house.wav
+---
+> 0 vox1_test_wav/id0002596/f568162b_nohash_0_four.wav vox1_test_wav/id0002596/f568162b_nohash_1_nine.wav
+> 0 vox1_test_wav/id0002596/f568162b_nohash_0_four.wav vox1_test_wav/id0002596/f568162b_nohash_0_house.wav
+42607,42608c42607,42608
+< 1 vox1_test_wav/id0002546/4c1aa16d_nohash_3_two.wav vox1_test_wav/id0002546/4c1aa16d_nohash_1_one.wav
+< 1 vox1_test_wav/id0002546/4c1aa16d_nohash_3_two.wav vox1_test_wav/id0002546/4c1aa16d_nohash_2_two.wav
+---
+> 0 vox1_test_wav/id0002546/4c1aa16d_nohash_3_two.wav vox1_test_wav/id0002546/4c1aa16d_nohash_1_one.wav
+> 0 vox1_test_wav/id0002546/4c1aa16d_nohash_3_two.wav vox1_test_wav/id0002546/4c1aa16d_nohash_2_two.wav
+42611,42612c42611,42612
+< 1 vox1_test_wav/id0002374/0132a06d_nohash_0_two.wav vox1_test_wav/id0002374/0132a06d_nohash_3_right.wav
+< 1 vox1_test_wav/id0002374/0132a06d_nohash_0_two.wav vox1_test_wav/id0002374/0132a06d_nohash_2_six.wav
+---
+> 0 vox1_test_wav/id0002374/0132a06d_nohash_0_two.wav vox1_test_wav/id0002374/0132a06d_nohash_3_right.wav
+> 0 vox1_test_wav/id0002374/0132a06d_nohash_0_two.wav vox1_test_wav/id0002374/0132a06d_nohash_2_six.wav
+42615,42616c42615,42616
+< 1 vox1_test_wav/id0002566/022cd682_nohash_0_five.wav vox1_test_wav/id0002566/022cd682_nohash_0_down.wav
+< 1 vox1_test_wav/id0002566/022cd682_nohash_0_five.wav vox1_test_wav/id0002566/022cd682_nohash_0_left.wav
+---
+> 0 vox1_test_wav/id0002566/022cd682_nohash_0_five.wav vox1_test_wav/id0002566/022cd682_nohash_0_down.wav
+> 0 vox1_test_wav/id0002566/022cd682_nohash_0_five.wav vox1_test_wav/id0002566/022cd682_nohash_0_left.wav
+42619,42620c42619,42620
+< 1 vox1_test_wav/id0002377/8769c34c_nohash_0_eight.wav vox1_test_wav/id0002377/8769c34c_nohash_0_sheila.wav
+< 1 vox1_test_wav/id0002377/8769c34c_nohash_0_eight.wav vox1_test_wav/id0002377/8769c34c_nohash_4_five.wav
+---
+> 0 vox1_test_wav/id0002377/8769c34c_nohash_0_eight.wav vox1_test_wav/id0002377/8769c34c_nohash_0_sheila.wav
+> 0 vox1_test_wav/id0002377/8769c34c_nohash_0_eight.wav vox1_test_wav/id0002377/8769c34c_nohash_4_five.wav
+42623,42624c42623,42624
+< 1 vox1_test_wav/id0002441/e882abb2_nohash_0_happy.wav vox1_test_wav/id0002441/e882abb2_nohash_0_bed.wav
+< 1 vox1_test_wav/id0002441/e882abb2_nohash_0_happy.wav vox1_test_wav/id0002441/e882abb2_nohash_0_dog.wav
+---
+> 0 vox1_test_wav/id0002441/e882abb2_nohash_0_happy.wav vox1_test_wav/id0002441/e882abb2_nohash_0_bed.wav
+> 0 vox1_test_wav/id0002441/e882abb2_nohash_0_happy.wav vox1_test_wav/id0002441/e882abb2_nohash_0_dog.wav
+42627,42628c42627,42628
+< 1 vox1_test_wav/id0002578/42ccb57a_nohash_1_left.wav vox1_test_wav/id0002578/42ccb57a_nohash_2_wow.wav
+< 1 vox1_test_wav/id0002578/42ccb57a_nohash_1_left.wav vox1_test_wav/id0002578/42ccb57a_nohash_0_three.wav
+---
+> 0 vox1_test_wav/id0002578/42ccb57a_nohash_1_left.wav vox1_test_wav/id0002578/42ccb57a_nohash_2_wow.wav
+> 0 vox1_test_wav/id0002578/42ccb57a_nohash_1_left.wav vox1_test_wav/id0002578/42ccb57a_nohash_0_three.wav
+42631,42632c42631,42632
+< 1 vox1_test_wav/id0002607/a929f9b9_nohash_0_stop.wav vox1_test_wav/id0002607/a929f9b9_nohash_0_nine.wav
+< 1 vox1_test_wav/id0002607/a929f9b9_nohash_0_stop.wav vox1_test_wav/id0002607/a929f9b9_nohash_2_zero.wav
+---
+> 0 vox1_test_wav/id0002607/a929f9b9_nohash_0_stop.wav vox1_test_wav/id0002607/a929f9b9_nohash_0_nine.wav
+> 0 vox1_test_wav/id0002607/a929f9b9_nohash_0_stop.wav vox1_test_wav/id0002607/a929f9b9_nohash_2_zero.wav
+42635,42636c42635,42636
+< 1 vox1_test_wav/id0002602/8a56f36e_nohash_1_three.wav vox1_test_wav/id0002602/8a56f36e_nohash_0_up.wav
+< 1 vox1_test_wav/id0002602/8a56f36e_nohash_1_three.wav vox1_test_wav/id0002602/8a56f36e_nohash_0_two.wav
+---
+> 0 vox1_test_wav/id0002602/8a56f36e_nohash_1_three.wav vox1_test_wav/id0002602/8a56f36e_nohash_0_up.wav
+> 0 vox1_test_wav/id0002602/8a56f36e_nohash_1_three.wav vox1_test_wav/id0002602/8a56f36e_nohash_0_two.wav
+42639,42640c42639,42640
+< 1 vox1_test_wav/id0002439/016e2c6d_nohash_0_yes.wav vox1_test_wav/id0002439/016e2c6d_nohash_0_wow.wav
+< 1 vox1_test_wav/id0002439/016e2c6d_nohash_0_yes.wav vox1_test_wav/id0002439/016e2c6d_nohash_2_marvin.wav
+---
+> 0 vox1_test_wav/id0002439/016e2c6d_nohash_0_yes.wav vox1_test_wav/id0002439/016e2c6d_nohash_0_wow.wav
+> 0 vox1_test_wav/id0002439/016e2c6d_nohash_0_yes.wav vox1_test_wav/id0002439/016e2c6d_nohash_2_marvin.wav
+42643,42644c42643,42644
+< 1 vox1_test_wav/id0002550/a6d586b7_nohash_0_left.wav vox1_test_wav/id0002550/a6d586b7_nohash_0_on.wav
+< 1 vox1_test_wav/id0002550/a6d586b7_nohash_0_left.wav vox1_test_wav/id0002550/a6d586b7_nohash_1_on.wav
+---
+> 0 vox1_test_wav/id0002550/a6d586b7_nohash_0_left.wav vox1_test_wav/id0002550/a6d586b7_nohash_0_on.wav
+> 0 vox1_test_wav/id0002550/a6d586b7_nohash_0_left.wav vox1_test_wav/id0002550/a6d586b7_nohash_1_on.wav
+42647,42648c42647,42648
+< 1 vox1_test_wav/id0002624/3389305e_nohash_0_house.wav vox1_test_wav/id0002624/3389305e_nohash_2_yes.wav
+< 1 vox1_test_wav/id0002624/3389305e_nohash_0_house.wav vox1_test_wav/id0002624/3389305e_nohash_0_eight.wav
+---
+> 0 vox1_test_wav/id0002624/3389305e_nohash_0_house.wav vox1_test_wav/id0002624/3389305e_nohash_2_yes.wav
+> 0 vox1_test_wav/id0002624/3389305e_nohash_0_house.wav vox1_test_wav/id0002624/3389305e_nohash_0_eight.wav
+42651,42652c42651,42652
+< 1 vox1_test_wav/id0002406/9fac5701_nohash_2_no.wav vox1_test_wav/id0002406/9fac5701_nohash_0_down.wav
+< 1 vox1_test_wav/id0002406/9fac5701_nohash_2_no.wav vox1_test_wav/id0002406/9fac5701_nohash_1_one.wav
+---
+> 0 vox1_test_wav/id0002406/9fac5701_nohash_2_no.wav vox1_test_wav/id0002406/9fac5701_nohash_0_down.wav
+> 0 vox1_test_wav/id0002406/9fac5701_nohash_2_no.wav vox1_test_wav/id0002406/9fac5701_nohash_1_one.wav
+42655,42656c42655,42656
+< 1 vox1_test_wav/id0002429/cc554de3_nohash_1_five.wav vox1_test_wav/id0002429/cc554de3_nohash_1_tree.wav
+< 1 vox1_test_wav/id0002429/cc554de3_nohash_1_five.wav vox1_test_wav/id0002429/cc554de3_nohash_0_marvin.wav
+---
+> 0 vox1_test_wav/id0002429/cc554de3_nohash_1_five.wav vox1_test_wav/id0002429/cc554de3_nohash_1_tree.wav
+> 0 vox1_test_wav/id0002429/cc554de3_nohash_1_five.wav vox1_test_wav/id0002429/cc554de3_nohash_0_marvin.wav
+42659,42660c42659,42660
+< 1 vox1_test_wav/id0002614/f035e2ea_nohash_1_learn.wav vox1_test_wav/id0002614/f035e2ea_nohash_6_zero.wav
+< 1 vox1_test_wav/id0002614/f035e2ea_nohash_1_learn.wav vox1_test_wav/id0002614/f035e2ea_nohash_5_backward.wav
+---
+> 0 vox1_test_wav/id0002614/f035e2ea_nohash_1_learn.wav vox1_test_wav/id0002614/f035e2ea_nohash_6_zero.wav
+> 0 vox1_test_wav/id0002614/f035e2ea_nohash_1_learn.wav vox1_test_wav/id0002614/f035e2ea_nohash_5_backward.wav
+42663,42664c42663,42664
+< 1 vox1_test_wav/id0002505/3a53b856_nohash_0_house.wav vox1_test_wav/id0002505/3a53b856_nohash_0_four.wav
+< 1 vox1_test_wav/id0002505/3a53b856_nohash_0_house.wav vox1_test_wav/id0002505/3a53b856_nohash_1_happy.wav
+---
+> 0 vox1_test_wav/id0002505/3a53b856_nohash_0_house.wav vox1_test_wav/id0002505/3a53b856_nohash_0_four.wav
+> 0 vox1_test_wav/id0002505/3a53b856_nohash_0_house.wav vox1_test_wav/id0002505/3a53b856_nohash_1_happy.wav
+42667,42668c42667,42668
+< 1 vox1_test_wav/id0002362/e8d562ca_nohash_0_three.wav vox1_test_wav/id0002362/e8d562ca_nohash_2_off.wav
+< 1 vox1_test_wav/id0002362/e8d562ca_nohash_0_three.wav vox1_test_wav/id0002362/e8d562ca_nohash_0_seven.wav
+---
+> 0 vox1_test_wav/id0002362/e8d562ca_nohash_0_three.wav vox1_test_wav/id0002362/e8d562ca_nohash_2_off.wav
+> 0 vox1_test_wav/id0002362/e8d562ca_nohash_0_three.wav vox1_test_wav/id0002362/e8d562ca_nohash_0_seven.wav
+42671,42672c42671,42672
+< 1 vox1_test_wav/id0002602/8a56f36e_nohash_2_up.wav vox1_test_wav/id0002602/8a56f36e_nohash_0_nine.wav
+< 1 vox1_test_wav/id0002602/8a56f36e_nohash_2_up.wav vox1_test_wav/id0002602/8a56f36e_nohash_0_yes.wav
+---
+> 0 vox1_test_wav/id0002602/8a56f36e_nohash_2_up.wav vox1_test_wav/id0002602/8a56f36e_nohash_0_nine.wav
+> 0 vox1_test_wav/id0002602/8a56f36e_nohash_2_up.wav vox1_test_wav/id0002602/8a56f36e_nohash_0_yes.wav
+42675,42676c42675,42676
+< 1 vox1_test_wav/id0002560/c2dccf38_nohash_0_learn.wav vox1_test_wav/id0002560/c2dccf38_nohash_1_nine.wav
+< 1 vox1_test_wav/id0002560/c2dccf38_nohash_0_learn.wav vox1_test_wav/id0002560/c2dccf38_nohash_0_down.wav
+---
+> 0 vox1_test_wav/id0002560/c2dccf38_nohash_0_learn.wav vox1_test_wav/id0002560/c2dccf38_nohash_1_nine.wav
+> 0 vox1_test_wav/id0002560/c2dccf38_nohash_0_learn.wav vox1_test_wav/id0002560/c2dccf38_nohash_0_down.wav
+42679,42680c42679,42680
+< 1 vox1_test_wav/id0002492/97e0c576_nohash_1_five.wav vox1_test_wav/id0002492/97e0c576_nohash_0_house.wav
+< 1 vox1_test_wav/id0002492/97e0c576_nohash_1_five.wav vox1_test_wav/id0002492/97e0c576_nohash_1_right.wav
+---
+> 0 vox1_test_wav/id0002492/97e0c576_nohash_1_five.wav vox1_test_wav/id0002492/97e0c576_nohash_0_house.wav
+> 0 vox1_test_wav/id0002492/97e0c576_nohash_1_five.wav vox1_test_wav/id0002492/97e0c576_nohash_1_right.wav
+42683,42684c42683,42684
+< 1 vox1_test_wav/id0002456/ec5ab5d5_nohash_0_sheila.wav vox1_test_wav/id0002456/ec5ab5d5_nohash_0_house.wav
+< 1 vox1_test_wav/id0002456/ec5ab5d5_nohash_0_sheila.wav vox1_test_wav/id0002456/ec5ab5d5_nohash_0_one.wav
+---
+> 0 vox1_test_wav/id0002456/ec5ab5d5_nohash_0_sheila.wav vox1_test_wav/id0002456/ec5ab5d5_nohash_0_house.wav
+> 0 vox1_test_wav/id0002456/ec5ab5d5_nohash_0_sheila.wav vox1_test_wav/id0002456/ec5ab5d5_nohash_0_one.wav
+42687,42688c42687,42688
+< 1 vox1_test_wav/id0002582/a434d52e_nohash_0_go.wav vox1_test_wav/id0002582/a434d52e_nohash_0_cat.wav
+< 1 vox1_test_wav/id0002582/a434d52e_nohash_0_go.wav vox1_test_wav/id0002582/a434d52e_nohash_1_stop.wav
+---
+> 0 vox1_test_wav/id0002582/a434d52e_nohash_0_go.wav vox1_test_wav/id0002582/a434d52e_nohash_0_cat.wav
+> 0 vox1_test_wav/id0002582/a434d52e_nohash_0_go.wav vox1_test_wav/id0002582/a434d52e_nohash_1_stop.wav
+42691,42692c42691,42692
+< 1 vox1_test_wav/id0002384/1746d7b6_nohash_0_bed.wav vox1_test_wav/id0002384/1746d7b6_nohash_1_yes.wav
+< 1 vox1_test_wav/id0002384/1746d7b6_nohash_0_bed.wav vox1_test_wav/id0002384/1746d7b6_nohash_0_down.wav
+---
+> 0 vox1_test_wav/id0002384/1746d7b6_nohash_0_bed.wav vox1_test_wav/id0002384/1746d7b6_nohash_1_yes.wav
+> 0 vox1_test_wav/id0002384/1746d7b6_nohash_0_bed.wav vox1_test_wav/id0002384/1746d7b6_nohash_0_down.wav
+42695,42696c42695,42696
+< 1 vox1_test_wav/id0002570/eda072b5_nohash_0_nine.wav vox1_test_wav/id0002570/eda072b5_nohash_0_one.wav
+< 1 vox1_test_wav/id0002570/eda072b5_nohash_0_nine.wav vox1_test_wav/id0002570/eda072b5_nohash_0_two.wav
+---
+> 0 vox1_test_wav/id0002570/eda072b5_nohash_0_nine.wav vox1_test_wav/id0002570/eda072b5_nohash_0_one.wav
+> 0 vox1_test_wav/id0002570/eda072b5_nohash_0_nine.wav vox1_test_wav/id0002570/eda072b5_nohash_0_two.wav
+42699,42700c42699,42700
+< 1 vox1_test_wav/id0002524/651d108f_nohash_1_eight.wav vox1_test_wav/id0002524/651d108f_nohash_0_bed.wav
+< 1 vox1_test_wav/id0002524/651d108f_nohash_1_eight.wav vox1_test_wav/id0002524/651d108f_nohash_2_down.wav
+---
+> 0 vox1_test_wav/id0002524/651d108f_nohash_1_eight.wav vox1_test_wav/id0002524/651d108f_nohash_0_bed.wav
+> 0 vox1_test_wav/id0002524/651d108f_nohash_1_eight.wav vox1_test_wav/id0002524/651d108f_nohash_2_down.wav
+42703,42704c42703,42704
+< 1 vox1_test_wav/id0002469/2313e093_nohash_0_off.wav vox1_test_wav/id0002469/2313e093_nohash_2_three.wav
+< 1 vox1_test_wav/id0002469/2313e093_nohash_0_off.wav vox1_test_wav/id0002469/2313e093_nohash_0_one.wav
+---
+> 0 vox1_test_wav/id0002469/2313e093_nohash_0_off.wav vox1_test_wav/id0002469/2313e093_nohash_2_three.wav
+> 0 vox1_test_wav/id0002469/2313e093_nohash_0_off.wav vox1_test_wav/id0002469/2313e093_nohash_0_one.wav
+42707,42708c42707,42708
+< 1 vox1_test_wav/id0002424/cc71bada_nohash_1_zero.wav vox1_test_wav/id0002424/cc71bada_nohash_0_four.wav
+< 1 vox1_test_wav/id0002424/cc71bada_nohash_1_zero.wav vox1_test_wav/id0002424/cc71bada_nohash_1_wow.wav
+---
+> 0 vox1_test_wav/id0002424/cc71bada_nohash_1_zero.wav vox1_test_wav/id0002424/cc71bada_nohash_0_four.wav
+> 0 vox1_test_wav/id0002424/cc71bada_nohash_1_zero.wav vox1_test_wav/id0002424/cc71bada_nohash_1_wow.wav
+42711,42712c42711,42712
+< 1 vox1_test_wav/id0002512/ed0965eb_nohash_0_up.wav vox1_test_wav/id0002512/ed0965eb_nohash_0_five.wav
+< 1 vox1_test_wav/id0002512/ed0965eb_nohash_0_up.wav vox1_test_wav/id0002512/ed0965eb_nohash_0_wow.wav
+---
+> 0 vox1_test_wav/id0002512/ed0965eb_nohash_0_up.wav vox1_test_wav/id0002512/ed0965eb_nohash_0_five.wav
+> 0 vox1_test_wav/id0002512/ed0965eb_nohash_0_up.wav vox1_test_wav/id0002512/ed0965eb_nohash_0_wow.wav
+42715,42716c42715,42716
+< 1 vox1_test_wav/id0002583/7bf801d1_nohash_0_yes.wav vox1_test_wav/id0002583/7bf801d1_nohash_2_cat.wav
+< 1 vox1_test_wav/id0002583/7bf801d1_nohash_0_yes.wav vox1_test_wav/id0002583/7bf801d1_nohash_1_one.wav
+---
+> 0 vox1_test_wav/id0002583/7bf801d1_nohash_0_yes.wav vox1_test_wav/id0002583/7bf801d1_nohash_2_cat.wav
+> 0 vox1_test_wav/id0002583/7bf801d1_nohash_0_yes.wav vox1_test_wav/id0002583/7bf801d1_nohash_1_one.wav
+42719,42720c42719,42720
+< 1 vox1_test_wav/id0002464/6aa8def4_nohash_3_five.wav vox1_test_wav/id0002464/6aa8def4_nohash_0_learn.wav
+< 1 vox1_test_wav/id0002464/6aa8def4_nohash_3_five.wav vox1_test_wav/id0002464/6aa8def4_nohash_2_zero.wav
+---
+> 0 vox1_test_wav/id0002464/6aa8def4_nohash_3_five.wav vox1_test_wav/id0002464/6aa8def4_nohash_0_learn.wav
+> 0 vox1_test_wav/id0002464/6aa8def4_nohash_3_five.wav vox1_test_wav/id0002464/6aa8def4_nohash_2_zero.wav
+42723,42724c42723,42724
+< 1 vox1_test_wav/id0002517/afd53389_nohash_0_wow.wav vox1_test_wav/id0002517/afd53389_nohash_0_six.wav
+< 1 vox1_test_wav/id0002517/afd53389_nohash_0_wow.wav vox1_test_wav/id0002517/afd53389_nohash_2_wow.wav
+---
+> 0 vox1_test_wav/id0002517/afd53389_nohash_0_wow.wav vox1_test_wav/id0002517/afd53389_nohash_0_six.wav
+> 0 vox1_test_wav/id0002517/afd53389_nohash_0_wow.wav vox1_test_wav/id0002517/afd53389_nohash_2_wow.wav
+42727,42728c42727,42728
+< 1 vox1_test_wav/id0002490/8281a2a8_nohash_3_seven.wav vox1_test_wav/id0002490/8281a2a8_nohash_3_zero.wav
+< 1 vox1_test_wav/id0002490/8281a2a8_nohash_3_seven.wav vox1_test_wav/id0002490/8281a2a8_nohash_4_off.wav
+---
+> 0 vox1_test_wav/id0002490/8281a2a8_nohash_3_seven.wav vox1_test_wav/id0002490/8281a2a8_nohash_3_zero.wav
+> 0 vox1_test_wav/id0002490/8281a2a8_nohash_3_seven.wav vox1_test_wav/id0002490/8281a2a8_nohash_4_off.wav
+42731,42732c42731,42732
+< 1 vox1_test_wav/id0002537/d264f7b6_nohash_4_zero.wav vox1_test_wav/id0002537/d264f7b6_nohash_3_stop.wav
+< 1 vox1_test_wav/id0002537/d264f7b6_nohash_4_zero.wav vox1_test_wav/id0002537/d264f7b6_nohash_1_left.wav
+---
+> 0 vox1_test_wav/id0002537/d264f7b6_nohash_4_zero.wav vox1_test_wav/id0002537/d264f7b6_nohash_3_stop.wav
+> 0 vox1_test_wav/id0002537/d264f7b6_nohash_4_zero.wav vox1_test_wav/id0002537/d264f7b6_nohash_1_left.wav
+42735,42736c42735,42736
+< 1 vox1_test_wav/id0002491/a16b3102_nohash_1_seven.wav vox1_test_wav/id0002491/a16b3102_nohash_0_dog.wav
+< 1 vox1_test_wav/id0002491/a16b3102_nohash_1_seven.wav vox1_test_wav/id0002491/a16b3102_nohash_0_bed.wav
+---
+> 0 vox1_test_wav/id0002491/a16b3102_nohash_1_seven.wav vox1_test_wav/id0002491/a16b3102_nohash_0_dog.wav
+> 0 vox1_test_wav/id0002491/a16b3102_nohash_1_seven.wav vox1_test_wav/id0002491/a16b3102_nohash_0_bed.wav
+42739,42740c42739,42740
+< 1 vox1_test_wav/id0002378/cfbedff9_nohash_2_down.wav vox1_test_wav/id0002378/cfbedff9_nohash_2_two.wav
+< 1 vox1_test_wav/id0002378/cfbedff9_nohash_2_down.wav vox1_test_wav/id0002378/cfbedff9_nohash_1_three.wav
+---
+> 0 vox1_test_wav/id0002378/cfbedff9_nohash_2_down.wav vox1_test_wav/id0002378/cfbedff9_nohash_2_two.wav
+> 0 vox1_test_wav/id0002378/cfbedff9_nohash_2_down.wav vox1_test_wav/id0002378/cfbedff9_nohash_1_three.wav
+42743,42744c42743,42744
+< 1 vox1_test_wav/id0002585/439c84f4_nohash_1_no.wav vox1_test_wav/id0002585/439c84f4_nohash_2_three.wav
+< 1 vox1_test_wav/id0002585/439c84f4_nohash_1_no.wav vox1_test_wav/id0002585/439c84f4_nohash_4_nine.wav
+---
+> 0 vox1_test_wav/id0002585/439c84f4_nohash_1_no.wav vox1_test_wav/id0002585/439c84f4_nohash_2_three.wav
+> 0 vox1_test_wav/id0002585/439c84f4_nohash_1_no.wav vox1_test_wav/id0002585/439c84f4_nohash_4_nine.wav
+42747,42748c42747,42748
+< 1 vox1_test_wav/id0002411/cb72dfb6_nohash_1_stop.wav vox1_test_wav/id0002411/cb72dfb6_nohash_0_zero.wav
+< 1 vox1_test_wav/id0002411/cb72dfb6_nohash_1_stop.wav vox1_test_wav/id0002411/cb72dfb6_nohash_1_five.wav
+---
+> 0 vox1_test_wav/id0002411/cb72dfb6_nohash_1_stop.wav vox1_test_wav/id0002411/cb72dfb6_nohash_0_zero.wav
+> 0 vox1_test_wav/id0002411/cb72dfb6_nohash_1_stop.wav vox1_test_wav/id0002411/cb72dfb6_nohash_1_five.wav
+42751,42752c42751,42752
+< 1 vox1_test_wav/id0002617/9f7079fe_nohash_0_house.wav vox1_test_wav/id0002617/9f7079fe_nohash_0_tree.wav
+< 1 vox1_test_wav/id0002617/9f7079fe_nohash_0_house.wav vox1_test_wav/id0002617/9f7079fe_nohash_2_cat.wav
+---
+> 0 vox1_test_wav/id0002617/9f7079fe_nohash_0_house.wav vox1_test_wav/id0002617/9f7079fe_nohash_0_tree.wav
+> 0 vox1_test_wav/id0002617/9f7079fe_nohash_0_house.wav vox1_test_wav/id0002617/9f7079fe_nohash_2_cat.wav
+42755,42756c42755,42756
+< 1 vox1_test_wav/id0002423/69a1a79f_nohash_0_forward.wav vox1_test_wav/id0002423/69a1a79f_nohash_2_six.wav
+< 1 vox1_test_wav/id0002423/69a1a79f_nohash_0_forward.wav vox1_test_wav/id0002423/69a1a79f_nohash_2_forward.wav
+---
+> 0 vox1_test_wav/id0002423/69a1a79f_nohash_0_forward.wav vox1_test_wav/id0002423/69a1a79f_nohash_2_six.wav
+> 0 vox1_test_wav/id0002423/69a1a79f_nohash_0_forward.wav vox1_test_wav/id0002423/69a1a79f_nohash_2_forward.wav
+42759,42760c42759,42760
+< 1 vox1_test_wav/id0002393/1aeef15e_nohash_0_tree.wav vox1_test_wav/id0002393/1aeef15e_nohash_0_yes.wav
+< 1 vox1_test_wav/id0002393/1aeef15e_nohash_0_tree.wav vox1_test_wav/id0002393/1aeef15e_nohash_1_on.wav
+---
+> 0 vox1_test_wav/id0002393/1aeef15e_nohash_0_tree.wav vox1_test_wav/id0002393/1aeef15e_nohash_0_yes.wav
+> 0 vox1_test_wav/id0002393/1aeef15e_nohash_0_tree.wav vox1_test_wav/id0002393/1aeef15e_nohash_1_on.wav
+42763,42764c42763,42764
+< 1 vox1_test_wav/id0002619/96c66ab7_nohash_0_five.wav vox1_test_wav/id0002619/96c66ab7_nohash_0_left.wav
+< 1 vox1_test_wav/id0002619/96c66ab7_nohash_0_five.wav vox1_test_wav/id0002619/96c66ab7_nohash_0_on.wav
+---
+> 0 vox1_test_wav/id0002619/96c66ab7_nohash_0_five.wav vox1_test_wav/id0002619/96c66ab7_nohash_0_left.wav
+> 0 vox1_test_wav/id0002619/96c66ab7_nohash_0_five.wav vox1_test_wav/id0002619/96c66ab7_nohash_0_on.wav
+42767,42768c42767,42768
+< 1 vox1_test_wav/id0002414/07c5129e_nohash_1_dog.wav vox1_test_wav/id0002414/07c5129e_nohash_0_house.wav
+< 1 vox1_test_wav/id0002414/07c5129e_nohash_1_dog.wav vox1_test_wav/id0002414/07c5129e_nohash_0_go.wav
+---
+> 0 vox1_test_wav/id0002414/07c5129e_nohash_1_dog.wav vox1_test_wav/id0002414/07c5129e_nohash_0_house.wav
+> 0 vox1_test_wav/id0002414/07c5129e_nohash_1_dog.wav vox1_test_wav/id0002414/07c5129e_nohash_0_go.wav
+42771,42772c42771,42772
+< 1 vox1_test_wav/id0002508/9a69672b_nohash_1_two.wav vox1_test_wav/id0002508/9a69672b_nohash_2_seven.wav
+< 1 vox1_test_wav/id0002508/9a69672b_nohash_1_two.wav vox1_test_wav/id0002508/9a69672b_nohash_1_eight.wav
+---
+> 0 vox1_test_wav/id0002508/9a69672b_nohash_1_two.wav vox1_test_wav/id0002508/9a69672b_nohash_2_seven.wav
+> 0 vox1_test_wav/id0002508/9a69672b_nohash_1_two.wav vox1_test_wav/id0002508/9a69672b_nohash_1_eight.wav
+42775,42776c42775,42776
+< 1 vox1_test_wav/id0002590/fbb56351_nohash_4_eight.wav vox1_test_wav/id0002590/fbb56351_nohash_2_one.wav
+< 1 vox1_test_wav/id0002590/fbb56351_nohash_4_eight.wav vox1_test_wav/id0002590/fbb56351_nohash_2_left.wav
+---
+> 0 vox1_test_wav/id0002590/fbb56351_nohash_4_eight.wav vox1_test_wav/id0002590/fbb56351_nohash_2_one.wav
+> 0 vox1_test_wav/id0002590/fbb56351_nohash_4_eight.wav vox1_test_wav/id0002590/fbb56351_nohash_2_left.wav
+42779,42780c42779,42780
+< 1 vox1_test_wav/id0002550/a6d586b7_nohash_3_stop.wav vox1_test_wav/id0002550/a6d586b7_nohash_0_happy.wav
+< 1 vox1_test_wav/id0002550/a6d586b7_nohash_3_stop.wav vox1_test_wav/id0002550/a6d586b7_nohash_2_off.wav
+---
+> 0 vox1_test_wav/id0002550/a6d586b7_nohash_3_stop.wav vox1_test_wav/id0002550/a6d586b7_nohash_0_happy.wav
+> 0 vox1_test_wav/id0002550/a6d586b7_nohash_3_stop.wav vox1_test_wav/id0002550/a6d586b7_nohash_2_off.wav
+42783,42784c42783,42784
+< 1 vox1_test_wav/id0002604/10c6d873_nohash_0_on.wav vox1_test_wav/id0002604/10c6d873_nohash_1_stop.wav
+< 1 vox1_test_wav/id0002604/10c6d873_nohash_0_on.wav vox1_test_wav/id0002604/10c6d873_nohash_0_yes.wav
+---
+> 0 vox1_test_wav/id0002604/10c6d873_nohash_0_on.wav vox1_test_wav/id0002604/10c6d873_nohash_1_stop.wav
+> 0 vox1_test_wav/id0002604/10c6d873_nohash_0_on.wav vox1_test_wav/id0002604/10c6d873_nohash_0_yes.wav
+42787,42788c42787,42788
+< 1 vox1_test_wav/id0002569/5cf1ecce_nohash_1_zero.wav vox1_test_wav/id0002569/5cf1ecce_nohash_1_no.wav
+< 1 vox1_test_wav/id0002569/5cf1ecce_nohash_1_zero.wav vox1_test_wav/id0002569/5cf1ecce_nohash_3_stop.wav
+---
+> 0 vox1_test_wav/id0002569/5cf1ecce_nohash_1_zero.wav vox1_test_wav/id0002569/5cf1ecce_nohash_1_no.wav
+> 0 vox1_test_wav/id0002569/5cf1ecce_nohash_1_zero.wav vox1_test_wav/id0002569/5cf1ecce_nohash_3_stop.wav
+42791,42792c42791,42792
+< 1 vox1_test_wav/id0002591/645ed69d_nohash_4_backward.wav vox1_test_wav/id0002591/645ed69d_nohash_2_yes.wav
+< 1 vox1_test_wav/id0002591/645ed69d_nohash_4_backward.wav vox1_test_wav/id0002591/645ed69d_nohash_0_learn.wav
+---
+> 0 vox1_test_wav/id0002591/645ed69d_nohash_4_backward.wav vox1_test_wav/id0002591/645ed69d_nohash_2_yes.wav
+> 0 vox1_test_wav/id0002591/645ed69d_nohash_4_backward.wav vox1_test_wav/id0002591/645ed69d_nohash_0_learn.wav
+42795,42796c42795,42796
+< 1 vox1_test_wav/id0002427/40738a2d_nohash_2_five.wav vox1_test_wav/id0002427/40738a2d_nohash_3_go.wav
+< 1 vox1_test_wav/id0002427/40738a2d_nohash_2_five.wav vox1_test_wav/id0002427/40738a2d_nohash_1_five.wav
+---
+> 0 vox1_test_wav/id0002427/40738a2d_nohash_2_five.wav vox1_test_wav/id0002427/40738a2d_nohash_3_go.wav
+> 0 vox1_test_wav/id0002427/40738a2d_nohash_2_five.wav vox1_test_wav/id0002427/40738a2d_nohash_1_five.wav
+42799,42800c42799,42800
+< 1 vox1_test_wav/id0002533/90e72357_nohash_3_follow.wav vox1_test_wav/id0002533/90e72357_nohash_0_stop.wav
+< 1 vox1_test_wav/id0002533/90e72357_nohash_3_follow.wav vox1_test_wav/id0002533/90e72357_nohash_4_seven.wav
+---
+> 0 vox1_test_wav/id0002533/90e72357_nohash_3_follow.wav vox1_test_wav/id0002533/90e72357_nohash_0_stop.wav
+> 0 vox1_test_wav/id0002533/90e72357_nohash_3_follow.wav vox1_test_wav/id0002533/90e72357_nohash_4_seven.wav
+42803,42804c42803,42804
+< 1 vox1_test_wav/id0002377/8769c34c_nohash_3_five.wav vox1_test_wav/id0002377/8769c34c_nohash_3_follow.wav
+< 1 vox1_test_wav/id0002377/8769c34c_nohash_3_five.wav vox1_test_wav/id0002377/8769c34c_nohash_0_one.wav
+---
+> 0 vox1_test_wav/id0002377/8769c34c_nohash_3_five.wav vox1_test_wav/id0002377/8769c34c_nohash_3_follow.wav
+> 0 vox1_test_wav/id0002377/8769c34c_nohash_3_five.wav vox1_test_wav/id0002377/8769c34c_nohash_0_one.wav
+42807,42808c42807,42808
+< 1 vox1_test_wav/id0002533/90e72357_nohash_3_go.wav vox1_test_wav/id0002533/90e72357_nohash_1_up.wav
+< 1 vox1_test_wav/id0002533/90e72357_nohash_3_go.wav vox1_test_wav/id0002533/90e72357_nohash_0_follow.wav
+---
+> 0 vox1_test_wav/id0002533/90e72357_nohash_3_go.wav vox1_test_wav/id0002533/90e72357_nohash_1_up.wav
+> 0 vox1_test_wav/id0002533/90e72357_nohash_3_go.wav vox1_test_wav/id0002533/90e72357_nohash_0_follow.wav
+42811,42812c42811,42812
+< 1 vox1_test_wav/id0002596/f568162b_nohash_2_stop.wav vox1_test_wav/id0002596/f568162b_nohash_0_dog.wav
+< 1 vox1_test_wav/id0002596/f568162b_nohash_2_stop.wav vox1_test_wav/id0002596/f568162b_nohash_1_no.wav
+---
+> 0 vox1_test_wav/id0002596/f568162b_nohash_2_stop.wav vox1_test_wav/id0002596/f568162b_nohash_0_dog.wav
+> 0 vox1_test_wav/id0002596/f568162b_nohash_2_stop.wav vox1_test_wav/id0002596/f568162b_nohash_1_no.wav
+42815,42816c42815,42816
+< 1 vox1_test_wav/id0002518/42a99aec_nohash_0_one.wav vox1_test_wav/id0002518/42a99aec_nohash_1_two.wav
+< 1 vox1_test_wav/id0002518/42a99aec_nohash_0_one.wav vox1_test_wav/id0002518/42a99aec_nohash_0_up.wav
+---
+> 0 vox1_test_wav/id0002518/42a99aec_nohash_0_one.wav vox1_test_wav/id0002518/42a99aec_nohash_1_two.wav
+> 0 vox1_test_wav/id0002518/42a99aec_nohash_0_one.wav vox1_test_wav/id0002518/42a99aec_nohash_0_up.wav
+42819,42820c42819,42820
+< 1 vox1_test_wav/id0002549/2aca1e72_nohash_0_wow.wav vox1_test_wav/id0002549/2aca1e72_nohash_1_on.wav
+< 1 vox1_test_wav/id0002549/2aca1e72_nohash_0_wow.wav vox1_test_wav/id0002549/2aca1e72_nohash_6_four.wav
+---
+> 0 vox1_test_wav/id0002549/2aca1e72_nohash_0_wow.wav vox1_test_wav/id0002549/2aca1e72_nohash_1_on.wav
+> 0 vox1_test_wav/id0002549/2aca1e72_nohash_0_wow.wav vox1_test_wav/id0002549/2aca1e72_nohash_6_four.wav
+42823,42824c42823,42824
+< 1 vox1_test_wav/id0002614/f035e2ea_nohash_3_zero.wav vox1_test_wav/id0002614/f035e2ea_nohash_5_backward.wav
+< 1 vox1_test_wav/id0002614/f035e2ea_nohash_3_zero.wav vox1_test_wav/id0002614/f035e2ea_nohash_1_up.wav
+---
+> 0 vox1_test_wav/id0002614/f035e2ea_nohash_3_zero.wav vox1_test_wav/id0002614/f035e2ea_nohash_5_backward.wav
+> 0 vox1_test_wav/id0002614/f035e2ea_nohash_3_zero.wav vox1_test_wav/id0002614/f035e2ea_nohash_1_up.wav
+42827,42828c42827,42828
+< 1 vox1_test_wav/id0002537/d264f7b6_nohash_2_on.wav vox1_test_wav/id0002537/d264f7b6_nohash_3_down.wav
+< 1 vox1_test_wav/id0002537/d264f7b6_nohash_2_on.wav vox1_test_wav/id0002537/d264f7b6_nohash_0_visual.wav
+---
+> 0 vox1_test_wav/id0002537/d264f7b6_nohash_2_on.wav vox1_test_wav/id0002537/d264f7b6_nohash_3_down.wav
+> 0 vox1_test_wav/id0002537/d264f7b6_nohash_2_on.wav vox1_test_wav/id0002537/d264f7b6_nohash_0_visual.wav
+42831,42832c42831,42832
+< 1 vox1_test_wav/id0002614/f035e2ea_nohash_4_on.wav vox1_test_wav/id0002614/f035e2ea_nohash_1_six.wav
+< 1 vox1_test_wav/id0002614/f035e2ea_nohash_4_on.wav vox1_test_wav/id0002614/f035e2ea_nohash_3_eight.wav
+---
+> 0 vox1_test_wav/id0002614/f035e2ea_nohash_4_on.wav vox1_test_wav/id0002614/f035e2ea_nohash_1_six.wav
+> 0 vox1_test_wav/id0002614/f035e2ea_nohash_4_on.wav vox1_test_wav/id0002614/f035e2ea_nohash_3_eight.wav
+42835,42836c42835,42836
+< 1 vox1_test_wav/id0002616/b089169d_nohash_0_nine.wav vox1_test_wav/id0002616/b089169d_nohash_0_stop.wav
+< 1 vox1_test_wav/id0002616/b089169d_nohash_0_nine.wav vox1_test_wav/id0002616/b089169d_nohash_1_two.wav
+---
+> 0 vox1_test_wav/id0002616/b089169d_nohash_0_nine.wav vox1_test_wav/id0002616/b089169d_nohash_0_stop.wav
+> 0 vox1_test_wav/id0002616/b089169d_nohash_0_nine.wav vox1_test_wav/id0002616/b089169d_nohash_1_two.wav
+42839,42840c42839,42840
+< 1 vox1_test_wav/id0002421/e8c3c5ca_nohash_1_four.wav vox1_test_wav/id0002421/e8c3c5ca_nohash_1_bed.wav
+< 1 vox1_test_wav/id0002421/e8c3c5ca_nohash_1_four.wav vox1_test_wav/id0002421/e8c3c5ca_nohash_0_bed.wav
+---
+> 0 vox1_test_wav/id0002421/e8c3c5ca_nohash_1_four.wav vox1_test_wav/id0002421/e8c3c5ca_nohash_1_bed.wav
+> 0 vox1_test_wav/id0002421/e8c3c5ca_nohash_1_four.wav vox1_test_wav/id0002421/e8c3c5ca_nohash_0_bed.wav
+42843,42844c42843,42844
+< 1 vox1_test_wav/id0002441/e882abb2_nohash_3_three.wav vox1_test_wav/id0002441/e882abb2_nohash_2_no.wav
+< 1 vox1_test_wav/id0002441/e882abb2_nohash_3_three.wav vox1_test_wav/id0002441/e882abb2_nohash_2_learn.wav
+---
+> 0 vox1_test_wav/id0002441/e882abb2_nohash_3_three.wav vox1_test_wav/id0002441/e882abb2_nohash_2_no.wav
+> 0 vox1_test_wav/id0002441/e882abb2_nohash_3_three.wav vox1_test_wav/id0002441/e882abb2_nohash_2_learn.wav
+42847,42848c42847,42848
+< 1 vox1_test_wav/id0002383/cd7f8c1b_nohash_2_one.wav vox1_test_wav/id0002383/cd7f8c1b_nohash_3_down.wav
+< 1 vox1_test_wav/id0002383/cd7f8c1b_nohash_2_one.wav vox1_test_wav/id0002383/cd7f8c1b_nohash_1_up.wav
+---
+> 0 vox1_test_wav/id0002383/cd7f8c1b_nohash_2_one.wav vox1_test_wav/id0002383/cd7f8c1b_nohash_3_down.wav
+> 0 vox1_test_wav/id0002383/cd7f8c1b_nohash_2_one.wav vox1_test_wav/id0002383/cd7f8c1b_nohash_1_up.wav
+42851,42852c42851,42852
+< 1 vox1_test_wav/id0002587/28612180_nohash_0_two.wav vox1_test_wav/id0002587/28612180_nohash_1_bed.wav
+< 1 vox1_test_wav/id0002587/28612180_nohash_0_two.wav vox1_test_wav/id0002587/28612180_nohash_1_two.wav
+---
+> 0 vox1_test_wav/id0002587/28612180_nohash_0_two.wav vox1_test_wav/id0002587/28612180_nohash_1_bed.wav
+> 0 vox1_test_wav/id0002587/28612180_nohash_0_two.wav vox1_test_wav/id0002587/28612180_nohash_1_two.wav
+42855,42856c42855,42856
+< 1 vox1_test_wav/id0002455/e54a0f16_nohash_0_house.wav vox1_test_wav/id0002455/e54a0f16_nohash_0_two.wav
+< 1 vox1_test_wav/id0002455/e54a0f16_nohash_0_house.wav vox1_test_wav/id0002455/e54a0f16_nohash_1_zero.wav
+---
+> 0 vox1_test_wav/id0002455/e54a0f16_nohash_0_house.wav vox1_test_wav/id0002455/e54a0f16_nohash_0_two.wav
+> 0 vox1_test_wav/id0002455/e54a0f16_nohash_0_house.wav vox1_test_wav/id0002455/e54a0f16_nohash_1_zero.wav
+42859,42860c42859,42860
+< 1 vox1_test_wav/id0002534/888a0c49_nohash_0_six.wav vox1_test_wav/id0002534/888a0c49_nohash_2_nine.wav
+< 1 vox1_test_wav/id0002534/888a0c49_nohash_0_six.wav vox1_test_wav/id0002534/888a0c49_nohash_1_yes.wav
+---
+> 0 vox1_test_wav/id0002534/888a0c49_nohash_0_six.wav vox1_test_wav/id0002534/888a0c49_nohash_2_nine.wav
+> 0 vox1_test_wav/id0002534/888a0c49_nohash_0_six.wav vox1_test_wav/id0002534/888a0c49_nohash_1_yes.wav
+42863,42864c42863,42864
+< 1 vox1_test_wav/id0002364/7e2d5caf_nohash_0_dog.wav vox1_test_wav/id0002364/7e2d5caf_nohash_0_down.wav
+< 1 vox1_test_wav/id0002364/7e2d5caf_nohash_0_dog.wav vox1_test_wav/id0002364/7e2d5caf_nohash_0_five.wav
+---
+> 0 vox1_test_wav/id0002364/7e2d5caf_nohash_0_dog.wav vox1_test_wav/id0002364/7e2d5caf_nohash_0_down.wav
+> 0 vox1_test_wav/id0002364/7e2d5caf_nohash_0_dog.wav vox1_test_wav/id0002364/7e2d5caf_nohash_0_five.wav
+42867,42868c42867,42868
+< 1 vox1_test_wav/id0002459/8134f43f_nohash_0_happy.wav vox1_test_wav/id0002459/8134f43f_nohash_4_nine.wav
+< 1 vox1_test_wav/id0002459/8134f43f_nohash_0_happy.wav vox1_test_wav/id0002459/8134f43f_nohash_3_on.wav
+---
+> 0 vox1_test_wav/id0002459/8134f43f_nohash_0_happy.wav vox1_test_wav/id0002459/8134f43f_nohash_4_nine.wav
+> 0 vox1_test_wav/id0002459/8134f43f_nohash_0_happy.wav vox1_test_wav/id0002459/8134f43f_nohash_3_on.wav
+42871,42872c42871,42872
+< 1 vox1_test_wav/id0002587/28612180_nohash_0_one.wav vox1_test_wav/id0002587/28612180_nohash_2_two.wav
+< 1 vox1_test_wav/id0002587/28612180_nohash_0_one.wav vox1_test_wav/id0002587/28612180_nohash_1_bed.wav
+---
+> 0 vox1_test_wav/id0002587/28612180_nohash_0_one.wav vox1_test_wav/id0002587/28612180_nohash_2_two.wav
+> 0 vox1_test_wav/id0002587/28612180_nohash_0_one.wav vox1_test_wav/id0002587/28612180_nohash_1_bed.wav

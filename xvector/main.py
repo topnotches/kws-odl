@@ -187,8 +187,8 @@ if __name__ == "__main__":
     config = Config(data_folder_path='../dataset_xvector',
                     checkpoint_path='./testlogs/lightning_logs/version_0/checkpoints/epoch=14-step=14970.ckpt',
                     train_x_vector_model = False,
-                    extract_x_vectors = True,
-                    train_plda = True,
+                    extract_x_vectors = False,
+                    train_plda = False,
                     test_plda = True,
                     x_vec_extract_layer=6,
                     plda_rank_f=25)#TODO delete most of this

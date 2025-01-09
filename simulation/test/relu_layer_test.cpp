@@ -4,7 +4,7 @@
 #include <math.h>
 #include "relu_layer.hpp"
 
-void test_conv_layer_sequential() {
+void test_fc_layer_sequential() {
     // Define input dimensions and parameters
     const uint16_t input_width = 4;
     const uint16_t input_height = 4;
@@ -81,10 +81,10 @@ void test_conv_layer_sequential() {
         }
     }
 
-    printf("Convolution test passed!\n");
+    printf("Relu layer test passed!\n");
 }
 
 int main() {
-    test_conv_layer_sequential();
+    test_fc_layer_sequential();
     return 0;
 }
