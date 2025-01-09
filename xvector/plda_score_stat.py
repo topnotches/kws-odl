@@ -65,14 +65,12 @@ class plda_score_stat_object():
             is_match = bool(int(pair.split(" ")[0].rstrip().split(".")[0].strip()))
             enrol_id = pair.split(" ")[1].strip()
             test_id = pair.split(" ")[2].strip()
-            print("ARGHHH")
-            print(self.plda_scores.modelset)
-            print("likasæejfoisejf")
-            print(enrol_id)
-            print("eadf<xjklm,.wadjklxmdxeajklæm")
-            print(np.where(self.plda_scores.modelset == enrol_id))
-            # Assuming self.plda_scores.modelset is a list-like iterable
-
+            # print("ARGHHH")
+            # print(self.plda_scores.modelset)
+            # print("likasæejfoisejf")
+            # print(enrol_id)
+            # print("eadf<xjklm,.wadjklxmdxeajklæm")
+            # print(np.where(self.plda_scores.modelset == enrol_id))
             try:
                 # Try finding the index of `enrol_id` in `self.plda_scores.modelset`
                 i = int(np.where(self.plda_scores.modelset == enrol_id)[0][0])
@@ -82,19 +80,28 @@ class plda_score_stat_object():
                 with open(output_file, "w") as file:
                     for item in self.plda_scores.modelset:
                         file.write(f"{item}\n")
-                print(f"An error occurred: {e}")
-                print(f"Modelset items have been written to {output_file}")
-                
+                # print(f"An error occurred: {e}")
+                # print(f"Modelset items have been written to {output_file}")
+            # print("aeofjaoeijfoieajf")
+            # print (self.x_vectors_test.loc[self.x_vectors_test['id'] == enrol_id, 'xvector'].item()[1:-1].split())
             if(not enrol_id in checked_list):
                 checked_list.append(enrol_id)
                 self.checked_xvec.append(np.array(self.x_vectors_test.loc[self.x_vectors_test['id'] == enrol_id, 'xvector'].item()[1:-1].split(), dtype=np.float64))
+                print("printing enroll")
+                # print(self.x_vectors_test.loc[self.x_vectors_test['id'] == enrol_id, 'xvector'].item()[1:-1].split())
                 self.checked_label.append(int(enrol_id.split(".")[0].split("/")[1][2:]))
+                print(enrol_id.split(".")[0].split("/")[1][2:])
                 
             j = int(np.where(self.plda_scores.segset == test_id)[0][0])
             if(not test_id in checked_list):
                 checked_list.append(test_id)
+                print("printing test")
+                # print(self.x_vectors_test.loc[self.x_vectors_test['id'] == test_id, 'xvector'].item()[1:-1].split())
                 self.checked_xvec.append(np.array(self.x_vectors_test.loc[self.x_vectors_test['id'] == test_id, 'xvector'].item()[1:-1].split(), dtype=np.float64))
                 self.checked_label.append(int(test_id.split(".")[0].split("/")[1][2:]))
+                print(test_id.split(".")[0].split("/")[1][2:])
+                
+                
 
             current_score = float(self.plda_scores.scoremat[i,j])
             if(is_match):

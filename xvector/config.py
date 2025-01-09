@@ -12,7 +12,7 @@ class Config:
                 dropout_p=0.0,
                 augmentations_per_sample=2,
                 plda_rank_f=50,
-                checkpoint_path='/home/topnotches/thesis/kws-odl/version_12/checkpoints/epoch=14-step=14970.ckpt',
+                checkpoint_path='./checkpoints/epoch=14-step=14970.ckpt',
                 data_folder_path='../dataset_xvector',
                 train_x_vector_model=True,
                 extract_x_vectors=True,

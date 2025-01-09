@@ -185,7 +185,7 @@ if __name__ == "__main__":
     # earlier parts of the programm must have been executed at least once
     print('setting up model and trainer parameters')
     config = Config(data_folder_path='../dataset_xvector',
-                    checkpoint_path='/home/topnotches/thesis/kws-odl/version_12/checkpoints/epoch=14-step=14970.ckpt',
+                    checkpoint_path='./testlogs/lightning_logs/version_0/checkpoints/epoch=14-step=14970.ckpt',
                     train_x_vector_model = False,
                     extract_x_vectors = True,
                     train_plda = True,

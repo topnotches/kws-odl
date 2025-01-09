@@ -2,7 +2,7 @@
 
 # Define variables
 DATASET_VERSION="v0.02"
-BASE_DIR="$HOME/thesis/kws-odl"
+BASE_DIR="."
 DATASET_DIR="$BASE_DIR/dataset"
 DATASET_URL="http://download.tensorflow.org/data/speech_commands_${DATASET_VERSION}.tar.gz"
 DATASET_ARCHIVE="speech_commands_${DATASET_VERSION}.tar.gz"
