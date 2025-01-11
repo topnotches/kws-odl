@@ -1,3 +1,24 @@
+DATA_FOLDER_PATH                        ='../dataset_xvector'
+CHECKPOINT_PATH                         ='./testlogs/lightning_logs/version_0/checkpoints/epoch=14-step=14970.ckpt'
+TRAIN_X_VECTOR_MODEL                    = False
+EXTRACT_X_VECTORS                       = False
+TRAIN_LDA                               = False
+TEST_LDA                                = False
+USE_LDA                                 = True
+TRAIN_PLDA                              = False
+TEST_PLDA                               = True
+X_VEC_EXTRACT_LAYER                     = 6
+PLDA_RANK_F                             = 25
+LDA_RANK_F                              = 64
+EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN     = 'x_vectors/TRAINING_EXTRACTED.csv'
+EXTRACTED_XVECTOR_OUTPUT_PATH_TEST      = 'x_vectors/jespers_sanity_test_my_faith.csv'
+EXTRACTED_LDA_OUTPUT_PATH               = 'embeddings'
+EXTRACTED_LDA_OUTPUT_TRAIN_FILE_NAME    = 'embeddings_train_' + str(LDA_RANK_F)+'.csv'
+EXTRACTED_LDA_OUTPUT_TEST_FILE_NAME     = 'embeddings_test_' + str(LDA_RANK_F)+'.csv'
+EXTRACTED_LDA_OUTPUT_PATH_TRAIN         = EXTRACTED_LDA_OUTPUT_PATH+ "/" + EXTRACTED_LDA_OUTPUT_TRAIN_FILE_NAME
+EXTRACTED_LDA_OUTPUT_PATH_TEST          = EXTRACTED_LDA_OUTPUT_PATH+ "/" + EXTRACTED_LDA_OUTPUT_TEST_FILE_NAME
+PLDA_MODEL_NAME                         = 'plda_model_' + str(LDA_RANK_F)
+
 import os
 
 import numpy as np
@@ -12,13 +33,13 @@ from pytorch_lightning import loggers as pl_loggers
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from torch.utils.data import DataLoader
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
 import plda_classifier as pc
 from config import Config
 from dataset import Dataset
 from plda_score_stat import plda_score_stat_object
 from tdnn_layer import TdnnLayer
-
 
 class XVectorModel(pl.LightningModule):
     def __init__(self, input_size=24,
@@ -74,7 +95,7 @@ class XVectorModel(pl.LightningModule):
         out = self.output(out)
         return out
 
-    # This method is used to generate the x-vectors for the PLDA classifier
+    # This method is used to generate the x-vectors for the LDA/PLDA
     # It is the same as the usual forward method exept it stops passing the
     # input through the layers at the specified x_vec_extract_layer
     # Finally it returns the x-vectors instead of the usual output
@@ -184,14 +205,17 @@ if __name__ == "__main__":
     # When running only later parts of the program a checkpoint_path MUST be given and
     # earlier parts of the programm must have been executed at least once
     print('setting up model and trainer parameters')
-    config = Config(data_folder_path='../dataset_xvector',
-                    checkpoint_path='./testlogs/lightning_logs/version_0/checkpoints/epoch=14-step=14970.ckpt',
-                    train_x_vector_model = False,
-                    extract_x_vectors = False,
-                    train_plda = False,
-                    test_plda = True,
-                    x_vec_extract_layer=6,
-                    plda_rank_f=25)#TODO delete most of this
+    config = Config(data_folder_path = DATA_FOLDER_PATH,
+                    checkpoint_path = CHECKPOINT_PATH,
+                    train_x_vector_model = TRAIN_X_VECTOR_MODEL,
+                    extract_x_vectors = EXTRACT_X_VECTORS,
+                    train_plda = TRAIN_PLDA,
+                    test_plda = TEST_PLDA,
+                    x_vec_extract_layer = X_VEC_EXTRACT_LAYER,
+                    plda_rank_f = PLDA_RANK_F,
+                    lda_rank_f = LDA_RANK_F,
+                    train_lda = TRAIN_LDA,
+                    test_lda = TEST_LDA)
 
     # Define model and trainer
     tb_logger = pl_loggers.TensorBoardLogger(save_dir="testlogs/")
@@ -245,11 +269,11 @@ if __name__ == "__main__":
         if(config.train_x_vector_model):
             trainer.test(model)
             x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv('x_vectors/TRAINING_EXTRACTED.csv')#TODO set to default name
+            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN)
         elif(config.checkpoint_path != 'none'):
             trainer.test(model, ckpt_path=config.checkpoint_path)
             x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv('x_vectors/TRAINING_EXTRACTED.csv')#TODO set to default name
+            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN)
         else:
             print('could not extract train x-vectors')
 
@@ -259,70 +283,112 @@ if __name__ == "__main__":
         if(config.train_x_vector_model):
             trainer.test(model)
             x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv('x_vectors/jespers_sanity_test_my_faith.csv')#TODO set to default name
+            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TEST)
         elif(config.checkpoint_path != 'none'):
             trainer.test(model, ckpt_path=config.checkpoint_path)
             x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv('x_vectors/jespers_sanity_test_my_faith.csv')#TODO set to default name
+            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TEST)
         else:
             print('could not extract test x-vectors')
     
 
+    if(config.train_lda):
+        print('Applying LDA to training x-vectors...')
+        if not os.path.exists(EXTRACTED_LDA_OUTPUT_PATH):
+            os.makedirs(EXTRACTED_LDA_OUTPUT_PATH)
+        x_vectors_train = pd.read_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN)
+        x_vectors_train.columns = ['index', 'id', 'label', 'xvector']
+        x_id_train = np.array(x_vectors_train['id'])
+        x_label_train = np.array(x_vectors_train['label'], dtype=int)
+        x_vec_train = np.array([np.array(x_vec[1:-1].split(), dtype=np.float64) for x_vec in x_vectors_train['xvector']])
+
+
+        lda = LinearDiscriminantAnalysis(n_components=config.lda_rank_f)
+        x_vec_train_lda = lda.fit_transform(x_vec_train, x_label_train)
+
+        x_vectors_train['xvector'] = [str(list(x)) for x in x_vec_train_lda]
+        x_vectors_train.to_csv(EXTRACTED_LDA_OUTPUT_PATH_TRAIN, index=False)
+        print("Done with training LDA!\n\n")
+
+
+    if(config.test_lda):
+        print('Applying LDA to test x-vectors...')
+        if not os.path.exists(EXTRACTED_LDA_OUTPUT_PATH):
+            os.makedirs(EXTRACTED_LDA_OUTPUT_PATH)
+        x_vectors_test = pd.read_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TEST)
+        x_vectors_test.columns = ['index', 'id', 'label', 'xvector']
+        x_id_test = np.array(x_vectors_test['id'])
+        x_label_test = np.array(x_vectors_test['label'], dtype=int)
+        x_vec_test = np.array([np.array(x_vec[1:-1].split(), dtype=np.float64) for x_vec in x_vectors_test['xvector']])
+
+
+        x_vec_test_lda = lda.transform(x_vec_test)
+
+        # Save LDA-transformed x-vectors
+        
+        x_vectors_test['xvector'] = [str(list(x)) for x in x_vec_test_lda]
+        x_vectors_test.to_csv(EXTRACTED_LDA_OUTPUT_PATH_TEST, index=False)
+        print("Done parsing test-set with LDA!\n\n")
+        
+
 
     if(config.train_plda):
-        print('loading x_vector data')
         if not os.path.exists('plda'):
             os.makedirs('plda')
         # Extract the x-vectors, labels and id from the csv
-        x_vectors_train = pd.read_csv('x_vectors/TRAINING_EXTRACTED.csv')#TODO set to default name
-        x_id_train = np.array(x_vectors_train.iloc[:, 1])
-        x_label_train = np.array(x_vectors_train.iloc[:, 2], dtype=int)
-        x_vec_train = np.array([np.array(x_vec[1:-1].split(), dtype=np.float64) for x_vec in x_vectors_train.iloc[:, 3]])
+        if (USE_LDA):
+            print('PLDA TRAIN: loading lda reduced x_vector data with dim: ' + str(config.lda_rank_f))
+            print("Loading data from: " + str(EXTRACTED_LDA_OUTPUT_PATH_TRAIN))
+            x_vectors_train = pd.read_csv(EXTRACTED_LDA_OUTPUT_PATH_TRAIN)
+        else:
+            print('PLDA TRAIN: loading x_vector data with plda dim: ' + str(config.lda_rank_f))
+            print("Loading data from: " + str(EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN))
+            x_vectors_train = pd.read_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN)
+            x_vectors_train.columns = ['index', 'id', 'label', 'xvector']
+            
+
+        x_id_train = np.array(x_vectors_train['id'])
+        x_label_train = np.array(x_vectors_train['label'], dtype=int)
+        
+        x_vec_train = np.array([np.array(x_vec.replace(",", "")[1:-1].split(), dtype=np.float64) for x_vec in x_vectors_train['xvector']])
 
         # Generate x_vec stat objects
         print('generating x_vec stat objects')
+        # print("x_vec_train: ")
+        # print(x_vec_train)
+        # print("x_label_train: ")
+        # print(x_label_train)
+        # print("x_id_train: ")
+        # print(x_id_train)
         tr_stat = pc.get_train_x_vec(x_vec_train, x_label_train, x_id_train)
 
-        # # Train plda #TODO change back to ony one
-        # print('training plda')
-        # plda = pc.setup_plda(rank_f=config.plda_rank_f, nb_iter=10)
-        # plda = pc.train_plda(plda, tr_stat)
-        # pc.save_plda(plda, 'plda_v1_5_l6_d25')#TODO set to default name
+        # Train plda
+        print('training plda')
+        plda = pc.setup_plda(rank_f=config.lda_rank_f, nb_iter=10)
+        plda = pc.train_plda(plda, tr_stat)
+        pc.save_plda(plda, PLDA_MODEL_NAME)
+        print("Done with training PLDA!\n\n")
         
-        # Train plda
-        print('training plda')
-        plda = pc.setup_plda(rank_f=50, nb_iter=10)
-        plda = pc.train_plda(plda, tr_stat)
-        pc.save_plda(plda, 'plda_ivec_v2_d50')
-        # Train plda
-        print('training plda')
-        plda = pc.setup_plda(rank_f=100, nb_iter=10)
-        plda = pc.train_plda(plda, tr_stat)
-        pc.save_plda(plda, 'plda_ivec_v2_d100')
-        # Train plda
-        print('training plda')
-        plda = pc.setup_plda(rank_f=150, nb_iter=10)
-        plda = pc.train_plda(plda, tr_stat)
-        pc.save_plda(plda, 'plda_ivec_v2_d150')
-        # Train plda
-        print('training plda')
-        plda = pc.setup_plda(rank_f=200, nb_iter=10)
-        plda = pc.train_plda(plda, tr_stat)
-        pc.save_plda(plda, 'plda_ivec_v2_d200')
 
 
 
     if(config.test_plda):
         # Extract the x-vectors, labels and id from the csv
-        print('loading x_vector data')
-        x_vectors_test = pd.read_csv('x_vectors/jespers_sanity_test_my_faith.csv')#TODO set to default name
-        x_vectors_test.columns = ['index', 'id', 'label', 'xvector']
+        if (USE_LDA):
+            print('PLDA TEST: loading lda reduced x_vector data with dim: ' + str(config.lda_rank_f))
+            print("Loading data from: " + str(EXTRACTED_LDA_OUTPUT_PATH_TEST))
+            x_vectors_test = pd.read_csv(EXTRACTED_LDA_OUTPUT_PATH_TEST)
+        else:
+            print('PLDA TEST: loading x_vector data with plda dim: ' + str(config.lda_rank_f))
+            print("Loading data from: " + str(EXTRACTED_XVECTOR_OUTPUT_PATH_TEST))
+            x_vectors_test = pd.read_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TEST)
+            x_vectors_test.columns = ['index', 'id', 'label', 'xvector']
         score = plda_score_stat_object(x_vectors_test)
 
         # Test plda
         print('testing plda')
         if(not config.train_plda):
-            plda = pc.load_plda('plda/plda_ivec_v2_d200.pickle')#TODO set to default name
+            plda = pc.load_plda('plda/'+PLDA_MODEL_NAME+'.pickle')
         print(config.data_folder_path + '/VoxCeleb/veri_test2.txt')
         score.test_plda(plda, config.data_folder_path + '/VoxCeleb/veri_test2.txt')
 
@@ -335,38 +401,8 @@ if __name__ == "__main__":
         # Generate images for tensorboard
         score.plot_images(tb_logger.experiment)
 
-        pc.save_plda(score, 'plda_score_ivec_v2_d200')#TODO set to default name
+        pc.save_plda(score, 'plda_score_ivec_v2_d200')
 
-
-
-    if(False):
-        # x_vectors_train = pd.read_csv('x_vectors/x_vector_train_v1.csv')
-        # train_label = np.array(x_vectors_train.iloc[:, 2], dtype=int)
-        # train_xvec = np.array([np.array(x_vec[1:-1].split(), dtype=np.float64) for x_vec in x_vectors_train.iloc[:, 3]])
-
-        # plda = pc.load_plda('plda/plda_v1_5.pickle')
-        # score = pc.load_plda('plda/plda_score_v1_5.pickle')
-        # score.plot_images(tb_logger.experiment, plda)#, train_xvec, train_label)
-        
-        score = pc.load_plda('plda/plda_score_v1_5_l7relu_d50.pickle')
-        print('calculating EER and minDCF')
-        print('EER: ', score.eer, '   threshold: ', score.eer_th)
-        print('minDCF: ', score.min_dcf, '   threshold: ', score.min_dcf_th)
-        
-        score = pc.load_plda('plda/plda_score_v1_5_l7relu_d100.pickle')
-        print('calculating EER and minDCF')
-        print('EER: ', score.eer, '   threshold: ', score.eer_th)
-        print('minDCF: ', score.min_dcf, '   threshold: ', score.min_dcf_th)
-        
-        score = pc.load_plda('plda/plda_score_v1_5_l7relu_d150.pickle')
-        print('calculating EER and minDCF')
-        print('EER: ', score.eer, '   threshold: ', score.eer_th)
-        print('minDCF: ', score.min_dcf, '   threshold: ', score.min_dcf_th)
-        
-        score = pc.load_plda('plda/plda_score_v1_5_l7relu_d200.pickle')
-        print('calculating EER and minDCF')
-        print('EER: ', score.eer, '   threshold: ', score.eer_th)
-        print('minDCF: ', score.min_dcf, '   threshold: ', score.min_dcf_th)
 
     print('DONE')
 '''
