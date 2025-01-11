@@ -1,11 +1,11 @@
 DATA_FOLDER_PATH                        ='../dataset_xvector'
 CHECKPOINT_PATH                         ='./testlogs/lightning_logs/version_0/checkpoints/epoch=14-step=14970.ckpt'
 TRAIN_X_VECTOR_MODEL                    = False
-EXTRACT_X_VECTORS                       = False
-TRAIN_LDA                               = False
-TEST_LDA                                = False
+EXTRACT_X_VECTORS                       = True
+TRAIN_LDA                               = True
+TEST_LDA                                = True
 USE_LDA                                 = True
-TRAIN_PLDA                              = False
+TRAIN_PLDA                              = True
 TEST_PLDA                               = True
 X_VEC_EXTRACT_LAYER                     = 6
 PLDA_RANK_F                             = 25
@@ -308,7 +308,9 @@ if __name__ == "__main__":
 
         x_vectors_train['xvector'] = [str(list(x)) for x in x_vec_train_lda]
         x_vectors_train.to_csv(EXTRACTED_LDA_OUTPUT_PATH_TRAIN, index=False)
-        print("Done with training LDA!\n\n")
+        print("Done with training LDA!")
+        print()
+        print()
 
 
     if(config.test_lda):
@@ -328,7 +330,9 @@ if __name__ == "__main__":
         
         x_vectors_test['xvector'] = [str(list(x)) for x in x_vec_test_lda]
         x_vectors_test.to_csv(EXTRACTED_LDA_OUTPUT_PATH_TEST, index=False)
-        print("Done parsing test-set with LDA!\n\n")
+        print("Done parsing test-set with LDA!")
+        print()
+        print()
         
 
 
@@ -367,7 +371,9 @@ if __name__ == "__main__":
         plda = pc.setup_plda(rank_f=config.lda_rank_f, nb_iter=10)
         plda = pc.train_plda(plda, tr_stat)
         pc.save_plda(plda, PLDA_MODEL_NAME)
-        print("Done with training PLDA!\n\n")
+        print("Done with training PLDA!")
+        print()
+        print()
         
 
 
@@ -399,9 +405,12 @@ if __name__ == "__main__":
         print('minDCF: ', score.min_dcf, '   threshold: ', score.min_dcf_th)
 
         # Generate images for tensorboard
-        score.plot_images(tb_logger.experiment)
+        #score.plot_images(tb_logger.experiment)
 
-        pc.save_plda(score, 'plda_score_ivec_v2_d200')
+        pc.save_plda(score, 'plda_score') # FIXME TODO: better naming if needed
+        print("Done with testing PLDA!")
+        print()
+        print()
 
 
     print('DONE')

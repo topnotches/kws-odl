@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "conv_layer.hpp"
 
-void conv_layer_sequential(float *conv_input_features, float *conv_output_features, float *conv_kernels,
+void conv_layer_sequential(float *conv_input_features, float *conv_output_features, float *conv_kernel_weights, float *conv_kernel_biases,
                             const uint16_t conv_input_width, const uint16_t conv_input_height, const uint16_t conv_input_depth,
                             const uint8_t conv_stride, const uint8_t conv_kernel_width, const uint8_t conv_kernel_height, const uint8_t output_feats, const uint8_t conv_batch_size) {
 
@@ -40,7 +40,7 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
                                 uint16_t conv_input_full_offset = conv_feature_offset + conv_row_offset + index_kernel_height * conv_input_width + conv_column_offset + index_kernel_width + conv_batch_input_offset;
                                 uint16_t conv_kernel_full_offset = conv_kernel_depth_offset + conv_kernel_height_offset + index_kernel_width;
 
-                                conv_sum += conv_input_features[conv_input_full_offset] * conv_kernels[conv_kernel_select_offset + conv_kernel_full_offset];
+                                conv_sum += conv_input_features[conv_input_full_offset] * conv_kernel_weights[conv_kernel_select_offset + conv_kernel_full_offset] + conv_kernel_biases[conv_kernel_select_offset + conv_kernel_full_offset];
                             }
                         }
                     }
