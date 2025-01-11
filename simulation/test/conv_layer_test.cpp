@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <math.h>
 #include "conv_layer.hpp"
+#include "misc_utils.hpp"
 
 void test_conv_layer_sequential() {
     // Define input dimensions and parameters
@@ -63,7 +64,10 @@ void test_conv_layer_sequential() {
     };
 
     // Initialize convolution kernel
-    float conv_kernels[kernel_width * kernel_height * input_depth * output_feature_count] = {
+    float conv_biases[kernel_width * kernel_height * input_depth * output_feature_count];
+    init_flarr_to_num(conv_biases, kernel_width * kernel_height * input_depth * output_feature_count, 1);
+    
+    float conv_weights[kernel_width * kernel_height * input_depth * output_feature_count] = {
         // kernel 1
         0,-1,-2,
         1, 0,-1,
@@ -158,7 +162,7 @@ void test_conv_layer_sequential() {
     float output_features[batch_size * output_width * output_height * output_feature_count];
 
     // Run the convolution layer
-    conv_layer_sequential(input_features, output_features, conv_kernels,
+    conv_layer_sequential(input_features, output_features, conv_weights,conv_biases,
                           input_width, input_height, input_depth,
                           stride, kernel_width, kernel_height, output_feature_count, batch_size);
 
@@ -168,8 +172,8 @@ void test_conv_layer_sequential() {
             for (uint16_t col = 0; col < output_width; col++) {
                 uint16_t index = slopper * output_width * output_height + row * output_width + col;
                 // printf("%f ", output_features[index]);
-                // printf("%f \n", expected_output_features[index]);
-                assert(fabs(output_features[index] - expected_output_features[index]) < 1e-6);
+                // printf("%f \n", expected_output_features[index]+kernel_width * kernel_height * input_depth);
+                assert(fabs(output_features[index] - (expected_output_features[index]+kernel_width * kernel_height * input_depth)) < 1e-6);
             }
             // printf("\n");
         }

@@ -1,7 +1,5 @@
-
-
-#include "relu_layer.hpp"
 #include <stdint.h>
+#include "relu_layer.hpp"
 
 
 
