@@ -10,7 +10,7 @@ inverted_labels = 754
 noise_percentage = inverted_labels/total_labels = 1002/42874 -> 2.3 %
 err_before = 6.39 %
 err_after  = 8.95 %
-err_diff   = err_after - err_before = (8.95 - 6.58) % = 2.37 %
+err_diff   = err_after - err_before = (8.95 - 6.39) % = 2.56 %
 
 dim = 1
 calculating EER and minDCF

@@ -255,6 +255,10 @@ if __name__ == "__main__":
             trainer.fit(model)
         else:
             trainer.fit(model, ckpt_path=config.checkpoint_path)
+            
+        print("Done with training x-vector extraction model!")
+        print()
+        print()
 
 
 
@@ -290,6 +294,9 @@ if __name__ == "__main__":
             x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TEST)
         else:
             print('could not extract test x-vectors')
+        print("Done with extracting x-vectors!")
+        print()
+        print()
     
 
     if(config.train_lda):
