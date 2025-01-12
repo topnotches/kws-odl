@@ -40,7 +40,7 @@ python main.py
 ### kws training
 For training the kws model run:
 ```
-cd quantization
+cd backbone
 python main.py
 ```
 ### simulation

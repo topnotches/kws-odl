@@ -7,13 +7,11 @@ version_*
 __pycache__
 .vscode
 simulation/bin/
-
+*pth
 *copy*
-
+__pycache__/
 #xvector
 
-xvector// optimized 
-/ DLL files
 xvector/__pycache__/
 
 *.py[cod]

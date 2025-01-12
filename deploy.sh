@@ -43,9 +43,9 @@ mkdir -p $NETWORD_DIR
 rm $NETWORD_DIR/model.onnx
 rm $NETWORD_DIR/out_layer*.txt
 rm $NETWORD_DIR/input.txt
-cp $CUR_DIR/quantization/input.txt $NETWORD_DIR/
-cp $CUR_DIR/quantization/model.onnx  $NETWORD_DIR/
-cp $CUR_DIR/quantization/out_layer*.txt $NETWORD_DIR/
+cp $CUR_DIR/backbone/input.txt $NETWORD_DIR/
+cp $CUR_DIR/backbone/model.onnx  $NETWORD_DIR/
+cp $CUR_DIR/backbone/out_layer*.txt $NETWORD_DIR/
 
 # Generate source code and weights for model inference
 # We use 64 bits for the BatchNorm and ReLU
@@ -57,6 +57,6 @@ cd $CUR_DIR/application/
 
 # Run end-to-end KWS on selected 8-core platform (e.g., PULP-OPEN) using the selected SDK (e.g., pulp_sdk)
 # Compute MFCC for selected audio sample and perform inference using the MFCCs on GVSOC
-# Dory will compare the intermediate features agains the ones generated in Python (quantization/main.py)
+# Dory will compare the intermediate features agains the ones generated in Python (backbone/main.py)
 make VERBOSE=1 clean all run sample=$AUDIO_SAMPLE sdk=$SDK CORE=8 platform=gvsoc
 
