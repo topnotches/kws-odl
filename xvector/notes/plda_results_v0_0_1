@@ -1,6 +1,6 @@
 
 Note:
-This is from implementing lda after 9b31960d9082cbe0232305946071fe6bbced57da for dim 150 for both lda and plda BEFORE AND AFTER setting inverting/scrambling 754 and 6056 labels
+This is from implementing lda after 9b31960d9082cbe0232305946071fe6bbced57da for dim 150 for both lda and plda BEFORE AND AFTER setting inverting/scrambling 1002 labels
 
 Note some small scrambling calculations,
 p_target = 10e-2
