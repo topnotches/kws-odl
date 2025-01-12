@@ -15,6 +15,7 @@ void test_conv_layer_sequential() {
     const uint8_t kernel_height = 3;
     const uint8_t output_feature_count = 4;
     const uint8_t batch_size = 2;
+    const uint8_t bias_init = 23;
 
     // Calculate output dimensions
     const uint16_t output_width = (input_width - kernel_width) / stride + 1;
@@ -41,7 +42,6 @@ void test_conv_layer_sequential() {
         2, 1, 0, 1,
         1, 0, 1, 2,
         0, 1, 2, 3,
-
         0, 1, 2, 3,
         1, 0, 1, 2,
         2, 1, 0, 1,
@@ -65,7 +65,7 @@ void test_conv_layer_sequential() {
 
     // Initialize convolution kernel
     float conv_biases[kernel_width * kernel_height * input_depth * output_feature_count];
-    init_flarr_to_num(conv_biases, kernel_width * kernel_height * input_depth * output_feature_count, 1);
+    init_flarr_to_num(conv_biases, kernel_width * kernel_height * input_depth * output_feature_count, bias_init);
     
     float conv_weights[kernel_width * kernel_height * input_depth * output_feature_count] = {
         // kernel 1
@@ -134,7 +134,7 @@ void test_conv_layer_sequential() {
 
         1, 1, 1,
         1, 1, 1,
-        1, 1, 1,
+        1, 1, 1
         
     };
 
@@ -167,15 +167,17 @@ void test_conv_layer_sequential() {
                           stride, kernel_width, kernel_height, output_feature_count, batch_size);
 
     // Validate the output features
-    for (uint16_t slopper = 0; slopper < output_feature_count; slopper++) {
-        for (uint16_t row = 0; row < output_height; row++) {
-            for (uint16_t col = 0; col < output_width; col++) {
-                uint16_t index = slopper * output_width * output_height + row * output_width + col;
-                // printf("%f ", output_features[index]);
-                // printf("%f \n", expected_output_features[index]+kernel_width * kernel_height * input_depth);
-                assert(fabs(output_features[index] - (expected_output_features[index]+kernel_width * kernel_height * input_depth)) < 1e-6);
+    for (uint16_t batch = 0; batch < batch_size; batch++) {
+        for (uint16_t slopper = 0; slopper < output_feature_count; slopper++) {
+            for (uint16_t row = 0; row < output_height; row++) {
+                for (uint16_t col = 0; col < output_width; col++) {
+                    uint16_t index = batch * output_feature_count * output_height * output_width + slopper * output_width * output_height + row * output_width + col;
+                    // printf("%f ", output_features[index]);
+                    // printf("%f \n", (expected_output_features[index]+kernel_width * kernel_height * input_depth * bias_init);
+                    assert(fabs(output_features[index] - (expected_output_features[index]+kernel_width * kernel_height * input_depth * bias_init)) < 1e-6);
+                }
+                // printf("\n");
             }
-            // printf("\n");
         }
     }
 

@@ -4,7 +4,8 @@
 
 void conv_layer_sequential(float *conv_input_features, float *conv_output_features, float *conv_kernel_weights, float *conv_kernel_biases,
                             const uint16_t conv_input_width, const uint16_t conv_input_height, const uint16_t conv_input_depth,
-                            const uint8_t conv_stride, const uint8_t conv_kernel_width, const uint8_t conv_kernel_height, const uint8_t output_feats, const uint8_t conv_batch_size) {
+                            const uint8_t conv_stride, const uint8_t conv_kernel_width, const uint8_t conv_kernel_height,
+                            const uint8_t output_feats, const uint8_t conv_batch_size) {
 
     uint16_t conv_batch_input_offset = 0;
     uint16_t conv_batch_output_offset = 0;
@@ -14,7 +15,7 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
     const uint16_t conv_row_offset_multiplier = conv_input_width * conv_stride;
     const uint16_t conv_kernel_depth_offset_multiplier = conv_kernel_width * conv_kernel_height;
     const uint16_t conv_total_kernel_select_offset_multiplier = conv_width_limit * conv_height_limit;
-    const uint16_t conv_batch_input_feature_points_per_batch = conv_input_width * conv_input_width * conv_input_depth;
+    const uint16_t conv_batch_input_feature_points_per_batch = conv_input_width * conv_input_height * conv_input_depth;
     const uint16_t conv_batch_output_feature_points_per_batch = conv_width_limit * conv_height_limit * output_feats;
 
     for (uint16_t index_batch = 0; index_batch < conv_batch_size; index_batch++) {
@@ -44,7 +45,7 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
                             }
                         }
                     }
-                    conv_output_features[conv_output_feature_select_offset + index_row * conv_width_limit + index_column] = conv_sum;
+                    conv_output_features[conv_batch_output_offset + conv_output_feature_select_offset + index_row * conv_width_limit + index_column] = conv_sum;
                 }
             }
         }
