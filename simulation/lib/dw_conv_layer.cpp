@@ -27,14 +27,12 @@ void dw_conv_layer_sequential(float *dw_conv_input_features, float *dw_conv_outp
 
     for (uint16_t index_batch = 0; index_batch < dw_conv_batch_size; index_batch++) { // batch
 
+        #pragma omp parallel for collapse(3) schedule(dynamic) // till i collapse
         for (uint16_t index_layer = 0; index_layer < dw_conv_input_depth; index_layer++) { // layer
-
             for (uint16_t index_row = 0; index_row < dw_conv_width_limit; index_row++) { // out
-
                 for (uint16_t index_column = 0; index_column < dw_conv_height_limit; index_column++) {
 
                     float dw_conv_sum = 0;
-                    
                     uint16_t dw_conv_row_offset = index_row * dw_conv_row_offset_multiplier;
                     uint16_t dw_conv_column_offset = index_column * dw_conv_stride;
                     uint16_t dw_conv_output_feature_select_offset = index_layer * dw_conv_total_kernel_select_offset_multiplier;
