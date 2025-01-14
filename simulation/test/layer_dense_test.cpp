@@ -35,16 +35,15 @@ void test_dense_layer_sequential() {
     // Validate the output features
     for (uint16_t batch_index = 0; batch_index < batch_size; batch_index++) {
         for (uint16_t out_index = 0; out_index < output_size; out_index++) {
+            
             uint16_t index = batch_index * output_size + out_index;
-            // printf("%d ", index);
-            // printf("%f ", output_features[index]);
-            // printf("%f \n", expected_output_features[index]);
+
             assert(fabs(output_features[index] - expected_output_features[index]) < 1e-6);
         
         }
     }
 
-    printf("Fully-connected layer test passed!\n");
+    printf("Dense layer test passed!\n");
 }
 
 int main() {

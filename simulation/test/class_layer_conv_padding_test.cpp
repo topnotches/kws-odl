@@ -4,6 +4,8 @@
 #include <math.h>
 #include "conv_layer.hpp"
 #include "misc_utils.hpp"
+#include "defs.hpp"
+#include "layer.hpp"
 
 void test_conv_layer_sequential() {
     // Define input dimensions and parameters
@@ -24,8 +26,33 @@ void test_conv_layer_sequential() {
     // Calculate output dimensions
     const uint16_t output_width =   (input_width - kernel_width + pad_left + pad_right) / stride + 1;
     const uint16_t output_height =  (input_height - kernel_height + pad_top + pad_bottom) / stride + 1;
-    // printf("width: %f\n", (float) (input_width - kernel_width + pad_left + pad_right) / stride + 1);
-    // printf("height: %f\n", (float) (input_height - kernel_height + pad_top + pad_bottom) / stride + 1);
+    
+    // Define input size for conv layer constructor param
+
+    tensor_dim_sizes_t layer_dim_size_in;
+
+    layer_dim_size_in.width = input_width;
+    layer_dim_size_in.height = input_height;
+    layer_dim_size_in.depth = input_depth;
+    layer_dim_size_in.batch = batch_size;
+    layer_dim_size_in.full = layer_dim_size_in.width *
+                            layer_dim_size_in.height *
+                            layer_dim_size_in.depth *
+                            layer_dim_size_in.batch;
+
+    // Define conv kernel hyper parameters;
+
+    conv_hypr_param_t conv_params;
+
+    conv_params.pad_top = pad_top; 
+    conv_params.pad_bottom = pad_bottom; 
+    conv_params.pad_left = pad_left; 
+    conv_params.pad_right = pad_right; 
+    conv_params.kernel_stride = stride;
+    conv_params.kernel_width = kernel_width;
+    conv_params.kernel_height = kernel_height;
+    conv_params.kernel_count = output_feature_map_count;
+
     // Initialize input features
     float input_features[batch_size * input_width * input_height * input_depth] = {
         
@@ -149,14 +176,12 @@ void test_conv_layer_sequential() {
 
     };
 
-    // Allocate memory for output features
-    float output_features[batch_size * output_width * output_height * output_feature_map_count];
+
+    layer my_layer(LayerTypes::conv, layer_dim_size_in, conv_weights, conv_biases, conv_params = conv_params);
 
     // Run the convolution layer
-    conv_layer_sequential(input_features, output_features, conv_weights,conv_biases,
-                          input_width, input_height, input_depth,
-                          stride, kernel_width, kernel_height, output_feature_map_count, batch_size,
-                          pad_top, pad_bottom, pad_left, pad_right);
+    my_layer.forward(input_features);
+
 
     // Validate the output features
     for (uint16_t batch = 0; batch < batch_size; batch++) {
@@ -166,15 +191,15 @@ void test_conv_layer_sequential() {
                 for (uint16_t col = 0; col < output_width; col++) {
                     uint16_t index = batch * output_feature_map_count * output_height * output_width + map * output_width * output_height + row * output_width + col;
                     // printf("index: %d, ", index);
-                    // printf("%f ", output_features[index]);
+                    // printf("%f ", my_layer.layer_outputs[index]);
                     // printf("%f \n", (expected_output_features[index]+kernel_width * kernel_height * input_depth * bias_init));
-                    assert(fabs(output_features[index] - (expected_output_features[index]+kernel_width * kernel_height * input_depth * bias_init)) < 1e-6);
+                    assert(fabs(my_layer.layer_outputs[index] - (expected_output_features[index]+kernel_width * kernel_height * input_depth * bias_init)) < 1e-6);
                 }
             }
         }
     }
 
-    printf("Convolution padding test passed!\n");
+    printf("Layer Class: Convolution padding test passed!\n");
 }
 
 int main() {

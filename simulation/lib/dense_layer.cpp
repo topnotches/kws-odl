@@ -13,7 +13,6 @@ void dense_layer(float *dense_input, float *dense_output, float *dense_weights, 
         for (uint16_t index_output = 0; index_output < dense_output_size; index_output++) {
             uint16_t batch_offset_input = index_batch * input_size;
             uint16_t batch_offset_output = index_batch * dense_output_size;
-
             for (uint16_t index_input = 0; index_input < input_size; index_input++) {
                 dense_output[batch_offset_output + index_output] += 
                     dense_input[batch_offset_input + index_input] * 

@@ -4,6 +4,7 @@
 #include <math.h>
 #include "dense_layer.hpp"
 #include "misc_utils.hpp"
+#include "layer.hpp"
 
 
 void test_dense_layer_sequential() {
@@ -16,11 +17,23 @@ void test_dense_layer_sequential() {
     const float bias_init_value = 123; 
 
     float input_features[batch_size * input_size];
-    float output_features[batch_size * output_size] = {};
     float expected_output_features[batch_size * output_size];
 
     float weights[input_size * output_size];
     float biases[input_size * output_size];
+
+    // Define input size for dense layer constructor param
+
+    tensor_dim_sizes_t layer_dim_size_in;
+
+    layer_dim_size_in.batch = batch_size;
+    layer_dim_size_in.full = input_size*batch_size;
+
+    // define conv kernel hyper parameters;
+
+    dense_param_t dense_params;
+
+    dense_params.size_out = output_size;
 
     init_flarr_to_num(weights, input_size * output_size, weight_init_value);
     init_flarr_to_num(biases, input_size * output_size, bias_init_value);
@@ -29,22 +42,26 @@ void test_dense_layer_sequential() {
 
     init_flarr_to_num(expected_output_features, output_size*batch_size, weight_init_value * input_init_value * input_size + bias_init_value);
     
-    dense_layer(input_features, output_features, weights, biases, input_size, output_size, batch_size);
+    layer my_layer(LayerTypes::dense, layer_dim_size_in, weights, biases, {}, dense_params);
 
+
+    // Run the depthwise convolution layer
+    my_layer.forward(input_features);
 
     // Validate the output features
     for (uint16_t batch_index = 0; batch_index < batch_size; batch_index++) {
         for (uint16_t out_index = 0; out_index < output_size; out_index++) {
             uint16_t index = batch_index * output_size + out_index;
             // printf("%d ", index);
-            // printf("%f ", output_features[index]);
+            // printf("%f ", my_layer.layer_outputs[index]);
             // printf("%f \n", expected_output_features[index]);
-            assert(fabs(output_features[index] - expected_output_features[index]) < 1e-6);
+            assert(fabs(my_layer.layer_outputs[index] - expected_output_features[index]) < 1e-6);
         
         }
     }
 
-    printf("Fully-connected layer test passed!\n");
+    printf("Layer Class: Dense layer test passed!\n");
+
 }
 
 int main() {
