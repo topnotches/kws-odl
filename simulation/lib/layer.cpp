@@ -90,14 +90,16 @@ layer::layer(LayerTypes layer_type, tensor_dim_sizes_t layer_dim_size_in, float 
         case LayerTypes::dense: {
             this->layer_type = LayerTypes::dense;
 
+            this->layer_dense_conv_hypr_params.size_in = this->layer_dim_size_in.full / this->layer_dim_size_in.batch;
             this->layer_dense_conv_hypr_params.size_out = layer_dense_conv_hypr_params.size_out;
+            
             this->layer_dim_size_out.full = this->layer_dense_conv_hypr_params.size_out * this->layer_dim_size_in.batch;
             this->layer_dim_size_out.width = 0;
             this->layer_dim_size_out.height = 0;
             this->layer_dim_size_out.depth = 0;
             this->layer_dim_size_out.batch = this->layer_dim_size_in.batch;
 
-            uint32_t layer_dense_weight_count = (this->layer_dim_size_in.full / this->layer_dim_size_in.batch) * (this->layer_dim_size_out.full / this->layer_dim_size_out.batch);
+            uint32_t layer_dense_weight_count = this->layer_dense_conv_hypr_params.size_in * this->layer_dense_conv_hypr_params.size_out;
             uint32_t layer_dense_bias_count = this->layer_dim_size_out.full / this->layer_dim_size_out.batch;
 
             this->layer_weights.resize(layer_dense_weight_count);
@@ -147,3 +149,47 @@ layer::~layer() {
 
 }
 
+
+void layer::forward(float *layer_input) {
+    switch (layer_type) {
+        case LayerTypes::conv: {
+            conv_layer_sequential(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
+                            this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth,
+                            this->layer_conv_hypr_params.kernel_stride, this->layer_conv_hypr_params.kernel_width, this->layer_conv_hypr_params.kernel_height,
+                            this->layer_conv_hypr_params.kernel_count, this->layer_dim_size_out.batch,
+                            this->layer_conv_hypr_params.pad_top, this->layer_conv_hypr_params.pad_bottom,
+                            this->layer_conv_hypr_params.pad_left, this->layer_conv_hypr_params.pad_right);
+            break;
+        }
+        case LayerTypes::dw_conv: {
+            dw_conv_layer_sequential(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
+                                        this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth,
+                                        this->layer_conv_hypr_params.kernel_stride, this->layer_conv_hypr_params.kernel_width,
+                                        this->layer_conv_hypr_params.kernel_height, this->layer_dim_size_in.batch,
+                                        this->layer_conv_hypr_params.pad_top, this->layer_conv_hypr_params.pad_bottom,
+                                        this->layer_conv_hypr_params.pad_left, this->layer_conv_hypr_params.pad_right);
+
+            break;
+        }
+        case LayerTypes::dense: {
+            dense_layer(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
+                        this->layer_dense_conv_hypr_params.size_in, this->layer_dense_conv_hypr_params.size_in, this->layer_dim_size_out.batch);
+            break;
+        }
+        case LayerTypes::batchnorm: {
+
+            batch_norm_sequential(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
+                                    this->layer_dim_size_in.full / this->layer_dim_size_in.batch, this->layer_dim_size_in.batch);
+
+            break;
+          }  
+        case LayerTypes::relu: {
+            relu_layer(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth);
+            break;
+        }
+        default: {
+            KHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN("Trying forward() on an unsupported layer...");
+            break;
+        }  
+    }
+}

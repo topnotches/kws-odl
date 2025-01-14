@@ -25,6 +25,7 @@ typedef struct conv_hypr_param_t {
 } conv_hypr_param;
 
 typedef struct dense_param_t {
+    uint32_t size_in = 0;
     uint32_t size_out = 0;
 } dense_param;
 

@@ -19,6 +19,7 @@ public:
     layer(LayerTypes layer_type, tensor_dim_sizes_t layer_dim_size_in,
     float *weights, float *biases, conv_hypr_param_t conv_params);
     ~layer();
+    void forward(float *layer_input);
 };
 
 
