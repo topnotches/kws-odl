@@ -95,7 +95,7 @@ if STEP_DO_EXPORT_MODEL:
             writer = csv.writer(csv_file)
 
             
-            writer.writerow(["Layer Name", "Parameter Name", "Shape", "Values"])
+            writer.writerow(["Name", "Shape", "Values"])
 
             
             for name, param in model.named_parameters():
@@ -105,7 +105,7 @@ if STEP_DO_EXPORT_MODEL:
                     param_values = param.detach().cpu().numpy().flatten().tolist()
                     
                     # Write parameter details to CSV
-                    writer.writerow([name, param_name, param_shape, param_values])
+                    writer.writerow([param_name, param_shape, param_values])
 
         print(f"Model parameters exported successfully to {EXPORT_OUTPUT_PATH}.")
     except Exception as e:
