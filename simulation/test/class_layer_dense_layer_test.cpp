@@ -44,8 +44,7 @@ void test_dense_layer_sequential() {
     
     layer my_layer(LayerTypes::dense, layer_dim_size_in, weights, biases, {}, dense_params);
 
-
-    // Run the depthwise convolution layer
+    // Run the dense layer
     my_layer.forward(input_features);
 
     // Validate the output features

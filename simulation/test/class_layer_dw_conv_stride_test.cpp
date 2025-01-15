@@ -164,7 +164,7 @@ void test_conv_layer_sequential() {
             }
         }
     }
-    printf("Class Layer: Depthwise convolution stride test passed!\n");
+    printf("Layer Class: Depthwise convolution stride test passed!\n");
 }
 
 int main() {

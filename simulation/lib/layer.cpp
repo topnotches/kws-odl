@@ -20,7 +20,7 @@ layer::layer(LayerTypes layer_type,
     this->layer_weights = {};
     this->layer_biases = {};
     this->layer_dim_size_in = {};  // {width, height, depth, batch_size}
-    this->layer_dim_size_out = {}; // {width, height, depth, batch_size}¨
+    this->layer_dim_size_out = {}; // {width, height, depth, batch_size}
     this->layer_conv_hypr_params = {};
     this->layer_dense_hypr_params = {};
     this->layer_outputs.resize(0);
@@ -34,7 +34,7 @@ layer::layer(LayerTypes layer_type,
 
             this->layer_conv_hypr_params = layer_conv_hypr_params;
 
-            this->layer_dim_size_out.width = (this->layer_dim_size_in.width - this->layer_conv_hypr_params.kernel_width + this->layer_conv_hypr_params.pad_left + this->layer_conv_hypr_params.pad_right) / this->layer_conv_hypr_params.kernel_stride + 1;
+            this->layer_dim_size_out.width  = (this->layer_dim_size_in.width - this->layer_conv_hypr_params.kernel_width + this->layer_conv_hypr_params.pad_left + this->layer_conv_hypr_params.pad_right) / this->layer_conv_hypr_params.kernel_stride + 1;
             this->layer_dim_size_out.height = (this->layer_dim_size_in.height - this->layer_conv_hypr_params.kernel_height + this->layer_conv_hypr_params.pad_top + this->layer_conv_hypr_params.pad_bottom) / this->layer_conv_hypr_params.kernel_stride + 1;
             this->layer_dim_size_out.depth  = this->layer_conv_hypr_params.kernel_count;
             this->layer_dim_size_out.batch  = this->layer_dim_size_in.batch;
@@ -122,8 +122,8 @@ layer::layer(LayerTypes layer_type,
             this->layer_type = LayerTypes::batchnorm;
             this->layer_dim_size_out = this->layer_dim_size_in;
             
-            uint32_t layer_bn_weight_count = this->layer_dim_size_in.full;
-            uint32_t layer_bn_bias_count = this->layer_dim_size_in.full;
+            uint32_t layer_bn_weight_count = this->layer_dim_size_in.full / this->layer_dim_size_in.batch;
+            uint32_t layer_bn_bias_count = this->layer_dim_size_in.full / this->layer_dim_size_in.batch;
             this->layer_weights.resize(0);
             this->layer_weights.insert(this->layer_weights.end(), weights, weights + layer_bn_weight_count);
 
@@ -137,7 +137,9 @@ layer::layer(LayerTypes layer_type,
         case LayerTypes::relu: {
             this->layer_type = LayerTypes::relu;
 
-            this->layer_dim_size_out = layer_dim_size_in;
+            this->layer_dim_size_out = this->layer_dim_size_in;
+
+            this->layer_outputs.resize(this->layer_dim_size_out.full);
 
             break;
         }
@@ -190,7 +192,8 @@ void layer::forward(float *layer_input) {
             break;
           }  
         case LayerTypes::relu: {
-            relu_layer(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth);
+
+            relu_layer(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth*this->layer_dim_size_in.batch);
             break;
         }
         default: {

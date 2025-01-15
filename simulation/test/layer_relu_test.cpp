@@ -6,21 +6,20 @@
 
 void test_dense_layer_sequential() {
     // Define input dimensions and parameters
-    const uint16_t input_width = 4;
+    const uint16_t input_width = 2;
     const uint16_t input_height = 4;
-    const uint8_t stride = 1;
-    const uint8_t kernel_width = 3;
-    const uint8_t kernel_height = 3;
-    const uint8_t output_feature_count = 4;
+    const uint8_t input_depth = 2;
     const uint8_t batch_size = 2;
-    const uint8_t relu_depth = batch_size * output_feature_count;
+    const uint8_t relu_depth = batch_size * input_depth;
 
-    // Calculate output dimensions
-    const uint16_t output_width = (input_width - kernel_width) / stride + 1;
-    const uint16_t output_height = (input_height - kernel_height) / stride + 1;
+    // // Calculate output dimensions
+    // printf("\n%d\n", batch_size * input_width * input_height * input_depth);
+    // printf("\n%d\n", batch_size * input_width * input_height * input_depth);
+    // printf("\n%d\n", batch_size * input_width * input_height * input_depth);
+    // printf("\n%d\n", batch_size * input_width * input_height * input_depth);
 
     // Initialize input features
-    float input_features[batch_size * output_width * output_height * output_feature_count] = {
+    float input_features[batch_size * input_width * input_height * input_depth] = {
         0.000000, -16.000000, 
         16.000000, 0.000000, 
         0.000000, 16.000000, 
@@ -43,7 +42,7 @@ void test_dense_layer_sequential() {
     };
 
     // Expected output features
-    float expected_output_features[batch_size * output_width * output_height * output_feature_count] = {
+    float expected_output_features[batch_size * input_width * input_height * input_depth] = {
         0.000000, 0.0000000, 
         16.000000, 0.000000, 
         0.000000, 16.000000, 
@@ -63,16 +62,16 @@ void test_dense_layer_sequential() {
     };
 
     // Allocate memory for output features
-    float output_features[batch_size * output_width * output_height * output_feature_count];
+    float output_features[batch_size * input_width * input_height * input_depth];
 
     // Run the convolution layer
-    relu_layer(input_features, output_features, output_width, output_height, relu_depth);
+    relu_layer(input_features, output_features, input_width, input_height, relu_depth);
 
     // Validate the output features
     for (uint16_t slopper = 0; slopper < relu_depth; slopper++) {
-        for (uint16_t row = 0; row < output_height; row++) {
-            for (uint16_t col = 0; col < output_width; col++) {
-                uint16_t index = slopper * output_width * output_height + row * output_width + col;
+        for (uint16_t row = 0; row < input_height; row++) {
+            for (uint16_t col = 0; col < input_width; col++) {
+                uint16_t index = slopper * input_width * input_height + row * input_width + col;
                 // printf("%f ", output_features[index]);
                 // printf("%f \n", expected_output_features[index]);
                 assert(fabs(output_features[index] - expected_output_features[index]) < 1e-6);
