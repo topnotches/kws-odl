@@ -1,7 +1,5 @@
-# Makefile for KWS-ODL Simulation with OpenMP and Dynamic Test Support
 
-# Compiler and flags
-CXX = g++
+CXX = g++ 
 CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -fopenmp
 
 # Directories
@@ -22,7 +20,7 @@ TEST_EXEC = $(patsubst $(TEST_DIR)/%.cpp, $(BIN_DIR)/%, $(TEST_SRCS))
 # Targets
 MAIN_EXEC = $(BIN_DIR)/app
 
-.PHONY: all clean tests
+.PHONY: all clean tests sandbox
 
 all: $(MAIN_EXEC) tests
 
@@ -33,6 +31,12 @@ $(MAIN_EXEC): $(MAIN_SRC) $(LIB_SRCS) $(HEADERS)
 $(BIN_DIR)/%: $(TEST_DIR)/%.cpp $(LIB_SRCS) $(HEADERS)
 	mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -o $@ $< $(LIB_SRCS)
+
+sandbox: $(SRC_DIR)/sandbox.cpp $(LIB_SRCS) $(HEADERS)
+	mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -o $(BIN_DIR)/sandbox $(SRC_DIR)/sandbox.cpp $(LIB_SRCS)
+	@echo "Running sandbox..."
+	@./$(BIN_DIR)/sandbox || echo "Sandbox execution failed with exit code $$?"
 
 clean:
 	rm -rf $(BIN_DIR)
