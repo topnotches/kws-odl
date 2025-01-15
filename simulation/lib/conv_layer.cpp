@@ -21,8 +21,8 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
     for (uint16_t index_batch = 0; index_batch < conv_batch_size; index_batch++) {
         #pragma omp parallel for collapse(3) schedule(dynamic)
         for (uint16_t index_kernel = 0; index_kernel < output_feats; index_kernel++) {
-            for (uint16_t index_row = 0; index_row < conv_width_limit; index_row++) {
-                for (uint16_t index_column = 0; index_column < conv_height_limit; index_column++) {
+            for (uint16_t index_row = 0; index_row < conv_height_limit; index_row++) {
+                for (uint16_t index_column = 0; index_column < conv_width_limit; index_column++) {
 
                     float conv_sum = 0;
                     uint16_t conv_output_feature_select_offset = index_kernel * conv_total_kernel_select_offset_multiplier;
