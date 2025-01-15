@@ -3,7 +3,7 @@ STEP_DO_EXPORT_MODEL    = True
 CHECKPOINT_PATH         = './model_acc_94.53125.pth'
 CLASSES                 = 12
 EXPORT_OUTPUT_DIR_PATH  = '../simulation/exported_models/'
-EXPORT_OUTPUT_NAME      = 'export_params_nclass_' + str(CLASSES) + '.pth'
+EXPORT_OUTPUT_NAME      = 'export_params_nclass_' + str(CLASSES) + '.csv'
 EXPORT_OUTPUT_PATH      = EXPORT_OUTPUT_DIR_PATH+EXPORT_OUTPUT_NAME
 
 import torch
