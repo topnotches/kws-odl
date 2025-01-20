@@ -31,7 +31,7 @@ void test_dense_layer_sequential() {
 
     // define conv kernel hyper parameters;
 
-    dense_param_t dense_params;
+    dense_hypr_param_t dense_params;
 
     dense_params.size_out = output_size;
 

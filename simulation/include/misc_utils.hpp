@@ -12,6 +12,6 @@ void KHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN(const char *message);
 
 std::vector<std::vector<std::string>> load_layers_from_csv_to_vec(const std::string& filePath);
 
-std::vector<float> string_to_float_vector(std::string string_of_floats, std::string delimiter = " ");
+std::vector<float> str_to_fl32_vec(std::string string_of_floats, std::string delimiter = " ");
 
 #endif

@@ -16,7 +16,7 @@ layer::layer(LayerTypes layer_type,
           float *weights, 
           float *biases, 
           conv_hypr_param_t layer_conv_hypr_params,
-          dense_param_t     layer_dense_hypr_params) {
+          dense_hypr_param_t     layer_dense_hypr_params) {
 
     this->layer_weights = {};
     this->layer_biases = {};
@@ -100,13 +100,13 @@ layer::layer(LayerTypes layer_type,
             this->layer_dense_hypr_params.size_out = layer_dense_hypr_params.size_out;
             
             this->layer_dim_size_out.full = this->layer_dense_hypr_params.size_out * this->layer_dim_size_in.batch;
-            this->layer_dim_size_out.width = 0; // change and test for change == 1
-            this->layer_dim_size_out.height = 0;
-            this->layer_dim_size_out.depth = 0;
+            this->layer_dim_size_out.width = this->layer_dense_hypr_params.size_out; // change and test for change == 1
+            this->layer_dim_size_out.height = 1;
+            this->layer_dim_size_out.depth = 1;
             this->layer_dim_size_out.batch = this->layer_dim_size_in.batch;
 
             uint32_t layer_dense_weight_count = this->layer_dense_hypr_params.size_in * this->layer_dense_hypr_params.size_out;
-            uint32_t layer_dense_bias_count = this->layer_dim_size_out.full / this->layer_dim_size_out.batch;
+            uint32_t layer_dense_bias_count = this->layer_dense_hypr_params.size_out;
             
             this->layer_weights.resize(0);
             this->layer_weights.insert(this->layer_weights.end(), weights, weights + layer_dense_weight_count);
@@ -125,6 +125,8 @@ layer::layer(LayerTypes layer_type,
             
             uint32_t layer_bn_weight_count = this->layer_dim_size_in.full / this->layer_dim_size_in.batch;
             uint32_t layer_bn_bias_count = this->layer_dim_size_in.full / this->layer_dim_size_in.batch;
+            printf("3oiawdfjoiawdj %d, ", this->layer_dim_size_in.full);
+            printf("3oiawdfjoiawdj %d, ", layer_bn_bias_count);
             this->layer_weights.resize(0);
             this->layer_weights.insert(this->layer_weights.end(), weights, weights + layer_bn_weight_count);
 
@@ -230,4 +232,18 @@ void layer::forward(float *layer_input) {
             break;
         }  
     }
+}
+
+
+tensor_dim_sizes_t layer::get_input_size() {
+    return this->layer_dim_size_in;
+}
+tensor_dim_sizes_t layer::get_output_size() {
+    return this->layer_dim_size_out;
+}
+std::vector<float> layer::get_weights() {
+    return this->layer_weights;
+}
+std::vector<float> layer::get_biases() {
+    return this->layer_biases;
 }

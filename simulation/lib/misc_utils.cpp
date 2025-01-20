@@ -118,7 +118,7 @@ std::vector<std::vector<std::string>> load_layers_from_csv_to_vec(const std::str
     return csv_data;
 }
 
-std::vector<float> string_to_float_vector(std::string string_of_floats, std::string delimiter) {
+std::vector<float> str_to_fl32_vec(std::string string_of_floats, std::string delimiter) {
     std::vector<float> float_vector;
 
     auto position = string_of_floats.find(delimiter);

@@ -42,11 +42,13 @@ void batch_norm_sequential(float *bn_input_features, float *bn_output_features, 
 
     // Apply normalization, scale, and shift
     #pragma omp parallel for schedule(dynamic)
-    for (uint16_t index_feature = 0; index_feature < bn_num_features; index_feature++) {
-        for (uint16_t index_batch = 0; index_batch < bn_num_batches; index_batch++) {
-            uint16_t index = index_feature * bn_num_batches + index_batch;
-            float bn_normalized_value = (bn_input_features[index] - bn_means[index_feature]) / sqrt(bn_variances[index_feature] + epsilon);
-            bn_output_features[index] = bn_gamma[index_feature] * bn_normalized_value + bn_beta[index_feature];
+    for (uint16_t index_feature_size = 0; index_feature_size < bn_num_features_size; index_feature_size++) {
+        for (uint16_t index_feature = 0; index_feature < bn_num_features; index_feature++) {
+            for (uint16_t index_batch = 0; index_batch < bn_num_batches; index_batch++) {
+                uint16_t index = index_feature * bn_num_batches + index_batch;
+                float bn_normalized_value = (bn_input_features[index] - bn_means[index_feature]) / sqrt(bn_variances[index_feature] + epsilon);
+                bn_output_features[index] = bn_gamma[index_feature] * bn_normalized_value + bn_beta[index_feature];
+            }
         }
     }
 }

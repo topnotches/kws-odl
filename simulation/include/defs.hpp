@@ -3,6 +3,14 @@
 #include <stdio.h>
 #include "misc_utils.hpp"
 
+#define NUMBER_OF_CLASSES 12
+
+#define LENGTH_BIT          1
+#define LENGTH_NIBBLE       4
+#define LENGTH_BYTE         8
+#define LENGTH_HALFWORD     16
+#define LENGTH_WORD         32
+#define LENGTH_DOUBLE_WORD  64
 
 enum class LayerTypes {
     conv,
@@ -26,7 +34,7 @@ typedef struct conv_hypr_param_t {
 } conv_hypr_param;
 
 
-typedef struct dense_param_t {
+typedef struct dense_hypr_param_t {
     uint32_t size_in = 0;
     uint32_t size_out = 0;
 } dense_param;
