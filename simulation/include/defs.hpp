@@ -9,7 +9,8 @@ enum class LayerTypes {
     dw_conv,
     dense,
     batchnorm,
-    relu
+    relu,
+    avgpool2d
 };
 
 typedef struct conv_hypr_param_t {

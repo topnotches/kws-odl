@@ -26,8 +26,8 @@ void test_conv_layer_sequential() {
     // Calculate output dimensions
     const uint16_t output_width =   (input_width - kernel_width + pad_left + pad_right) / stride + 1;
     const uint16_t output_height =  (input_height - kernel_height + pad_top + pad_bottom) / stride + 1;
-    printf("%f, output_width \n", (float)(input_width - kernel_width + pad_left + pad_right) / stride + 1);
-    printf("%f, output_height \n", (float)(input_height - kernel_height + pad_top + pad_bottom) / stride + 1);
+    // printf("%f, output_width \n", (float)(input_width - kernel_width + pad_left + pad_right) / stride + 1);
+    // printf("%f, output_height \n", (float)(input_height - kernel_height + pad_top + pad_bottom) / stride + 1);
     // Define input size for conv layer constructor param
 
     tensor_dim_sizes_t layer_dim_size_in;

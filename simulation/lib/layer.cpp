@@ -8,6 +8,7 @@
 #include "layer.hpp"
 #include "misc_utils.hpp"
 #include "relu_layer.hpp"
+#include "avgpool2d_layer.hpp"
 
 
 layer::layer(LayerTypes layer_type, 
@@ -99,7 +100,7 @@ layer::layer(LayerTypes layer_type,
             this->layer_dense_hypr_params.size_out = layer_dense_hypr_params.size_out;
             
             this->layer_dim_size_out.full = this->layer_dense_hypr_params.size_out * this->layer_dim_size_in.batch;
-            this->layer_dim_size_out.width = 0;
+            this->layer_dim_size_out.width = 0; // change and test for change == 1
             this->layer_dim_size_out.height = 0;
             this->layer_dim_size_out.depth = 0;
             this->layer_dim_size_out.batch = this->layer_dim_size_in.batch;
@@ -143,6 +144,25 @@ layer::layer(LayerTypes layer_type,
 
             break;
         }
+        case LayerTypes::avgpool2d: {
+            this->layer_type = LayerTypes::avgpool2d;
+
+            this->layer_conv_hypr_params = layer_conv_hypr_params;
+
+            this->layer_dim_size_out.width = (this->layer_dim_size_in.width - this->layer_conv_hypr_params.kernel_width + this->layer_conv_hypr_params.pad_left + this->layer_conv_hypr_params.pad_right) / this->layer_conv_hypr_params.kernel_stride + 1;
+            this->layer_dim_size_out.height = (this->layer_dim_size_in.height - this->layer_conv_hypr_params.kernel_height + this->layer_conv_hypr_params.pad_top + this->layer_conv_hypr_params.pad_bottom) / this->layer_conv_hypr_params.kernel_stride + 1;
+            this->layer_dim_size_out.depth  = this->layer_dim_size_in.depth;
+            this->layer_dim_size_out.batch  = this->layer_dim_size_in.batch;
+            
+            this->layer_dim_size_out.full = this->layer_dim_size_out.width *
+                                            this->layer_dim_size_out.height *
+                                            this->layer_dim_size_out.depth *
+                                            this->layer_dim_size_out.batch;
+            
+            this->layer_outputs.resize(this->layer_dim_size_out.full);
+
+            break;
+        }
         default: {
             KHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN("Trying to initialize an unsupported layer...");
             break;
@@ -157,7 +177,7 @@ layer::~layer() {
 
 
 void layer::forward(float *layer_input) {
-    switch (layer_type) {
+    switch (this->layer_type) {
         case LayerTypes::conv: {
             conv_layer_sequential(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
                             this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth,
@@ -194,6 +214,15 @@ void layer::forward(float *layer_input) {
         case LayerTypes::relu: {
 
             relu_layer(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth*this->layer_dim_size_in.batch);
+            break;
+        }
+        case LayerTypes::avgpool2d: {
+            avgpool2d_layer_sequential(layer_input, this->layer_outputs.data(),
+                                        this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth,
+                                        this->layer_conv_hypr_params.kernel_stride, this->layer_conv_hypr_params.kernel_width,
+                                        this->layer_conv_hypr_params.kernel_height, this->layer_dim_size_in.batch,
+                                        this->layer_conv_hypr_params.pad_top, this->layer_conv_hypr_params.pad_bottom,
+                                        this->layer_conv_hypr_params.pad_left, this->layer_conv_hypr_params.pad_right);
             break;
         }
         default: {
