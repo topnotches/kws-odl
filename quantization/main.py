@@ -1,4 +1,4 @@
-STEP_DO_TRAIN           = False
+STEP_DO_TRAIN           = True
 STEP_DO_PROCESS_MFCCS   = True  # New step
 STEP_DO_EXPORT_MODEL    = False
 CHECKPOINT_PATH         = './model_acc_94.53125.pth'
