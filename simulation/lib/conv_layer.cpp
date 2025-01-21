@@ -18,6 +18,7 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
     const uint16_t conv_batch_input_feature_points_per_batch = conv_input_width * conv_input_height * conv_input_depth;
     const uint16_t conv_batch_output_feature_points_per_batch = conv_width_limit * conv_height_limit * output_feats;
 
+
     for (uint16_t index_batch = 0; index_batch < conv_batch_size; index_batch++) {
         #pragma omp parallel for collapse(3) schedule(dynamic)
         for (uint16_t index_kernel = 0; index_kernel < output_feats; index_kernel++) {
@@ -51,9 +52,18 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
                                     //printf("col: %d , ", conv_kernel_select_offset + conv_kernel_full_offset);
 
                                     //printf("index: %f\n", conv_input_features[conv_input_full_offset]);
+                                   // if (index_kernel == 1) {
+//
+                                   // printf("sum before: %f ", conv_sum);
+                                   // }
+
                                     conv_sum += conv_input_features[conv_input_full_offset] * conv_kernel_weights[conv_kernel_select_offset + conv_kernel_full_offset];
+                                   // if (index_kernel == 1) {
+                                   //     printf("sum: %f weight: %f\n", conv_input_features[conv_input_full_offset] * conv_kernel_weights[conv_kernel_select_offset + conv_kernel_full_offset], conv_kernel_weights[conv_kernel_select_offset + conv_kernel_full_offset]);
+//
+                                   // }
                                 }
-                                conv_sum += conv_kernel_biases[conv_kernel_select_offset + conv_kernel_full_offset];
+                                conv_sum += conv_kernel_biases[index_kernel];
                             }
                         }
                     }
@@ -64,4 +74,5 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
         conv_batch_output_offset += conv_batch_output_feature_points_per_batch;
         conv_batch_input_offset += conv_batch_input_feature_points_per_batch;
     }
+    
 }

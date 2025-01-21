@@ -106,8 +106,7 @@ std::vector<std::vector<std::string>> load_layers_from_csv_to_vec(const std::str
 
             row_data.push_back(name);
             row_data.push_back(size);
-            row_data.push_back(params);
-            
+            row_data.push_back(params + " ");
 
             csv_data.push_back(row_data);
         }

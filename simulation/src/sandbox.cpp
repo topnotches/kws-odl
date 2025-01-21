@@ -83,7 +83,6 @@ int  main() {
     // Model is list of layers
     std::vector<layer> model;
     // MFCC input dimension
-
     tensor_dim_sizes_t layer_dim_size_in;
 
     layer_dim_size_in.height = 49;
@@ -164,21 +163,34 @@ int  main() {
     std::vector<float> input_mfccs = load_mffcs_bin(test_mfccs_path);
     
     model[0].forward(input_mfccs.data());
-
     for (uint8_t layer_index = 1; layer_index < model.size(); layer_index++ ) {
-
        model[layer_index].forward(model[layer_index - 1].layer_outputs.data());
     }
-    std::vector<float> weights =  model[0].get_weights();
-    for (auto activation : weights) {
-        std::cout << weights.size() << std::endl;
-    }
-    return 0;
-}
-
 /*
-
-
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+        std::cout <<  std::endl;
+*/
+    
+    /*
+    for (auto activation : input_mfccs) {
+        std::cout << activation << std::endl;
+    }
+    
+    std::vector<float> weights =  model[1].get_weights();
+    std::vector<float> biases =  model[1].get_biases();
     for (auto my_layer : model) {
        auto my_size = my_layer.get_output_size(); 
        std::cout << "[" <<
@@ -189,6 +201,17 @@ int  main() {
        "]" <<
        std::endl;
     }
+
+    */
+    for (auto activation : model[0].layer_outputs) {
+        std::cout << activation << std::endl;
+    }
+    return 0;
+}
+
+/*
+
+
      ConstantPad2d-1            [-1, 1, 59, 12]               0
             Conv2d-2            [-1, 64, 25, 5]           2,624
        BatchNorm2d-3            [-1, 64, 25, 5]             128

@@ -123,10 +123,8 @@ layer::layer(LayerTypes layer_type,
             this->layer_type = LayerTypes::batchnorm;
             this->layer_dim_size_out = this->layer_dim_size_in;
             
-            uint32_t layer_bn_weight_count = this->layer_dim_size_in.full / this->layer_dim_size_in.batch;
-            uint32_t layer_bn_bias_count = this->layer_dim_size_in.full / this->layer_dim_size_in.batch;
-            printf("3oiawdfjoiawdj %d, ", this->layer_dim_size_in.full);
-            printf("3oiawdfjoiawdj %d, ", layer_bn_bias_count);
+            uint32_t layer_bn_weight_count = this->layer_dim_size_in.depth;
+            uint32_t layer_bn_bias_count = this->layer_dim_size_in.depth;
             this->layer_weights.resize(0);
             this->layer_weights.insert(this->layer_weights.end(), weights, weights + layer_bn_weight_count);
 
@@ -209,7 +207,7 @@ void layer::forward(float *layer_input) {
         case LayerTypes::batchnorm: {
 
             batch_norm_sequential(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
-                                    this->layer_dim_size_in.full / this->layer_dim_size_in.batch, this->layer_dim_size_in.batch);
+                                    this->layer_dim_size_in.width * this->layer_dim_size_in.height, this->layer_dim_size_in.depth, this->layer_dim_size_in.batch);
 
             break;
           }  
