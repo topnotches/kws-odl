@@ -231,7 +231,7 @@ void layer::forward(float *layer_input) {
     }
 }
 
-
+// getters
 tensor_dim_sizes_t layer::get_input_size() {
     return this->layer_dim_size_in;
 }
@@ -243,4 +243,7 @@ std::vector<float> layer::get_weights() {
 }
 std::vector<float> layer::get_biases() {
     return this->layer_biases;
+}
+LayerTypes layer::get_layer_type() {
+    return this->layer_type;
 }

@@ -1,6 +1,6 @@
-STEP_DO_TRAIN           = True
-STEP_DO_PROCESS_MFCCS   = True  # New step
-STEP_DO_EXPORT_MODEL    = False
+STEP_DO_TRAIN           = False
+STEP_DO_PROCESS_MFCCS   = True
+STEP_DO_EXPORT_MODEL    = True
 CHECKPOINT_PATH         = './model_acc_94.53125.pth'
 CLASSES                 = 12
 EXPORT_OUTPUT_DIR_PATH  = '../simulation/exported_models/'
@@ -53,7 +53,6 @@ if STEP_DO_TRAIN:
     start = time.time()
     trainining_environment.train(model)
     print('Finished Training on GPU in {:.2f} seconds'.format(time.time() - start))
-
 if STEP_DO_EXPORT_MODEL:
     model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=device))
 
@@ -64,10 +63,22 @@ if STEP_DO_EXPORT_MODEL:
         with open(EXPORT_OUTPUT_PATH, mode='w', newline='') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(["Name", "Shape", "Values"])
+
+            # Export learnable parameters (weights and biases)
             for name, param in model.named_parameters():
                 if param.requires_grad:
                     writer.writerow([name, list(param.shape), param.detach().cpu().numpy().flatten().tolist()])
-        print(f"Model parameters exported successfully to {EXPORT_OUTPUT_PATH}.")
+
+            # Export running mean and variance for BatchNorm2d layers
+            for name, module in model.named_modules():
+                if isinstance(module, nn.BatchNorm2d):
+                    writer.writerow([f"{name}.running_mean", list(module.running_mean.shape), 
+                                     module.running_mean.cpu().numpy().flatten().tolist()])
+                    writer.writerow([f"{name}.running_var", list(module.running_var.shape), 
+                                     module.running_var.cpu().numpy().flatten().tolist()])
+
+        print(f"Model parameters and BatchNorm stats exported successfully to {EXPORT_OUTPUT_PATH}.")
+
     except Exception as e:
         print(f"Error exporting model parameters: {e}")
 
@@ -88,7 +99,7 @@ def register_hooks(model):
         if isinstance(module, nn.Module):
             for name, child in module.named_children():
                 # Register hooks for all layers of interest (Conv2d, Linear, BatchNorm, ReLU, etc.)
-                if isinstance(child, (nn.Conv2d, nn.Linear, nn.BatchNorm2d, nn.ReLU, nn.MaxPool2d, nn.Dropout, nn.AdaptiveAvgPool2d)):
+                if isinstance(child, (nn.Conv2d, nn.Linear, nn.BatchNorm2d, nn.ReLU, nn.MaxPool2d, nn.Dropout, nn.AvgPool2d)):
                     hook = child.register_forward_hook(hook_fn)
                     hooks.append(hook)
                 # Recursively register hooks for child modules
@@ -137,3 +148,4 @@ if STEP_DO_PROCESS_MFCCS:
     
     except Exception as e:
         print(f"Error processing MFCCs file: {e}")
+

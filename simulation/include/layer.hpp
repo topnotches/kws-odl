@@ -20,6 +20,7 @@ public:
     tensor_dim_sizes_t get_output_size();
     std::vector<float> get_weights();
     std::vector<float> get_biases();
+    LayerTypes get_layer_type();
     layer(LayerTypes layer_type, 
           tensor_dim_sizes_t layer_dim_size_in, 
           float *weights = nullptr, 

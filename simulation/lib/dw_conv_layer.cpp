@@ -20,10 +20,10 @@ void dw_conv_layer_sequential(float *dw_input_features, float *dw_output_feature
 
     for (uint16_t index_batch = 0; index_batch < dw_batch_size; index_batch++) { // batch
                                 // //printf("new batch\n");
-        //#pragma omp parallel for collapse(3) schedule(dynamic) // till i collapse
+        #pragma omp parallel for collapse(3) schedule(dynamic) // till i collapse
         for (uint16_t index_layer = 0; index_layer < dw_input_depth; index_layer++) { // layer
             for (uint16_t index_row = 0; index_row < dw_height_limit; index_row++) { // out
-                for (uint16_t index_column = 0; index_column <dw_width_limit ; index_column++) {
+                for (uint16_t index_column = 0; index_column < dw_width_limit ; index_column++) {
 
                     float dw_sum = 0;
                     uint16_t dw_output_feature_select_offset = index_layer * dw_total_kernel_select_offset_multiplier;
@@ -46,8 +46,8 @@ void dw_conv_layer_sequential(float *dw_input_features, float *dw_output_feature
                                 //printf("row: %d,  ", dw_input_row);
                                 //printf("col: %d, ", dw_input_col);
 
-                                if (dw_batch_output_offset + dw_output_feature_select_offset + index_row * dw_width_limit + index_column==0)
-                                    printf("input index %d, kernel index %d, index layer %d, kernel value %f, input value %f, bias value %f\n",  dw_input_full_offset, dw_kernel_full_offset, index_layer, dw_kernel_weights[dw_kernel_full_offset], dw_input_features[dw_input_full_offset], dw_kernel_biases[index_layer]);
+                               // if (dw_batch_output_offset + dw_output_feature_select_offset + index_row * dw_width_limit + index_column==0)
+                               //     printf("input index %d, kernel index %d, index layer %d, kernel value %f, input value %f, bias value %f\n",  dw_input_full_offset, dw_kernel_full_offset, index_layer, dw_kernel_weights[dw_kernel_full_offset], dw_input_features[dw_input_full_offset], dw_kernel_biases[index_layer]);
 
                                 dw_sum += dw_input_features[dw_input_full_offset] * dw_kernel_weights[dw_kernel_full_offset];
                             }

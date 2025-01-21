@@ -63,11 +63,10 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
 //
                                    // }
                                 }
-                                conv_sum += conv_kernel_biases[index_kernel];
                             }
                         }
                     }
-                    conv_output_features[conv_batch_output_offset + conv_output_feature_select_offset + index_row * conv_width_limit + index_column] = conv_sum;
+                    conv_output_features[conv_batch_output_offset + conv_output_feature_select_offset + index_row * conv_width_limit + index_column] = conv_sum += conv_kernel_biases[index_kernel];
                 }
             }
         }
