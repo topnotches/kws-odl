@@ -5,9 +5,8 @@
 #include "batch_norm_layer.hpp"
 
 void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
-                           float *running_mean, float *running_variance,
                            float *bn_gamma, float *bn_beta,
-                           
+                           float *running_mean, float *running_variance,
                            const uint16_t bn_num_features, const uint16_t bn_num_channels, const uint16_t bn_num_batches) {
 
     const float epsilon = 1e-5; // Small constant for numerical stability
@@ -40,7 +39,9 @@ void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
     */
     float bn_means[bn_num_channels];
     float bn_variances[bn_num_channels];
-
+    for (uint8_t i = 0; i <64; i++) {
+        printf("MEAN: %f\n",running_mean[i]);
+    }
     // Initialize means and variances to 0
     memset(bn_means, 0, sizeof(float) * bn_num_channels);
     memset(bn_variances, 0, sizeof(float) * bn_num_channels);

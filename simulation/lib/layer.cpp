@@ -11,12 +11,14 @@
 #include "avgpool2d_layer.hpp"
 
 
-layer::layer(LayerTypes layer_type, 
-          tensor_dim_sizes_t layer_dim_size_in, 
-          float *weights, 
-          float *biases, 
-          conv_hypr_param_t layer_conv_hypr_params,
-          dense_hypr_param_t     layer_dense_hypr_params) {
+layer::layer(LayerTypes         layer_type, 
+          tensor_dim_sizes_t    layer_dim_size_in, 
+          float                 *weights, 
+          float                 *biases, 
+          conv_hypr_param_t     layer_conv_hypr_params,
+          dense_hypr_param_t    layer_dense_hypr_params,
+          float                 *layer_bn_means,
+          float                 *layer_bn_variances) {
 
     this->layer_weights = {};
     this->layer_biases = {};
@@ -129,6 +131,14 @@ layer::layer(LayerTypes layer_type,
 
             this->layer_biases.resize(0);
             this->layer_biases.insert(this->layer_biases.end(), biases, biases + layer_bn_bias_count);
+            
+            uint32_t layer_bn_mean_count = this->layer_dim_size_in.depth;
+            uint32_t layer_bn_variance_count = this->layer_dim_size_in.depth;
+            this->layer_bn_means.resize(0);
+            this->layer_bn_means.insert(this->layer_bn_means.end(), layer_bn_means, layer_bn_means + layer_bn_mean_count);
+
+            this->layer_bn_variances.resize(0);
+            this->layer_bn_variances.insert(this->layer_bn_variances.end(), layer_bn_variances, layer_bn_variances + layer_bn_variance_count);
 
             this->layer_outputs.resize(this->layer_dim_size_out.full);
 
@@ -206,6 +216,7 @@ void layer::forward(float *layer_input) {
         case LayerTypes::batchnorm: {
 
             batch_norm_sequential(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
+                                    this->layer_bn_means.data(), this->layer_bn_variances.data(),
                                     this->layer_dim_size_in.width * this->layer_dim_size_in.height, this->layer_dim_size_in.depth, this->layer_dim_size_in.batch);
 
             break;
@@ -246,4 +257,10 @@ std::vector<float> layer::get_biases() {
 }
 LayerTypes layer::get_layer_type() {
     return this->layer_type;
+}
+std::vector<float> layer::get_layer_bn_means() {
+    return this->layer_bn_means;
+}
+std::vector<float> layer::get_layer_bn_variances() {
+    return this->layer_bn_variances;
 }

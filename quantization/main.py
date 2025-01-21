@@ -64,23 +64,28 @@ if STEP_DO_EXPORT_MODEL:
             writer = csv.writer(csv_file)
             writer.writerow(["Name", "Shape", "Values"])
 
-            # Export learnable parameters (weights and biases)
+            processed_bn_layers = set()  # Track processed BatchNorm layers
+
             for name, param in model.named_parameters():
                 if param.requires_grad:
                     writer.writerow([name, list(param.shape), param.detach().cpu().numpy().flatten().tolist()])
 
-            # Export running mean and variance for BatchNorm2d layers
-            for name, module in model.named_modules():
-                if isinstance(module, nn.BatchNorm2d):
-                    writer.writerow([f"{name}.running_mean", list(module.running_mean.shape), 
-                                     module.running_mean.cpu().numpy().flatten().tolist()])
-                    writer.writerow([f"{name}.running_var", list(module.running_var.shape), 
-                                     module.running_var.cpu().numpy().flatten().tolist()])
+                    # Extract layer name (remove trailing ".weight" or ".bias")
+                    bn_layer_name = name.rsplit('.', 1)[0]
+                    if bn_layer_name not in processed_bn_layers and bn_layer_name in dict(model.named_modules()) and  name.rsplit('.', 1)[1] == "bias":
+                        module = dict(model.named_modules())[bn_layer_name]
+                        if isinstance(module, nn.BatchNorm2d):
+                            writer.writerow([f"{bn_layer_name}.running_mean", list(module.running_mean.shape), 
+                                            module.running_mean.cpu().numpy().flatten().tolist()])
+                            writer.writerow([f"{bn_layer_name}.running_var", list(module.running_var.shape), 
+                                            module.running_var.cpu().numpy().flatten().tolist()])
+                            processed_bn_layers.add(bn_layer_name)  # Mark as processed to avoid duplicates
 
         print(f"Model parameters and BatchNorm stats exported successfully to {EXPORT_OUTPUT_PATH}.")
 
     except Exception as e:
         print(f"Error exporting model parameters: {e}")
+
 
 
 # Recursive function to register hooks on all layers
