@@ -4,8 +4,7 @@
 #include <vector>
 #include <string>
 #include "defs.hpp"
-class layer
-{
+class layer {
 private:
     std::vector<float> layer_weights; 
     std::vector<float> layer_biases;

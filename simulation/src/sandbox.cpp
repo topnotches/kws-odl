@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <math.h>
+#include <dataloader.hpp>
 #include "misc_utils.hpp"
 #include "defs.hpp"
 #include "layer.hpp"
@@ -28,16 +29,18 @@ int  main() {
     
     std::vector<float> input_mfccs = load_batch_from_paths(test_mfccs_path);
     
-
+    std::vector<std::string> words = {"yes"};
+    
     // Model is list of layers
-    std::vector<layer> model = get_model(exported_params, test_mfccs_path.size(), NUMBER_OF_CLASSES);
+    std::vector<layer> model = get_model(exported_params, 1, NUMBER_OF_CLASSES);
 
+    dataloader bobby(words, "d21fd169");
     // Forward Step
-    model_forward(model, input_mfccs);
+    model_forward(model, bobby.get_dataloader_inputs_train()[0]);
 
     for (auto activation : model.back().layer_outputs) {
         std::cout << activation << std::endl;
     }
-    
+
     return 0;
 }
