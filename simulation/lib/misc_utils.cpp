@@ -1,7 +1,10 @@
 #include "misc_utils.hpp"
+#include <iostream>
 #include <string>
 #include <sstream>
 #include <vector>
+#include <stdio.h>
+#include "defs.hpp"
 #include <fstream>
 #include <assert.h>
 
@@ -132,4 +135,63 @@ std::vector<float> str_to_fl32_vec(std::string string_of_floats, std::string del
         position = string_of_floats.find(delimiter);
     }
     return float_vector;
+}
+
+
+std::vector<float> load_mffcs_bin(const std::string& filename) {
+    std::vector<float> data;
+    
+    // Open the binary file for reading
+    std::ifstream file(filename, std::ios::binary | std::ios::ate);
+    
+    if (!file) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return data;
+    }
+
+    // Get the file size
+    std::streamsize size = file.tellg();
+    file.seekg(0, std::ios::beg);
+
+    // Ensure the file size is a multiple of float size
+    if (size % sizeof(float) != 0) {
+        std::cerr << "File size is not a multiple of float size!" << std::endl;
+        return data;
+    }
+
+    // Resize the vector to hold the float data
+    size_t numFloats = size / sizeof(float);
+    data.resize(numFloats);
+
+    // Read the binary file into the float vector
+    if (!file.read(reinterpret_cast<char*>(data.data()), size)) {
+        std::cerr << "Error reading file: " << filename << std::endl;
+        data.clear();
+    }
+
+    return data;
+}
+conv_hypr_param_t set_conv_param(uint8_t width, uint8_t height, uint8_t stride, uint8_t count, uint8_t tp, uint8_t bp, uint8_t lp, uint8_t rp) {
+    conv_hypr_param_t params;
+
+    params.pad_top = tp;
+    params.pad_bottom = bp;
+    params.pad_left = lp;
+    params.pad_right = rp;
+
+    params.kernel_stride = stride;
+    params.kernel_width = width;
+    params.kernel_height = height;
+    params.kernel_count = count;
+    
+    return params;
+}
+
+dense_hypr_param_t set_dense_param(uint32_t output_size, uint32_t input_size) {
+    dense_hypr_param_t params;
+
+    params.size_in = input_size;
+    params.size_out = output_size;
+    
+    return params;
 }

@@ -1,12 +1,13 @@
 STEP_DO_TRAIN           = False
+STEP_DO_EXPORT_MODEL    = False
 STEP_DO_PROCESS_MFCCS   = True
-STEP_DO_EXPORT_MODEL    = True
 CHECKPOINT_PATH         = './model_acc_94.53125.pth'
 CLASSES                 = 12
 EXPORT_OUTPUT_DIR_PATH  = '../simulation/exported_models/'
 EXPORT_OUTPUT_NAME      = 'export_params_nclass_' + str(CLASSES) + '.csv'
 EXPORT_OUTPUT_PATH      = EXPORT_OUTPUT_DIR_PATH + EXPORT_OUTPUT_NAME
-MFCCS_INPUT_PATH        = '../dataset_mfccs_raw/yes/d21fd169_nohash_0'  # Path to MFCCs binary file
+MFCCS_INPUT_PATHS        = ['../dataset_mfccs_raw/yes/d21fd169_nohash_0',
+                            '../dataset_mfccs_raw/yes/d21fd169_nohash_1']  # Path(s) to MFCCs binary file
 MFCCS_OUTPUT_PATH       = './output_mfccs.bin' # Path to save model output
 
 import torch
@@ -87,7 +88,6 @@ if STEP_DO_EXPORT_MODEL:
         print(f"Error exporting model parameters: {e}")
 
 
-
 # Recursive function to register hooks on all layers
 def register_hooks(model):
     layer_outputs = []
@@ -116,18 +116,32 @@ def register_hooks(model):
     return layer_outputs, layer_names, hooks
 
 if STEP_DO_PROCESS_MFCCS:
+
+    # Main script to process MFCCs from a list of file paths
+    print("Processing MFCCs input...")
     try:
-        print("Processing MFCCs input...")
         model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=device))
-        
-        mfccs_data = np.fromfile(MFCCS_INPUT_PATH, dtype=np.float32)
-        mfccs_tensor = torch.tensor(mfccs_data).reshape(1, 1, 49, -1).to(device)
+
+        # Process all MFCCs in the batch
+        batch_data = []
+        for path in MFCCS_INPUT_PATHS:  # list of MFCC file paths
+            mfcc_data = np.fromfile(path, dtype=np.float32)
+            
+            # Check the shape of the input MFCC data and reshape accordingly
+            # Assuming MFCC data is a 1D array that needs to be reshaped into 4D tensor
+            # Example reshape to (batch_size, channels, height, width) -> [1, 1, 49, width]
+            mfcc_tensor = torch.tensor(mfcc_data).reshape( 1, 49, -1).to(device)
+            
+            batch_data.append(mfcc_tensor)
+
+        # Stack all the tensors in the batch
+        batch_tensor = torch.stack(batch_data)
 
         model.eval()
         layer_outputs, layer_names, hooks = register_hooks(model)  # Register hooks
 
         with torch.no_grad():
-            output = model(mfccs_tensor)
+            output = model(batch_tensor)  # Process the entire batch
 
         output_numpy = output.cpu().numpy()
 
@@ -136,8 +150,11 @@ if STEP_DO_PROCESS_MFCCS:
         with open(csv_output_path, mode='w', newline='') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(["Output Values"])  # Header for final output
-            for value in output_numpy.flatten():
-                writer.writerow([value])
+
+            # Write all outputs in the batch to the CSV
+            for output_batch in output_numpy:
+                for value in output_batch.flatten():
+                    writer.writerow([value])
 
             # Write layer outputs along with their names
             for idx, (layer_output, layer_name) in enumerate(zip(layer_outputs, layer_names)):
@@ -150,7 +167,6 @@ if STEP_DO_PROCESS_MFCCS:
             hook.remove()
 
         print(f"Processed MFCCs and layer outputs saved to {csv_output_path}.")
-    
+        
     except Exception as e:
-        print(f"Error processing MFCCs file: {e}")
-
+        print(f"Error processing MFCCs files: {e}")

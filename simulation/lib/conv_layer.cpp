@@ -48,20 +48,7 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
                                 
                                 if (conv_input_row >= 0 && conv_input_row < conv_input_height &&
                                     conv_input_col >= 0 && conv_input_col < conv_input_width) {       // padding
-                                    //printf("row: %d,  ", conv_input_row);
-                                    //printf("col: %d , ", conv_kernel_select_offset + conv_kernel_full_offset);
-
-                                    //printf("index: %f\n", conv_input_features[conv_input_full_offset]);
-                                   // if (index_kernel == 1) {
-//
-                                   // printf("sum before: %f ", conv_sum);
-                                   // }
-
                                     conv_sum += conv_input_features[conv_input_full_offset] * conv_kernel_weights[conv_kernel_select_offset + conv_kernel_full_offset];
-                                   // if (index_kernel == 1) {
-                                   //     printf("sum: %f weight: %f\n", conv_input_features[conv_input_full_offset] * conv_kernel_weights[conv_kernel_select_offset + conv_kernel_full_offset], conv_kernel_weights[conv_kernel_select_offset + conv_kernel_full_offset]);
-//
-                                   // }
                                 }
                             }
                         }

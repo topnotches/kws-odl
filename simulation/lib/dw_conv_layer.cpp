@@ -15,11 +15,10 @@ void dw_conv_layer_sequential(float *dw_input_features, float *dw_output_feature
     const uint16_t dw_height_limit = (dw_input_height - dw_kernel_height + dw_pad_top + dw_pad_bottom) / dw_stride + 1;
     const uint16_t dw_kernel_size = dw_kernel_width * dw_kernel_height;
     const uint16_t dw_total_kernel_select_offset_multiplier = dw_width_limit * dw_height_limit;
-    const uint16_t dw_batch_input_feature_points_per_batch = dw_input_width * dw_input_width * dw_input_depth;
+    const uint16_t dw_batch_input_feature_points_per_batch = dw_input_width * dw_input_height * dw_input_depth;
     const uint16_t dw_batch_output_feature_points_per_batch = dw_width_limit * dw_height_limit * dw_input_depth;
 
     for (uint16_t index_batch = 0; index_batch < dw_batch_size; index_batch++) { // batch
-                                // //printf("new batch\n");
         #pragma omp parallel for collapse(3) schedule(dynamic) // till i collapse
         for (uint16_t index_layer = 0; index_layer < dw_input_depth; index_layer++) { // layer
             for (uint16_t index_row = 0; index_row < dw_height_limit; index_row++) { // out
@@ -43,11 +42,6 @@ void dw_conv_layer_sequential(float *dw_input_features, float *dw_output_feature
 
                             if (dw_input_row >= 0 && dw_input_row < dw_input_height &&
                                 dw_input_col >= 0 && dw_input_col < dw_input_width) {       // padding
-                                //printf("row: %d,  ", dw_input_row);
-                                //printf("col: %d, ", dw_input_col);
-
-                               // if (dw_batch_output_offset + dw_output_feature_select_offset + index_row * dw_width_limit + index_column==0)
-                               //     printf("input index %d, kernel index %d, index layer %d, kernel value %f, input value %f, bias value %f\n",  dw_input_full_offset, dw_kernel_full_offset, index_layer, dw_kernel_weights[dw_kernel_full_offset], dw_input_features[dw_input_full_offset], dw_kernel_biases[index_layer]);
 
                                 dw_sum += dw_input_features[dw_input_full_offset] * dw_kernel_weights[dw_kernel_full_offset];
                             }

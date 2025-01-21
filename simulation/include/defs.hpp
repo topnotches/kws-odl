@@ -1,7 +1,6 @@
 #ifndef DEFS_H
 #define DEFS_H
 #include <stdio.h>
-#include "misc_utils.hpp"
 
 #define NUMBER_OF_CLASSES 12
 
