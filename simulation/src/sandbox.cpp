@@ -74,7 +74,7 @@ int  main() {
     std::vector<std::vector<std::string>> layer_params_str = load_layers_from_csv_to_vec(exported_params);
 
     std::vector<std::vector<float>> layer_params;
-    uint8_t i_print = 0;
+    //uint8_t i_print = 0;
     for (auto layer_name: layer_params_str){
         layer_params.push_back(str_to_fl32_vec(layer_name[2]));
         //std::cout << "index: " << std::to_string(i_print) << ", name: " << layer_name[0].c_str() << std::endl;
@@ -132,26 +132,26 @@ int  main() {
     model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
 
     // Layer 3, Depth-wise Separable Convolution
-    model.push_back(layer(LayerTypes::dw_conv,      model.back().get_output_size(),  layer_params[12].data(), layer_params[13].data(), param_dw_conv_layer2));
+    model.push_back(layer(LayerTypes::dw_conv,      model.back().get_output_size(),  layer_params[12].data(), layer_params[13].data(), param_dw_conv_layer3));
     model.push_back(layer(LayerTypes::batchnorm,    model.back().get_output_size(),  layer_params[14].data(),  layer_params[15].data()));
     model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
-    model.push_back(layer(LayerTypes::conv,         model.back().get_output_size(),  layer_params[16].data(),  layer_params[17].data(), param_pw_conv_layer2));
+    model.push_back(layer(LayerTypes::conv,         model.back().get_output_size(),  layer_params[16].data(),  layer_params[17].data(), param_pw_conv_layer3));
     model.push_back(layer(LayerTypes::batchnorm,    model.back().get_output_size(),  layer_params[18].data(),  layer_params[19].data()));
     model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
 
     // Layer 4, Depth-wise Separable Convolution
-    model.push_back(layer(LayerTypes::dw_conv,      model.back().get_output_size(),  layer_params[20].data(),  layer_params[21].data(), param_dw_conv_layer2));
+    model.push_back(layer(LayerTypes::dw_conv,      model.back().get_output_size(),  layer_params[20].data(),  layer_params[21].data(), param_dw_conv_layer4));
     model.push_back(layer(LayerTypes::batchnorm,    model.back().get_output_size(),  layer_params[22].data(),  layer_params[23].data()));
     model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
-    model.push_back(layer(LayerTypes::conv,         model.back().get_output_size(),  layer_params[24].data(),  layer_params[25].data(), param_pw_conv_layer2));
+    model.push_back(layer(LayerTypes::conv,         model.back().get_output_size(),  layer_params[24].data(),  layer_params[25].data(), param_pw_conv_layer4));
     model.push_back(layer(LayerTypes::batchnorm,    model.back().get_output_size(),  layer_params[26].data(),  layer_params[27].data()));
     model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
 
     // Layer 5, Depth-wise Separable Convolution
-    model.push_back(layer(LayerTypes::dw_conv,      model.back().get_output_size(),  layer_params[28].data(),  layer_params[29].data(), param_dw_conv_layer2));
+    model.push_back(layer(LayerTypes::dw_conv,      model.back().get_output_size(),  layer_params[28].data(),  layer_params[29].data(), param_dw_conv_layer5));
     model.push_back(layer(LayerTypes::batchnorm,    model.back().get_output_size(),  layer_params[30].data(),  layer_params[31].data()));
     model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
-    model.push_back(layer(LayerTypes::conv,         model.back().get_output_size(),  layer_params[32].data(),  layer_params[33].data(), param_pw_conv_layer2));
+    model.push_back(layer(LayerTypes::conv,         model.back().get_output_size(),  layer_params[32].data(),  layer_params[33].data(), param_pw_conv_layer5));
     model.push_back(layer(LayerTypes::batchnorm,    model.back().get_output_size(),  layer_params[34].data(),  layer_params[35].data()));
     model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
 
@@ -203,7 +203,7 @@ int  main() {
     }
 
     */
-    for (auto activation : model[0].layer_outputs) {
+    for (auto activation : model.back().layer_outputs) {
         std::cout << activation << std::endl;
     }
     return 0;

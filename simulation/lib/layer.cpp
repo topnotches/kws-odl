@@ -50,7 +50,7 @@ layer::layer(LayerTypes layer_type,
                                             this->layer_conv_hypr_params.kernel_count *
                                             this->layer_dim_size_in.depth;
 
-            uint32_t layer_conv_bias_count = layer_conv_weight_count;
+            uint32_t layer_conv_bias_count = this->layer_conv_hypr_params.kernel_count;
             
             this->layer_weights.resize(0);
             this->layer_weights.insert(this->layer_weights.end(), weights, weights + layer_conv_weight_count);
@@ -80,8 +80,7 @@ layer::layer(LayerTypes layer_type,
             uint32_t layer_conv_weight_count = this->layer_conv_hypr_params.kernel_width *
                                             this->layer_conv_hypr_params.kernel_height *
                                             this->layer_dim_size_in.depth;
-
-            uint32_t layer_conv_bias_count = layer_conv_weight_count;
+            uint32_t layer_conv_bias_count = this->layer_dim_size_in.depth;
             
             this->layer_weights.resize(0);
             this->layer_weights.insert(this->layer_weights.end(), weights, weights + layer_conv_weight_count);
