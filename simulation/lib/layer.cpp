@@ -1,14 +1,17 @@
 
 #include "layer.hpp"
+#include "defs.hpp"
+#include <iostream>
+#include "misc_utils.hpp"
+
 #include "batch_norm_layer.hpp"
 #include "conv_layer.hpp"
-#include "defs.hpp"
 #include "dense_layer.hpp"
 #include "dw_conv_layer.hpp"
-#include "layer.hpp"
-#include "misc_utils.hpp"
 #include "relu_layer.hpp"
 #include "avgpool2d_layer.hpp"
+#include "softmax_layer.hpp"
+#include "cross_entropy_loss_layer.hpp"
 
 
 layer::layer(LayerTypes         layer_type, 
@@ -172,6 +175,28 @@ layer::layer(LayerTypes         layer_type,
 
             break;
         }
+        case LayerTypes::softmax: {
+            this->layer_type = LayerTypes::softmax;
+            
+            this->layer_dim_size_out = this->layer_dim_size_in;
+            
+            this->layer_outputs.resize(this->layer_dim_size_out.full);
+
+            break;
+        }
+        case LayerTypes::cross_entropy_loss: {
+            this->layer_type = LayerTypes::cross_entropy_loss;
+            
+            this->layer_dim_size_out.batch = this->layer_dim_size_in.batch; 
+            this->layer_dim_size_out.full = this->layer_dim_size_in.batch; 
+            this->layer_dim_size_out.depth = 1; 
+            this->layer_dim_size_out.height = 1; 
+            this->layer_dim_size_out.width = 1; 
+
+            this->layer_outputs.resize(this->layer_dim_size_out.full);
+
+            break;
+        }
         default: {
             KHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN("Trying to initialize an unsupported layer...");
             break;
@@ -185,7 +210,7 @@ layer::~layer() {
 }
 
 
-void layer::forward(float *layer_input) {
+void layer::forward(float *layer_input, float *labels_input) {
     switch (this->layer_type) {
         case LayerTypes::conv: {
             conv_layer_sequential(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
@@ -233,6 +258,14 @@ void layer::forward(float *layer_input) {
                                         this->layer_conv_hypr_params.kernel_height, this->layer_dim_size_in.batch,
                                         this->layer_conv_hypr_params.pad_top, this->layer_conv_hypr_params.pad_bottom,
                                         this->layer_conv_hypr_params.pad_left, this->layer_conv_hypr_params.pad_right);
+            break;
+        }
+        case LayerTypes::softmax: {
+            softmax_layer_sequential(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.batch, this->layer_dim_size_in.width);
+            break;
+        }
+        case LayerTypes::cross_entropy_loss: {
+            cross_entropy_loss_sequential(labels_input, layer_input, this->layer_outputs.data(),  this->layer_dim_size_out.batch, this->layer_dim_size_in.width);
             break;
         }
         default: {

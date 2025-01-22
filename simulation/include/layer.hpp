@@ -33,7 +33,7 @@ public:
           float                 *layer_bn_means = NULL,
           float                 *layer_bn_variances = NULL);
     ~layer();
-    void forward(float *layer_input);
+    void forward(float *layer_input, float *labels_input = NULL);
 };
 
 

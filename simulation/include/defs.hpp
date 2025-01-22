@@ -4,7 +4,7 @@
 
 #define NUMBER_OF_CLASSES   12
 #define EPOCHS              100
-#define BATCH_SIZE          128
+#define BATCH_SIZE          8
 
 #define LENGTH_BIT          1
 #define LENGTH_NIBBLE       4
@@ -19,7 +19,9 @@ enum class LayerTypes {
     dense,
     batchnorm,
     relu,
-    avgpool2d
+    avgpool2d,
+    softmax,
+    cross_entropy_loss
 };
 
 typedef struct conv_hypr_param_t {

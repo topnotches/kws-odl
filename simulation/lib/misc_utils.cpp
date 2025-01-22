@@ -60,3 +60,9 @@ std::vector<float> load_mffcs_bin(const std::string& filename) {
 
     return data;
 }
+
+std::vector<float> int_to_float_onehot(const uint8_t integer, const uint8_t max) {
+    std::vector<float> onehot(max, 0.0);
+    onehot[integer] = 1.0f;
+    return onehot;
+}
