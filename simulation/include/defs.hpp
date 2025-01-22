@@ -2,7 +2,9 @@
 #define DEFS_H
 #include <stdio.h>
 
-#define NUMBER_OF_CLASSES 12
+#define NUMBER_OF_CLASSES   12
+#define EPOCHS              100
+#define BATCH_SIZE          128
 
 #define LENGTH_BIT          1
 #define LENGTH_NIBBLE       4

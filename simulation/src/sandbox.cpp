@@ -10,7 +10,6 @@
 #include "layer.hpp"
 #include "model_utils.hpp"
 
-#define BATCH_SIZE 3
 
 auto load_batch_from_paths(std::vector<std::string> paths) {
     std::vector<float> input_mfccs = {};
@@ -31,16 +30,22 @@ int  main() {
     
     std::vector<std::string> words = {"yes"};
     
+    std::vector<layer> model = get_model(exported_params, BATCH_SIZE, NUMBER_OF_CLASSES);
+    dataloader dataloader(words, "yes", BATCH_SIZE);
     // Model is list of layers
-    std::vector<layer> model = get_model(exported_params, 1, NUMBER_OF_CLASSES);
+    uint8_t i = 0;
+    while (i < EPOCHS) {
+        if (dataloader.get_training_pool_empty()) {
+            auto mybatch = dataloader.get_batch();
+            
+            model_forward(model, std::get<0>(mybatch));
 
-    dataloader bobby(words, "d21fd169");
-    // Forward Step
-    model_forward(model, bobby.get_dataloader_inputs_train()[0]);
-
-    for (auto activation : model.back().layer_outputs) {
-        std::cout << activation << std::endl;
+            dataloader.print_progress_bar(i);
+        } else {
+            dataloader.reset_training_pool();
+            std::cout << "EPOCH: " << std::endl;
+            i++;
+        }
     }
-
     return 0;
 }

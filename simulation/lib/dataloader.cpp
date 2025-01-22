@@ -11,8 +11,7 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::string dataloader_speaker_id, std::string dataloader_dataset_path, float train_split) {
-
+dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::string dataloader_speaker_id, uint8_t dataloader_batch_size, std::string dataloader_dataset_path, float dataloader_train_split) {
 
     uint8_t label = 0;
     this->dataloader_path_names_train = {};
@@ -31,7 +30,6 @@ dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::st
         std::string dir_path = dataloader_dataset_path + target_word;
         for (const auto & entry : fs::directory_iterator(dir_path)) {
             if (entry.path().string().find(dataloader_speaker_id) != std::string::npos) {
-                std::cout << entry.path().string() << std::endl;
                 temp_dataloader_path_names.push_back(entry.path().string());
                 temp_dataloader_inputs.push_back(load_mffcs_bin(entry.path().string()));
                 temp_dataloader_labels.push_back(label);
@@ -43,43 +41,123 @@ dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::st
     std::vector<uint32_t> indexes;
     for (uint32_t i = 0; i < temp_dataloader_path_names.size(); ++i)
         indexes.push_back(i);
-    std::random_shuffle(indexes.begin(), indexes.end());
-    uint32_t total = indexes.size();
-    uint32_t train = (uint32_t) ((float) total * train_split);
-    uint32_t validation = total - train;
-    
+    indexes = this->shuffle_vector(indexes);
+    this->dataloader_total_size = indexes.size();
+    this->dataloader_train_size = (uint32_t) ((float) dataloader_total_size * dataloader_train_split);
+    this->dataloader_validation_size = dataloader_total_size - dataloader_train_size;
+    this->dataloader_batch_size = dataloader_batch_size;
+    this->dataloader_num_batches = this->dataloader_train_size / this->dataloader_batch_size; 
     printf("Splitting dataset into train/validation: \n");
-    printf("Total      %d: \n",total);
-    printf("Train      %d: \n",train);
-    printf("Validation %d: \n",validation);
+    printf("Total size:      %d \n",this->dataloader_total_size);
+    printf("Train size:      %d \n",this->dataloader_train_size);
+    printf("Validation size: %d \n",this->dataloader_validation_size);
+    printf("Batch size:      %d \n",this->dataloader_batch_size);
     
     for (uint32_t i = 0; i < indexes.size(); i++) {
-        
+        if (i < this->dataloader_train_size) {
+            this->dataloader_path_names_train.push_back(temp_dataloader_path_names[indexes[i]]);
+            this->dataloader_inputs_train.push_back(temp_dataloader_inputs[indexes[i]]);
+            this->dataloader_labels_train.push_back(temp_dataloader_labels[indexes[i]]);
+        } else {
+            this->dataloader_path_names_validation.push_back(temp_dataloader_path_names[indexes[i]]);
+            this->dataloader_inputs_validation.push_back(temp_dataloader_inputs[indexes[i]]);
+            this->dataloader_labels_validation.push_back(temp_dataloader_labels[indexes[i]]);
+        }
     }
-
-    for (uint8_t i = 0; i < this->dataloader_labels_train.size(); i++) {
-        printf("index: %d \n", i);
-        printf(this->dataloader_path_names_train[i].c_str());
-        printf("\ndataloader_label: %d \n",this->dataloader_labels_train[i]);
+    // Initialize pick list
+    for (uint32_t i = 0; i < this->dataloader_train_size; ++i) {
+        this->dataloader_pick_list.push_back(i);
     }
-
+    this->dataloader_pick_list = this->shuffle_vector(this->dataloader_pick_list);
+    //for (uint32_t i = 0; i < this->dataloader_train_size; ++i) {
+    //    
+    //    std::cout << "picklist index: " << this->dataloader_pick_list[i] << " " << "picklist item: " << this->dataloader_path_names_train[this->dataloader_pick_list[i]] << " " << "index: " << i << " ";
+    //    std::cout << this->dataloader_path_names_train[i] << std::endl;
+    //}
 }
 dataloader::~dataloader( ) {
     
 }
+std::tuple<std::vector<float>,std::vector<uint8_t>> dataloader::get_batch() {
+    std::vector<float> input_data;
+    std::vector<uint8_t> input_labels;
+    if (this->dataloader_batch_size <= this->dataloader_pick_list.size()) {
+        for (uint8_t i = 0; i < this->dataloader_batch_size; i++) {
+            //std::cout << "Picked name: " <<  this->dataloader_path_names_train[this->dataloader_pick_list.back()]<<std::endl;
 
-std::vector<std::string> dataloader::get_dataloader_path_names_train() {
+            std::vector<float> temp_input_data = this->dataloader_inputs_train[this->dataloader_pick_list.back()];
+            input_data.insert(input_data.end(), temp_input_data.begin(), temp_input_data.end());
+            
+            uint8_t temp_input_labels = this->dataloader_labels_train[this->dataloader_pick_list.back()];
+            this->dataloader_pick_list.pop_back();
+            input_labels.push_back(temp_input_labels);
+        }
+    } else {
+        KHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN("ERROR: batch size is larger than residuals");
+    }
+    return std::make_tuple(input_data, input_labels);
+}
+
+void dataloader::print_progress_bar(uint32_t epoch, float error) {
+    float progress = (float)(dataloader_num_batches - (this->dataloader_pick_list.size() / this->dataloader_batch_size)) / dataloader_num_batches;
+
+    int barWidth = 70;
+
+    std::cout << "\x1b[1A" // Move cursor up one
+        << "\x1b[2K"; // Delete the entire line
+    std::cout << "EPOCH: " << epoch << "/" << EPOCHS << "[";
+    int pos = barWidth * progress;
+    
+    for (int i = 0; i < barWidth; ++i) {
+        if (i < pos) std::cout << "=";
+        else if (i == pos) std::cout << ">";
+        else std::cout << " ";
+    }
+    std::cout << "] " << int(progress * 100.0) << "%, avg. error: " << error << "%\r";
+    std::cout.flush();
+
+    std::cout << std::endl;
+}
+
+bool dataloader::get_training_pool_empty() {
+    if (this->dataloader_batch_size <= this->dataloader_pick_list.size()) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+void dataloader::reset_training_pool() {
+    // Initialize pick list
+    for (uint32_t i = 0; i < this->dataloader_train_size; ++i) {
+        this->dataloader_pick_list.push_back(i);
+    }
+    this->dataloader_pick_list = this->shuffle_vector(this->dataloader_pick_list);
+}
+
+std::vector<std::string> dataloader::get_path_names_train() {
     return this->dataloader_path_names_train;
 }
 
-std::vector<std::vector<float>> dataloader::get_dataloader_inputs_train() {
+std::vector<std::vector<float>> dataloader::get_inputs_train() {
     return this->dataloader_inputs_train;
 }
 
-std::vector<uint8_t> dataloader::get_dataloader_labels_train() {
+std::vector<uint8_t> dataloader::get_labels_train() {
     return this->dataloader_labels_train;
 }
 
-std::vector<uint32_t> dataloader::get_dataloader_pick_list() {
+std::vector<uint32_t> dataloader::get_pick_list() {
     return this->dataloader_pick_list;
+}
+
+std::vector<uint32_t> dataloader::shuffle_vector(std::vector<uint32_t> vector) {
+    std::srand(time(NULL));
+    std::random_shuffle(vector.begin(), vector.end());
+    return vector;
+}
+std::vector<float> dataloader::shuffle_vector(std::vector<float> vector) {
+    std::srand(time(NULL));
+    std::random_shuffle(vector.begin(), vector.end());
+    return vector;
 }
