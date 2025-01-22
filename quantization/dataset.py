@@ -45,7 +45,7 @@ RANDOM_SEED = 59185
 
 
 def prepare_words_list(wanted_words):
-  return [SILENCE_LABEL, UNKNOWN_WORD_LABEL] + wanted_words
+  return wanted_words
 
 
 def which_set(filename, validation_percentage, testing_percentage):
@@ -96,7 +96,7 @@ class AudioProcessor(object):
     wanted_words_index = {}
 
     for index, wanted_word in enumerate(training_parameters['wanted_words']):
-        wanted_words_index[wanted_word] = index + 2
+        wanted_words_index[wanted_word] = index
 
     # Prepare data sets
     self.data_set = {'validation': [], 'testing': [], 'training': []}
@@ -123,8 +123,6 @@ class AudioProcessor(object):
       # If we use 35 classes - all are known, hence no unkown samples      
       if word in wanted_words_index:
         self.data_set[set_index].append({'label': word, 'file': wav_path, 'speaker': speaker_id})
-      else:
-        unknown_set[set_index].append({'label': word, 'file': wav_path, 'speaker': speaker_id})
 
     if not all_words:
       raise Exception('No .wavs found at ' + search_path)
@@ -136,24 +134,7 @@ class AudioProcessor(object):
 
     # We need an arbitrary file to load as the input for the silence samples.
     # It's multiplied by zero later, so the content doesn't matter.
-    silence_wav_path = self.data_set['training'][0]['file']
 
-    # Add silence and unknown words to each set
-    for set_index in ['validation', 'testing', 'training']:
-
-      set_size = len(self.data_set[set_index])
-      silence_size = int(math.ceil(set_size * training_parameters['silence_percentage'] / 100))
-      for _ in range(silence_size):
-        self.data_set[set_index].append({
-            'label': SILENCE_LABEL,
-            'file': silence_wav_path,
-            'speaker': "None" 
-        })
-
-      # Pick some unknowns to add to each partition of the data set.
-      random.shuffle(unknown_set[set_index])
-      unknown_size = int(math.ceil(set_size * training_parameters['unknown_percentage'] / 100))
-      self.data_set[set_index].extend(unknown_set[set_index][:unknown_size])
 
     # Make sure the ordering is random.
     for set_index in ['validation', 'testing', 'training']:
@@ -165,9 +146,7 @@ class AudioProcessor(object):
     for word in all_words:
       if word in wanted_words_index:
         self.word_to_index[word] = wanted_words_index[word]
-      else:
-        self.word_to_index[word] = UNKNOWN_WORD_INDEX
-    self.word_to_index[SILENCE_LABEL] = SILENCE_INDEX
+
 
 
   def generate_background_noise(self):

@@ -65,7 +65,7 @@ class DSCNN(torch.nn.Module):
         self.relu9 = torch.nn.ReLU()
 
         self.avg   = torch.nn.AvgPool2d(kernel_size=(25, 5), stride=1)
-        self.fc1   = torch.nn.Linear(64, 12, bias=use_bias)
+        self.fc1   = torch.nn.Linear(64, 10, bias=use_bias)
         # self.soft  = torch.nn.Softmax(dim=1)
         # self.soft = F.log_softmax(x, dim=1)
 

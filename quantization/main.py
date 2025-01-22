@@ -1,8 +1,8 @@
-STEP_DO_TRAIN           = False
-STEP_DO_EXPORT_MODEL    = False
+STEP_DO_TRAIN           = True
+STEP_DO_EXPORT_MODEL    = True
 STEP_DO_PROCESS_MFCCS   = True
 CHECKPOINT_PATH         = './model_acc_94.53125.pth'
-CLASSES                 = 12
+CLASSES                 = 10
 EXPORT_OUTPUT_DIR_PATH  = '../simulation/exported_models/'
 EXPORT_OUTPUT_NAME      = 'export_params_nclass_' + str(CLASSES) + '.csv'
 EXPORT_OUTPUT_PATH      = EXPORT_OUTPUT_DIR_PATH + EXPORT_OUTPUT_NAME

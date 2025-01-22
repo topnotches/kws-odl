@@ -71,8 +71,8 @@ def conf_matrix(labels, predicted, training_parameters):
     predicted = predicted.cpu()
     cm = confusion_matrix(labels, predicted)
     cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    df_cm = pd.DataFrame(cm, index = [i for i in ['silence','unknown']+training_parameters['wanted_words']],
-                  columns = [i for i in ['silence','unknown']+training_parameters['wanted_words']])
+    df_cm = pd.DataFrame(cm, index = [i for i in training_parameters['wanted_words']],
+                  columns = [i for i in training_parameters['wanted_words']])
     plt.figure(figsize = (10,7))
     sn.heatmap(df_cm, annot=True)
     plt.show()
@@ -110,8 +110,8 @@ def parameter_generation():
     'data_url':'https://storage.googleapis.com/download.tensorflow.org/data/speech_commands_v0.02.tar.gz',
     'epochs':40,
     'batch_size':128,
-    'silence_percentage':10.0,
-    'unknown_percentage':10.0,
+    'silence_percentage':0.0,
+    'unknown_percentage':0.0,
     'validation_percentage':10.0,
     'testing_percentage':10.0,
     'background_frequency':0.8,
