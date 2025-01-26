@@ -77,7 +77,7 @@ training_parameters["time_shift_samples"] = time_shift_samples
 
 
 def prepare_words_list(wanted_words):
-    return [SILENCE_LABEL, UNKNOWN_WORD_LABEL] + wanted_words
+    return wanted_words
 
 
 def which_set(filename, validation_percentage, testing_percentage):

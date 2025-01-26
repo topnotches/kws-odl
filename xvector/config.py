@@ -20,7 +20,9 @@ class Config:
                 train_plda=True,
                 test_plda=True,
                 train_lda=True,
-                test_lda=True):
+                test_lda=True,
+                all_lda=True,
+                export_all_lda=True):
                 
         self.batch_size = batch_size
         self.input_size = input_size
@@ -43,3 +45,5 @@ class Config:
         self.test_plda = test_plda
         self.train_lda = train_lda
         self.test_lda = test_lda
+        self.all_lda = all_lda
+        self.export_all_lda = export_all_lda

@@ -63,8 +63,10 @@ class DSCNN(torch.nn.Module):
         self.conv9 = torch.nn.Conv2d(in_channels = 64, out_channels = 64, kernel_size = (1, 1), stride = (1, 1), bias = use_bias)
         self.bn9   = torch.nn.BatchNorm2d(64)
         self.relu9 = torch.nn.ReLU()
+        self.bn10   = torch.nn.BatchNorm2d(64)
 
         self.avg   = torch.nn.AvgPool2d(kernel_size=(25, 5), stride=1)
+        
         self.fc1   = torch.nn.Linear(64, 10, bias=use_bias)
         # self.soft  = torch.nn.Softmax(dim=1)
         # self.soft = F.log_softmax(x, dim=1)
@@ -75,7 +77,7 @@ class DSCNN(torch.nn.Module):
         # self.conv2 = torch.nn.Conv2d(in_channels = 64, out_channels = 64, kernel_size = (3, 3), stride = (1, 1), groups = 1, bias = use_bias)
         # self.bn2   = torch.nn.BatchNorm2d(64)
         # self.relu2 = torch.nn.ReLU()
-    def forward(self, x):
+    def forward(self, x, embeddings):
         if getattr(self, "save", False):  # Use an attribute to control the saving behavior
             x = self.pad1(x)
             x = self.conv1(x)
@@ -104,9 +106,10 @@ class DSCNN(torch.nn.Module):
             x = self.relu9(x)
             npy_to_txt(8, x.int().cpu().detach().numpy())
             print("Sum: ", str(torch.sum(x.int())))
-
             x = self.avg(x)
             npy_to_txt(9, x.int().cpu().detach().numpy())
+            embeddings = self.bn10(embeddings)
+            x = embeddings * x
             x = torch.flatten(x, 1)
             x = self.fc1(x)
             npy_to_txt(10, x.int().cpu().detach().numpy())
@@ -147,9 +150,13 @@ class DSCNN(torch.nn.Module):
             x = self.conv9(x)
             x = self.bn9(x)
             x = self.relu9(x)
-
+            
             x = self.avg(x)
+            embeddings = self.bn10(embeddings)
+            x = embeddings * x
+            
             x = torch.flatten(x, 1)
+            
             x = self.fc1(x)
 
         return x

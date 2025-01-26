@@ -53,9 +53,10 @@ class Train():
         total = 0
 
         with torch.no_grad():
-            inputs, labels = data[0]
+            inputs, labels, embeddings = data[0]
             inputs = torch.Tensor(inputs[:,None,:,:]).to(self.device)
             labels = torch.Tensor(labels).long().to(self.device)
+            embeddings = torch.Tensor(embeddings[:,:,None,None]).to(self.device)
             model = model.to(self.device)  
 
             if (integer):
@@ -66,11 +67,11 @@ class Train():
             if (save):
                 model = model.cpu()
                 inputs = inputs.type(torch.uint8).type(torch.float).cpu()
-                outputs = F.softmax(model(inputs, save), dim=1)
+                outputs = F.softmax(model(inputs, embeddings, save), dim=1)
                 outputs = outputs.to(self.device)
                 npy_to_txt(-1, inputs.int().cpu().detach().numpy())
             else:
-                outputs = F.softmax(model(inputs), dim=1)
+                outputs = F.softmax(model(inputs, embeddings), dim=1)
                 outputs = outputs.to(self.device)
 
             _, predicted = torch.max(outputs, 1)
@@ -101,16 +102,17 @@ class Train():
 
             for minibatch in range(len(data)):
 
-                inputs, labels = data[0]
+                inputs, labels, embeddings = data[0]
                 inputs = torch.Tensor(inputs[:,None,:,:]).to(self.device)
                 labels = torch.Tensor(labels).to(self.device).long()
+                embeddings = torch.Tensor(embeddings[:,:,None,None]).to(self.device)
 
                 # Zero out the parameter gradients after each mini-batch
                 self.optimizer.zero_grad()
 
                 # Train, compute loss, update optimizer
                 model = model.to(self.device)
-                outputs = F.softmax(model(inputs), dim=1)
+                outputs = F.softmax(model(inputs,embeddings), dim=1)
                 loss = self.criterion(outputs, labels)
                 loss.backward()
                 self.optimizer.step()

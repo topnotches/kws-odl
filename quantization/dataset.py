@@ -29,7 +29,7 @@ import torch
 import torchaudio
 
 from collections import Counter, OrderedDict
-
+import pandas as pd
 import soundfile as sf
 import numpy as np
 import tensorflow as tf
@@ -109,7 +109,6 @@ class AudioProcessor(object):
       _ , word = os.path.split(os.path.dirname(wav_path))
       speaker_id = wav_path.split('/')[-1].split('_')[0]  # Hardcoded, should use regex.
       word = word.lower()
-
       # Ignore background noise, as it has been handled by generate_background_noise()
       if word == BACKGROUND_NOISE_LABEL:
         continue
@@ -117,12 +116,13 @@ class AudioProcessor(object):
       all_words[word] = True
       # Determine the set to which the word should belong
       set_index = which_set(wav_path, training_parameters['validation_percentage'], training_parameters['testing_percentage'])
+      embeddings_path = '../dataset_embeddings/'+ '/'.join(wav_path.split('/')[2:]).split('.')[0] + '.csv' # python is sickening
 
       # If it's a known class, store its detail, otherwise add it to the list
       # we'll use to train the unknown label.
       # If we use 35 classes - all are known, hence no unkown samples      
       if word in wanted_words_index:
-        self.data_set[set_index].append({'label': word, 'file': wav_path, 'speaker': speaker_id})
+        self.data_set[set_index].append({'label': word, 'file': wav_path, 'embeddings': embeddings_path, 'speaker': speaker_id})
 
     if not all_words:
       raise Exception('No .wavs found at ' + search_path)
@@ -187,6 +187,7 @@ class AudioProcessor(object):
     # Create a data placeholder
     data_placeholder = np.zeros((samples_number, self.data_processing_parameters['spectrogram_length'],self.data_processing_parameters['feature_bin_count']),dtype='float32' )
     labels_placeholder = np.zeros(samples_number)
+    embeddings_placeholder = np.zeros((samples_number, 64), dtype='float32' )
 
     # Required for noise analysis
     use_background = (self.background_noise and (mode == 'training'))
@@ -303,8 +304,9 @@ class AudioProcessor(object):
 
         label_index = self.word_to_index[sample['label']]
         labels_placeholder[i] = label_index
+        embeddings_placeholder[i] = pd.read_csv(sample['embeddings'], header=None).to_numpy()[1]
 
-    return data_placeholder, labels_placeholder
+    return data_placeholder, labels_placeholder, embeddings_placeholder
 
 
 class AudioGenerator(torch.utils.data.Dataset):
@@ -332,6 +334,6 @@ class AudioGenerator(torch.utils.data.Dataset):
     def __getitem__(self, idx):
         # Return a random batch of data, unless training_parameters['batch_size'] == -1
 
-        data, labels = self.audio_processor.get_data(self.mode, self.training_parameters)        
+        data, labels, embeddings = self.audio_processor.get_data(self.mode, self.training_parameters)        
 
-        return data, labels
+        return data, labels, embeddings

@@ -4,23 +4,31 @@ TRAIN_X_VECTOR_MODEL                    = False
 EXTRACT_X_VECTORS                       = True
 TRAIN_LDA                               = True
 TEST_LDA                                = True
-USE_LDA                                 = True
-TRAIN_PLDA                              = True
-TEST_PLDA                               = True
+ALL_LDA                                 = True
+EXPORT_ALL_LDA                          = True
+USE_LDA                                 = False
+TRAIN_PLDA                              = False
+TEST_PLDA                               = False
 X_VEC_EXTRACT_LAYER                     = 6
 PLDA_RANK_F                             = 25
 LDA_RANK_F                              = 64
 EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN     = 'x_vectors/TRAINING_EXTRACTED.csv'
-EXTRACTED_XVECTOR_OUTPUT_PATH_TEST      = 'x_vectors/jespers_sanity_test_my_faith.csv'
+EXTRACTED_XVECTOR_OUTPUT_PATH_TEST      = 'x_vectors/TESTING_EXTRACTED.csv'
+EXTRACTED_XVECTOR_OUTPUT_PATH_ALL       = 'x_vectors/ALL_EXTRACTED.csv'
 EXTRACTED_LDA_OUTPUT_PATH               = 'embeddings'
 EXTRACTED_LDA_OUTPUT_TRAIN_FILE_NAME    = 'embeddings_train_' + str(LDA_RANK_F)+'.csv'
 EXTRACTED_LDA_OUTPUT_TEST_FILE_NAME     = 'embeddings_test_' + str(LDA_RANK_F)+'.csv'
+EXTRACTED_LDA_OUTPUT_ALL_FILE_NAME      = 'embeddings_all_' + str(LDA_RANK_F)+'.csv'
 EXTRACTED_LDA_OUTPUT_PATH_TRAIN         = EXTRACTED_LDA_OUTPUT_PATH+ "/" + EXTRACTED_LDA_OUTPUT_TRAIN_FILE_NAME
 EXTRACTED_LDA_OUTPUT_PATH_TEST          = EXTRACTED_LDA_OUTPUT_PATH+ "/" + EXTRACTED_LDA_OUTPUT_TEST_FILE_NAME
+EXTRACTED_LDA_OUTPUT_PATH_ALL           = EXTRACTED_LDA_OUTPUT_PATH+ "/" + EXTRACTED_LDA_OUTPUT_ALL_FILE_NAME
+EXPORT_EMBEDDINGS_OUTPUT_DIR            = '../dataset_embeddings'
 PLDA_MODEL_NAME                         = 'plda_model_' + str(LDA_RANK_F)
+
 
 import os
 
+import shutil
 import numpy as np
 import pandas as pd
 import pytorch_lightning as pl
@@ -191,6 +199,9 @@ class XVectorModel(pl.LightningModule):
         if(extract_mode == 'test'):
             self.dataset.load_data(test=True)
             test_data_loader = DataLoader(dataset=self.dataset, batch_size=self.batch_size, num_workers=4, shuffle=False)
+        if(extract_mode == 'all'):
+            self.dataset.load_data(all=True)
+            test_data_loader = DataLoader(dataset=self.dataset, batch_size=self.batch_size, num_workers=4, shuffle=False)
         return test_data_loader
 
 
@@ -215,7 +226,10 @@ if __name__ == "__main__":
                     plda_rank_f = PLDA_RANK_F,
                     lda_rank_f = LDA_RANK_F,
                     train_lda = TRAIN_LDA,
-                    test_lda = TEST_LDA)
+                    test_lda = TEST_LDA,
+                    all_lda = ALL_LDA,
+                    export_all_lda = EXPORT_ALL_LDA
+                    )
 
     # Define model and trainer
     tb_logger = pl_loggers.TensorBoardLogger(save_dir="testlogs/")
@@ -261,40 +275,28 @@ if __name__ == "__main__":
         print()
 
 
-
+   
     # Extract the x-vectors
     if(config.extract_x_vectors):
         print('extracting x-vectors')
         if not os.path.exists('x_vectors'):
             os.makedirs('x_vectors')
         # Extract the x-vectors for training the PLDA classifier and save to csv
+        
+            
+        
         x_vector = []
-        extract_mode = 'train'
+        extract_mode = 'all'
         if(config.train_x_vector_model):
             trainer.test(model)
             x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN)
+            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_ALL)
         elif(config.checkpoint_path != 'none'):
             trainer.test(model, ckpt_path=config.checkpoint_path)
             x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN)
+            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_ALL)
         else:
-            print('could not extract train x-vectors')
-
-        # Extract the x-vectors for testing the PLDA classifier and save to csv
-        x_vector = []
-        extract_mode = 'test'
-        if(config.train_x_vector_model):
-            trainer.test(model)
-            x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TEST)
-        elif(config.checkpoint_path != 'none'):
-            trainer.test(model, ckpt_path=config.checkpoint_path)
-            x_vector = pd.DataFrame(x_vector)
-            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TEST)
-        else:
-            print('could not extract test x-vectors')
-        print("Done with extracting x-vectors!")
+            print('could not extract all x-vectors')
         print()
         print()
     
@@ -340,8 +342,58 @@ if __name__ == "__main__":
         print("Done parsing test-set with LDA!")
         print()
         print()
-        
+    if(config.all_lda):
+        print('Applying LDA to ALL x-vectors...')
+        if not os.path.exists(EXTRACTED_LDA_OUTPUT_PATH):
+            os.makedirs(EXTRACTED_LDA_OUTPUT_PATH)
+        x_vectors_all = pd.read_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_ALL)
+        x_vectors_all.columns = ['index', 'id', 'label', 'xvector']
+        x_id_all = np.array(x_vectors_all['id'])
+        x_label_all = np.array(x_vectors_all['label'], dtype=int)
+        x_vec_all = np.array([np.array(x_vec[1:-1].split(), dtype=np.float64) for x_vec in x_vectors_all['xvector']])
 
+
+        x_vec_all_lda = lda.transform(x_vec_all)
+
+        # Save LDA-transformed x-vectors
+        
+        x_vectors_all['xvector'] = [str(list(x)) for x in x_vec_all_lda]
+        x_vectors_all.to_csv(EXTRACTED_LDA_OUTPUT_PATH_ALL, index=False)
+        print("Done parsing test-set with LDA!")
+        print()
+        print()
+        
+    if(config.export_all_lda): 
+        
+        if not os.path.exists(EXPORT_EMBEDDINGS_OUTPUT_DIR):
+            os.makedirs(EXPORT_EMBEDDINGS_OUTPUT_DIR)
+        else:
+            shutil.rmtree(EXPORT_EMBEDDINGS_OUTPUT_DIR)
+            os.makedirs(EXPORT_EMBEDDINGS_OUTPUT_DIR)
+        gsc_words = [name for name in os.listdir("../dataset")]
+        
+        for wordname in gsc_words:
+            if (wordname[0] != "_" and os.path.isdir("../dataset/" + wordname)):
+                os.makedirs(EXPORT_EMBEDDINGS_OUTPUT_DIR + '/' + wordname)
+                
+        
+        print('EXPORT EMBEDDINGS TO GSC FORMAT: loading lda reduced x_vector data with dim: ' + str(config.lda_rank_f))
+        print("Loading data from: " + str(EXTRACTED_LDA_OUTPUT_PATH_ALL))
+        x_vectors_all = pd.read_csv(EXTRACTED_LDA_OUTPUT_PATH_ALL)
+        
+        for index, row in x_vectors_all.iterrows():
+            id = row.get('id')
+            embeddings = row.get('xvector')
+            xvector_filename = id.split('/')[-1].split('.')[0]
+            word = xvector_filename.split('_')[-1]
+            gsc_filename = ""
+            for splitword in xvector_filename.split('_')[:-1]:
+                gsc_filename = gsc_filename + splitword + '_'
+            gsc_filename = gsc_filename[:-1]
+            embeddings_list = eval(embeddings)  # Be cautious with eval if input is not controlled
+            embeddings_df = pd.DataFrame([embeddings_list])  # Convert to DataFrame
+            embeddings_df.to_csv(EXPORT_EMBEDDINGS_OUTPUT_DIR + '/' + word + '/' +gsc_filename+'.csv', index=False)
+            
 
     if(config.train_plda):
         if not os.path.exists('plda'):

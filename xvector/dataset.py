@@ -33,6 +33,8 @@ class Dataset(Dataset):
         self.val_labels = []
         self.test_samples = []
         self.test_labels = []
+        self.all_samples = []
+        self.all_labels = []
 
         self.data_folder_path = data_folder_path
         self.sampling_rate = sampling_rate
@@ -51,6 +53,7 @@ class Dataset(Dataset):
         """
         vox_train_path = self.data_folder_path + '/VoxCeleb/vox1_dev_wav/*/*.wav'
         vox_test_path = self.data_folder_path + '/VoxCeleb/vox1_test_wav/*/*.wav'
+        vox_all_path = self.data_folder_path + '/VoxCeleb/vox1_all_wav/*/*.wav'
 
         # Get the paths to all train and val data samples
         globs = glob.glob(vox_train_path)
@@ -99,8 +102,24 @@ class Dataset(Dataset):
         print(len(test_samples), ' voice samples')
         print('DONE collectiong samples')
 
+        # Get the paths to all all data samples
+        globs = glob.glob(vox_all_path)
+        print('collectiong all samples')
+        
+        # Gat the list of samples and labels
+        all_samples = [(sample, 'none') for sample in globs]
+        all_labels = [os.path.basename(os.path.dirname(f)) for f in globs]
+            
+        unique_labels = np.unique(all_labels)
+        print('found:')
+        print(len(unique_labels), ' unique speakers')
+        print(len(all_samples), ' voice samples')
+        print('DONE collectiong samples')
+
         self.test_samples = list(np.array(test_samples))
         self.test_labels = list(np.array(test_labels))
+        self.all_samples = list(np.array(all_samples))
+        self.all_labels = list(np.array(all_labels))
 
     def __getitem__(self, index):
         """
@@ -146,7 +165,7 @@ class Dataset(Dataset):
         """
         return self.n_samples
 
-    def load_data(self, train=False, val=False, test=False):
+    def load_data(self, train=False, val=False, test=False, all=False):
         """
         Loads the specified data to be active.
 
@@ -178,6 +197,9 @@ class Dataset(Dataset):
         if(test):
             self.samples = self.samples + self.test_samples
             self.labels = self.labels + self.test_labels
+        if(all):
+            self.samples = self.samples + self.all_samples
+            self.labels = self.labels + self.all_labels
 
         # Get the num of samples and the unique class names
         self.n_samples = len(self.samples)

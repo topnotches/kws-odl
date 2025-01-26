@@ -12,6 +12,7 @@ def create_voxceleb_layout(speech_commands_path, output_path):
     # Ensure the output directories exist
     dev_path = output_path / "vox1_dev_wav"
     test_path = output_path / "vox1_test_wav"
+    all_path = output_path / "vox1_all_wav"
 
     # Remove contents of dev and test directories if they exist
     if dev_path.exists():
@@ -24,11 +25,13 @@ def create_voxceleb_layout(speech_commands_path, output_path):
                 item.is_dir()
                 and item.name != "vox1_dev_wav"
                 and item.name != "vox1_test_wav"
+                and item.name != "vox1_all_wav"
             ):
                 shutil.rmtree(item)
 
     dev_path.mkdir(parents=True, exist_ok=True)
     test_path.mkdir(parents=True, exist_ok=True)
+    all_path.mkdir(parents=True, exist_ok=True)
 
     # Get all subdirectories (keywords in Speech Commands)
     keywords = [d for d in speech_commands_path.iterdir() if d.is_dir()]
@@ -36,7 +39,7 @@ def create_voxceleb_layout(speech_commands_path, output_path):
     # Extract unique speaker IDs
     speaker_ids = set()
     for keyword in keywords:
-        if keyword.name != "dataset/_background_noise_":
+        if "background_noise" not in str(keyword):
             audio_files = list(keyword.glob("*.wav"))
             for audio_file in audio_files:
                 speaker_id = audio_file.stem.split("_")[0]
@@ -54,7 +57,7 @@ def create_voxceleb_layout(speech_commands_path, output_path):
     test_speakers = set(speaker_ids[split_index:])
 
     for keyword in keywords:
-        if keyword.name != "dataset/_background_noise_":
+        if "background_noise" not in str(keyword):
             
             audio_files = list(keyword.glob("*.wav"))
 
@@ -72,12 +75,12 @@ def create_voxceleb_layout(speech_commands_path, output_path):
                     speaker_dir = dev_path / formatted_speaker_id
                 else:
                     speaker_dir = test_path / formatted_speaker_id
-
                 # Create the directory if it doesn't exist
                 speaker_dir.mkdir(parents=True, exist_ok=True)
 
                 # Copy the audio file to the appropriate directory
                 shutil.copy(audio_file, speaker_dir / new_file_name)
+                
 
     # Generate the veri_test2.txt file
     veri_test_path = output_path / "veri_test2.txt"

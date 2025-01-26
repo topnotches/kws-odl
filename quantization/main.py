@@ -41,7 +41,7 @@ if STEP_DO_TRAIN:
     print("Dataset split (Train/Valid/Test):", train_size, "/", valid_size, "/", test_size)
 
     print("Printing model summary...")
-    summary(model, (1, 49, data_processing_parameters['feature_bin_count']))
+    summary(model, [(1, 49, data_processing_parameters['feature_bin_count']), (64,1,1)])
     dummy_input = torch.rand(1, 1, 49, data_processing_parameters['feature_bin_count']).to(device)
 
     print("Initializing training environment...")
