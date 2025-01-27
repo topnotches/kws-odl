@@ -283,7 +283,32 @@ if __name__ == "__main__":
             os.makedirs('x_vectors')
         # Extract the x-vectors for training the PLDA classifier and save to csv
         
-            
+        x_vector = []
+        extract_mode = 'train'
+        if(config.train_x_vector_model):
+            trainer.test(model)
+            x_vector = pd.DataFrame(x_vector)
+            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN)
+        elif(config.checkpoint_path != 'none'):
+            trainer.test(model, ckpt_path=config.checkpoint_path)
+            x_vector = pd.DataFrame(x_vector)
+            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN)
+        else:
+            print('could not extract train x-vectors')
+
+        # Extract the x-vectors for testing the PLDA classifier and save to csv
+        x_vector = []
+        extract_mode = 'test'
+        if(config.train_x_vector_model):
+            trainer.test(model)
+            x_vector = pd.DataFrame(x_vector)
+            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TEST)
+        elif(config.checkpoint_path != 'none'):
+            trainer.test(model, ckpt_path=config.checkpoint_path)
+            x_vector = pd.DataFrame(x_vector)
+            x_vector.to_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TEST)
+        else:
+            print('could not extract test x-vectors')
         
         x_vector = []
         extract_mode = 'all'
