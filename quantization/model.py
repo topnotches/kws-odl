@@ -63,6 +63,7 @@ class DSCNN(torch.nn.Module):
         self.conv9 = torch.nn.Conv2d(in_channels = 64, out_channels = 64, kernel_size = (1, 1), stride = (1, 1), bias = use_bias)
         self.bn9   = torch.nn.BatchNorm2d(64)
         self.relu9 = torch.nn.ReLU()
+        self.bn10   = torch.nn.BatchNorm2d(64)
 
         self.emb_norm = nn.InstanceNorm2d(num_features = 1, affine=False, track_running_stats=False)
 
@@ -110,15 +111,8 @@ class DSCNN(torch.nn.Module):
             x = self.avg(x)
             npy_to_txt(9, x.int().cpu().detach().numpy())
 
-            embeddings = embeddings.view(-1, 1, 1, 64)
+            embeddings = self.bn10(embeddings)
 
-            mean = embeddings.mean(dim=-1, keepdim=True)  # Compute mean for last dimension
-            std = embeddings.std(dim=-1, keepdim=True)    # Compute std for last dimension
-
-            # Normalize the sample (epsilon added for numerical stability)
-            normalized_embeddings = (embeddings - mean) / (std + 1e-5)
-
-            embeddings = normalized_embeddings.view(-1, 64, 1, 1)
             
             x = torch.flatten(x, 1)
             x = self.fc1(x)
@@ -162,16 +156,8 @@ class DSCNN(torch.nn.Module):
             x = self.relu9(x)
             
             x = self.avg(x)
-            embeddings = embeddings.view(-1, 1, 1, 64)
-
-            mean = embeddings.mean(dim=-1, keepdim=True)  # Compute mean for last dimension
-            std = embeddings.std(dim=-1, keepdim=True)    # Compute std for last dimension
-
-            # Normalize the sample (epsilon added for numerical stability)
-            normalized_embeddings = (embeddings - mean) / (std + 1e-5)
-
-            embeddings = normalized_embeddings.view(-1, 64, 1, 1)
             
+            embeddings = self.bn10(embeddings)
             x = embeddings * x
             
             x = torch.flatten(x, 1)

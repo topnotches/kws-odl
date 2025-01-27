@@ -3,8 +3,10 @@
 #include <stdio.h>
 
 #define NUMBER_OF_CLASSES   12
-#define EPOCHS              100
-#define BATCH_SIZE          8
+#define EPOCHS              10000
+#define BATCH_SIZE          40
+#define LAYER_SELECT        28
+
 
 #define LENGTH_BIT          1
 #define LENGTH_NIBBLE       4
@@ -21,7 +23,8 @@ enum class LayerTypes {
     relu,
     avgpool2d,
     softmax,
-    cross_entropy_loss
+    cross_entropy_loss,
+    fusion
 };
 
 typedef struct conv_hypr_param_t {

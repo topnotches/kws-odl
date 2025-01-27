@@ -225,11 +225,14 @@ std::vector<layer> get_model(std::string model_path, uint8_t batch_size, uint8_t
     model.push_back(layer(LayerTypes::conv,         model.back().get_output_size(),  layer_params[48].data(),  layer_params[49].data(), param_pw_conv_layer5));
     model.push_back(layer(LayerTypes::batchnorm,    model.back().get_output_size(),  layer_params[50].data(),  layer_params[51].data(), {}, {}, layer_params[52].data(), layer_params[53].data()));
     model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
-
+    
     // Layer 6, Average Pooling
     model.push_back(layer(LayerTypes::avgpool2d,    model.back().get_output_size(), {}, {}, param_ap2d_conv_layer6));
+    
+    // Layer 7, fusion
+    model.push_back(layer(LayerTypes::fusion,       model.back().get_output_size()));
 
-    // Layer 7, Dense 
+    // Layer 8, Dense 
     model.push_back(layer(LayerTypes::dense,        model.back().get_output_size(), layer_params[54].data(),  layer_params[55].data(), {}, param_dense_layer7));
     return model;
 }
