@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <sstream>
 #include <vector>
+#include <numeric>
 #include <math.h>
 #include "dataloader.hpp"
 #include "misc_utils.hpp"
@@ -41,7 +42,7 @@ int  main() {
     layer softmax(LayerTypes::softmax, model.back().get_output_size());
     layer crossentropy(LayerTypes::cross_entropy_loss, softmax.get_output_size());
 
-    dataloader dataloader(words, "d21fd169", BATCH_SIZE); // Change '/' to the userID
+    dataloader dataloader(words, "d21fd169", BATCH_SIZE, 1.0); // Change '/' to the userID
 
     float error = 0.0f;
     float momentum = 0.0;
@@ -63,8 +64,6 @@ int  main() {
             }
             model_forward(model, std::get<0>(mybatch));
             softmax.forward(model.back().layer_outputs.data());
-            
-
             crossentropy.forward(softmax.layer_outputs.data(), labels_onehot.data());
             softmax.backward(labels_onehot.data());
             model[29].backward(softmax.layer_gradient_outputs.data());
@@ -80,6 +79,12 @@ int  main() {
 
             error = (momentum)*error+(1-momentum)*temp_err;
             
+
+            //float sum_of_elems = 0.0f;
+            //for(std::vector<float>::iterator it = model[LAYER_SELECT].layer_outputs.begin(); it != model[LAYER_SELECT].layer_outputs.end(); ++it)
+            //sum_of_elems += *it;
+            //std::cout << sum_of_elems << std::endl;
+
             dataloader.print_progress_bar(i,error);
             
         } else {

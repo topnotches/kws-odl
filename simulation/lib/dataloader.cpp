@@ -11,7 +11,7 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::string dataloader_speaker_id, uint8_t dataloader_batch_size, std::string dataloader_dataset_path, float dataloader_train_split) {
+dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::string dataloader_speaker_id, uint8_t dataloader_batch_size, float dataloader_train_split, std::string dataloader_dataset_path) {
 
     uint8_t label = 0;
     this->dataloader_path_names_train = {};
@@ -113,7 +113,7 @@ void dataloader::print_progress_bar(uint32_t epoch, float error) {
         else if (i == pos) std::cout << ">";
         else std::cout << " ";
     }
-    std::cout << "] " << int(progress * 100.0) << "%, avg. error: " << error << "%\r";
+    std::cout << "] " << int(progress * 100.0) << "%, Loss: " << error << "%\r";
     std::cout.flush();
 
     std::cout << std::endl;

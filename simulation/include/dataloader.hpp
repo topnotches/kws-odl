@@ -27,7 +27,7 @@ private:
 public:
     std::vector<float> layer_outputs;
     
-    dataloader(std::vector<std::string> words, std::string speaker_id, uint8_t dataloader_batch_size = 1, std::string dataset_path = "../dataset_mfccs_raw/", float dataloader_train_split = 0.9);
+    dataloader(std::vector<std::string> words, std::string speaker_id, uint8_t dataloader_batch_size = 1, float dataloader_train_split = 0.9, std::string dataset_path = "../dataset_mfccs_raw/");
     ~dataloader();
 
 

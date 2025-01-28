@@ -242,5 +242,6 @@ void model_forward(std::vector<layer> &model, std::vector<float> data) {
     model[0].forward(data.data());
     for (uint8_t layer_index = 1; layer_index < model.size(); layer_index++ ) {
        model[layer_index].forward(model[layer_index - 1].layer_outputs.data());
+       //printf("size [%d %d %d %d]\n", model[layer_index-1].get_input_size().batch, model[layer_index-1].get_input_size().depth, model[layer_index-1].get_input_size().height, model[layer_index-1].get_input_size().width);
     }
 }

@@ -18,10 +18,10 @@ private:
     // Adam stuff:
     float layer_adam_learning_rate = 1e-5;
     float layer_adam_beta1 = 0.9;
-    float layer_adam_beta2 = 0.999;
+    float layer_adam_beta2 = 0.99;
     std::vector<float> layer_adam_momentum;
     std::vector<float> layer_adam_velocity;
-    float layer_adam_epsilon = 1e-8;
+    float layer_adam_epsilon = 1e-10;
     uint32_t layer_adam_time_step = 1;
 public:
     std::vector<float> layer_outputs;

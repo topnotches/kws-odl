@@ -40,6 +40,7 @@ void dense_layer_backward_sequential(float* dense_grad_input,
                 dense_grad_input[index_batch * dense_input_size + index_input] += 
                     dense_grad_output[index_batch * dense_output_size + index_output] * 
                     dense_weights[index_output * dense_input_size + index_input];
+
             }
         }
     }

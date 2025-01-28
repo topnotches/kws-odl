@@ -216,7 +216,7 @@ layer::layer(LayerTypes         layer_type,
             this->layer_dim_size_out = this->layer_dim_size_in; 
 
             this->layer_outputs.resize(this->layer_dim_size_out.full);
-
+            this->layer_dim_size_out.width = this->layer_dim_size_out.full / this->layer_dim_size_out.batch;
             this->layer_weights.resize(this->layer_dim_size_out.width); 
             std::fill(this->layer_weights.begin(), this->layer_weights.end(), 1.0f); 
 
@@ -325,7 +325,8 @@ void layer::backward(float *layer_gradient_input) {
             break;
         }
         case LayerTypes::dense: {
-            dense_layer_backward_sequential(this->layer_gradient_outputs.data(), 
+            dense_layer_backward_sequential(
+                             this->layer_gradient_outputs.data(), 
                                 layer_gradient_input,
                                 this->layer_weights.data(),
                                 this->layer_dense_hypr_params.size_in, 
@@ -359,12 +360,13 @@ void layer::backward(float *layer_gradient_input) {
             break;
         }
         case LayerTypes::fusion: {
-            fusion_mult_backward_sequential(this->layer_gradient_outputs.data(), 
-                                       layer_gradient_input, 
+            fusion_mult_backward_sequential(
+                                        this->layer_gradient_outputs.data(), 
+                                        layer_gradient_input, 
                                         this->layer_weights.data(), 
-                                        this->layer_dim_size_in.width, 
-                                        this->layer_dim_size_in.batch);
-            adam_optimize(this->layer_gradient_outputs.data(), this->layer_dim_size_in.width);
+                                        this->layer_dim_size_out.width, 
+                                        this->layer_dim_size_out.batch);
+            adam_optimize(this->layer_gradient_outputs.data(), this->layer_dim_size_out.width);
             break;
         }
         default: {
@@ -442,7 +444,7 @@ void layer::adam_optimize(const float* layer_adam_gradients_backprop, const uint
        // std::cout <<this->layer_adam_velocity[index] << "!alkwmdaw" << (1.0f - pow(this->layer_adam_beta2, this->layer_adam_time_step)) << std::endl;
     }
 
-    this->layer_adam_time_step++;
+    //this->layer_adam_time_step++;
 }
 
 // getters

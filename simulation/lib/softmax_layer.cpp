@@ -1,4 +1,3 @@
-
 #include "softmax_layer.hpp"
 #include <math.h>
 #include <iostream>
@@ -28,6 +27,7 @@ void softmax_layer_backward_sequential(const float* softmax_outputs,
             softmax_gradients[index_label + index_batch * softmax_num_labels] = 
                 softmax_outputs[index_label + index_batch * softmax_num_labels] - 
                 true_labels[index_label + index_batch * softmax_num_labels];
+
         }
     }
 }

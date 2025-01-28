@@ -9,7 +9,7 @@ void fusion_mult_sequential(const float* fusion_input, float* fusion_output, con
     for (uint8_t index_batch = 0; index_batch < fusion_batch_size; index_batch++) {
         for (uint8_t index_feature = 0; index_feature < fusion_features; index_feature++) {
             fusion_output[index_batch * fusion_features + index_feature] = fusion_input[index_batch * fusion_features + index_feature] * fusion_embeddings[index_feature];
-            ///std::cout << fusion_output[index_batch * fusion_features + index_feature]<< std::endl; 
+            
         }
     }
 }
