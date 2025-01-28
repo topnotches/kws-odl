@@ -1,14 +1,14 @@
 DATA_FOLDER_PATH                        ='../dataset_xvector'
-CHECKPOINT_PATH                         ='./testlogs/lightning_logs/version_0/checkpoints/epoch=14-step=14970.ckpt'
-TRAIN_X_VECTOR_MODEL                    = False
+CHECKPOINT_PATH                         = './testlogs/lightning_logs/version_34/checkpoints/epoch=13-step=14000.ckpt'#'./testlogs/lightning_logs/version_0/checkpoints/epoch=14-step=14970.ckpt'
+TRAIN_X_VECTOR_MODEL                    = True
 EXTRACT_X_VECTORS                       = True
 TRAIN_LDA                               = True
 TEST_LDA                                = True
 ALL_LDA                                 = True
 EXPORT_ALL_LDA                          = True
-USE_LDA                                 = False
-TRAIN_PLDA                              = False
-TEST_PLDA                               = False
+USE_LDA                                 = True
+TRAIN_PLDA                              = True
+TEST_PLDA                               = True
 X_VEC_EXTRACT_LAYER                     = 6
 PLDA_RANK_F                             = 25
 LDA_RANK_F                              = 64
@@ -72,7 +72,9 @@ class XVectorModel(pl.LightningModule):
             TdnnLayer(input_size=hidden_size, output_size=1500, batch_norm=batch_norm, dropout_p=dropout_p)
         )
         self.segment_layer6 = nn.Linear(3000, x_vector_size)
+        self.bn_fc1 = nn.BatchNorm1d(512, momentum=0.1, affine=False)
         self.segment_layer7 = nn.Linear(x_vector_size, x_vector_size)
+        self.bn_fc2 = nn.BatchNorm1d(512, momentum=0.1, affine=False)
         self.output = nn.Linear(x_vector_size, num_classes)
 
         self.x_vec_extract_layer = x_vec_extract_layer
@@ -97,8 +99,8 @@ class XVectorModel(pl.LightningModule):
 
         out = self.stat_pool(out)
 
-        out = F.relu(self.segment_layer6(out))
-        out = F.relu(self.segment_layer7(out))
+        out = F.relu(self.bn_fc1(self.segment_layer6(out)))
+        out = F.relu(self.bn_fc2(self.segment_layer7(out)))
         
         out = self.output(out)
         return out
@@ -113,10 +115,10 @@ class XVectorModel(pl.LightningModule):
         out = self.stat_pool(out)
 
         if(self.x_vec_extract_layer == 6):
-            x_vec = self.segment_layer6.forward(out)
+            x_vec = self.bn_fc1(self.segment_layer6.forward(out))
         elif(self.x_vec_extract_layer == 7):
-            out = F.relu(self.segment_layer6.forward(out))
-            x_vec = self.segment_layer7.forward(out)
+            out = self.bn_fc1(F.relu(self.segment_layer6.forward(out)))
+            x_vec = self.bn_fc2(self.segment_layer7.forward(out))
         else:
             x_vec = self.segment_layer6.forward(out)
             
