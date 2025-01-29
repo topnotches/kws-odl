@@ -444,7 +444,7 @@ void layer::adam_optimize(const float* layer_adam_gradients_backprop, const uint
        // std::cout <<this->layer_adam_velocity[index] << "!alkwmdaw" << (1.0f - pow(this->layer_adam_beta2, this->layer_adam_time_step)) << std::endl;
     }
 
-    //this->layer_adam_time_step++;
+    this->layer_adam_time_step++;
 }
 
 // getters

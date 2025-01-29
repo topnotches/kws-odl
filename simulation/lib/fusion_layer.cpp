@@ -21,7 +21,7 @@ void fusion_mult_backward_sequential(float* fusion_grad_input,
     
     memset(fusion_grad_input, 0, fusion_batch_size * fusion_features * sizeof(float));
 
-    #pragma omp parallel for collapse(2) schedule(dynamic)
+    #pragma omp parallel for //collapse(2) schedule(dynamic)
     for (uint8_t index_batch = 0; index_batch < fusion_batch_size; index_batch++) {
         for (uint8_t index_feature = 0; index_feature < fusion_features; index_feature++) {
             fusion_grad_input[index_batch * fusion_features + index_feature] = 

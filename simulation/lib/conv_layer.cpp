@@ -25,7 +25,7 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
     const int32_t conv_batch_output_feature_points_per_batch = conv_width_limit * conv_height_limit * output_feats;
 
     for (int32_t index_batch = 0; index_batch < conv_batch_size; index_batch++) {
-        #pragma omp parallel for collapse(3) schedule(dynamic)
+        #pragma omp parallel for //collapse(3) schedule(dynamic)
         for (int32_t index_kernel = 0; index_kernel < output_feats; index_kernel++) {
             for (int32_t index_row = 0; index_row < conv_height_limit; index_row++) {
                 for (int32_t index_column = 0; index_column < conv_width_limit; index_column++) {

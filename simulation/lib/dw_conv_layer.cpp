@@ -19,7 +19,7 @@ void dw_conv_layer_sequential(float *dw_input_features, float *dw_output_feature
     const uint32_t dw_batch_output_feature_points_per_batch = dw_width_limit * dw_height_limit * dw_input_depth;
 
     for (int32_t index_batch = 0; index_batch < dw_batch_size; index_batch++) { // batch
-        #pragma omp parallel for collapse(3) schedule(dynamic) // till i collapse
+        #pragma omp parallel for //collapse(3)  // till i collapse
         for (int32_t index_layer = 0; index_layer < dw_input_depth; index_layer++) { // layer
             for (int32_t index_row = 0; index_row < dw_height_limit; index_row++) { // out
                 for (int32_t index_column = 0; index_column < dw_width_limit ; index_column++) {
