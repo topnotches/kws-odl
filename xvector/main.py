@@ -1,6 +1,6 @@
 DATA_FOLDER_PATH                        ='../dataset_xvector'
-CHECKPOINT_PATH                         = './testlogs/lightning_logs/version_34/checkpoints/epoch=13-step=14000.ckpt'#'./testlogs/lightning_logs/version_0/checkpoints/epoch=14-step=14970.ckpt'
-TRAIN_X_VECTOR_MODEL                    = True
+CHECKPOINT_PATH                         = './testlogs/lightning_logs/version_38/checkpoints/epoch=15-step=16000.ckpt'#'./testlogs/lightning_logs/version_0/checkpoints/epoch=14-step=14970.ckpt'
+TRAIN_X_VECTOR_MODEL                    = False
 EXTRACT_X_VECTORS                       = True
 TRAIN_LDA                               = True
 TEST_LDA                                = True
@@ -120,7 +120,8 @@ class XVectorModel(pl.LightningModule):
             out = self.bn_fc1(F.relu(self.segment_layer6.forward(out)))
             x_vec = self.bn_fc2(self.segment_layer7.forward(out))
         else:
-            x_vec = self.segment_layer6.forward(out)
+            x_vec = self.bn_fc1(self.segment_layer6.forward(out))
+            
             
         return x_vec
 

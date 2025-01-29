@@ -40,12 +40,33 @@ python main.py
 ### kws training
 For training the kws model run:
 ```
-cd backbone
+cd quantization
 python main.py
 ```
 ### simulation
-Currently only tests are supported for implemented layers, run:
+The simulation currently provides:
+
+DataLoader, with batch sizes and random shuffle between epochs.
+Model_utils, to generate the KWS model's layers - softmax and loss have to be instantiated separately, see sandbox in README's commit SHA.
+layer.backward() for softmax, dense, and fusion layer + AdamOptim for the latter.
+
+To run the simulation, run:
 ```
 cd simulation
-make tests
+make sandbox
+```
+
+### Mozilla Datasets
+Please download: https://commonvoice.mozilla.org/en/datasets version 20 (80+ GB) into your local repo and run:
+```
+./06_get_data_mozilla.sh 
+```
+wget does not work due to access restrictions. Following, map the Mozilla Dataset into the x-vector tree-structure:
+```
+./07_mozilla_to_vc.py 
+```
+then prep rir and musan for augmentation:
+```
+./08_get_data_musan_mozilla.sh
+./09_get_data_rir_mozilla.sh
 ```
