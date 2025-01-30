@@ -43,9 +43,8 @@ UNKNOWN_WORD_LABEL = '_unknown_'
 UNKNOWN_WORD_INDEX = 1
 RANDOM_SEED = 59185
 
-
 def prepare_words_list(wanted_words):
-  return wanted_words
+  return [SILENCE_LABEL, UNKNOWN_WORD_LABEL] + wanted_words
 
 
 def which_set(filename, validation_percentage, testing_percentage):
@@ -96,7 +95,7 @@ class AudioProcessor(object):
     wanted_words_index = {}
 
     for index, wanted_word in enumerate(training_parameters['wanted_words']):
-        wanted_words_index[wanted_word] = index
+        wanted_words_index[wanted_word] = index + 2
 
     # Prepare data sets
     self.data_set = {'validation': [], 'testing': [], 'training': []}
@@ -104,6 +103,7 @@ class AudioProcessor(object):
     all_words = {}
     # Find all audio samples
     search_path = os.path.join(self.data_directory, '*', '*.wav')
+    speaker_id_to_int = {}
 
     for wav_path in glob.glob(search_path):
       _ , word = os.path.split(os.path.dirname(wav_path))
@@ -112,18 +112,30 @@ class AudioProcessor(object):
       # Ignore background noise, as it has been handled by generate_background_noise()
       if word == BACKGROUND_NOISE_LABEL:
         continue
-
+      if wav_path.__contains__("4c6167ca") or wav_path.__contains__("c50f55b8"):
+        continue
+      
       all_words[word] = True
       # Determine the set to which the word should belong
       set_index = which_set(wav_path, training_parameters['validation_percentage'], training_parameters['testing_percentage'])
+      
+      
+      # Assign a unique integer to each speaker ID
+      if speaker_id not in speaker_id_to_int:
+          speaker_id_to_int[speaker_id] = len(speaker_id_to_int)
+      
+      speaker_id_int = speaker_id_to_int[speaker_id]
+      
       embeddings_path = '../dataset_embeddings/'+ '/'.join(wav_path.split('/')[2:]).split('.')[0] + '.csv' # python is sickening
 
       # If it's a known class, store its detail, otherwise add it to the list
       # we'll use to train the unknown label.
       # If we use 35 classes - all are known, hence no unkown samples      
       if word in wanted_words_index:
-        self.data_set[set_index].append({'label': word, 'file': wav_path, 'embeddings': embeddings_path, 'speaker': speaker_id})
-
+        #self.data_set[set_index].append({'label': word, 'file': wav_path, 'embeddings': embeddings_path, 'speaker': speaker_id}) // bad
+        self.data_set[set_index].append({'label': word, 'file': wav_path, 'embeddings': embeddings_path, 'speaker_int': speaker_id_int, 'speaker': speaker_id})
+      else:
+        unknown_set[set_index].append({'label': word, 'file': wav_path, 'embeddings': embeddings_path, 'speaker_int': speaker_id_int, 'speaker': speaker_id})
     if not all_words:
       raise Exception('No .wavs found at ' + search_path)
     for index, wanted_word in enumerate(training_parameters['wanted_words']):
@@ -134,7 +146,22 @@ class AudioProcessor(object):
 
     # We need an arbitrary file to load as the input for the silence samples.
     # It's multiplied by zero later, so the content doesn't matter.
+    silence_wav_path = self.data_set['training'][0]['file']
 
+    # Add silence and unknown words to each set
+    for set_index in ['validation', 'testing', 'training']:
+      set_size = len(self.data_set[set_index])
+      silence_size = int(math.ceil(set_size * training_parameters['silence_percentage'] / 100))
+      for _ in range(silence_size):
+        self.data_set[set_index].append({
+            'label': SILENCE_LABEL,
+            'file': silence_wav_path,
+            'speaker': "None" 
+        })
+      # Pick some unknowns to add to each partition of the data set.
+      random.shuffle(unknown_set[set_index])
+      unknown_size = int(math.ceil(set_size * training_parameters['unknown_percentage'] / 100))
+      self.data_set[set_index].extend(unknown_set[set_index][:unknown_size])
 
     # Make sure the ordering is random.
     for set_index in ['validation', 'testing', 'training']:
@@ -146,6 +173,9 @@ class AudioProcessor(object):
     for word in all_words:
       if word in wanted_words_index:
         self.word_to_index[word] = wanted_words_index[word]
+      else:
+        self.word_to_index[word] = UNKNOWN_WORD_INDEX
+    self.word_to_index[SILENCE_LABEL] = SILENCE_INDEX
 
 
 
@@ -187,6 +217,7 @@ class AudioProcessor(object):
     # Create a data placeholder
     data_placeholder = np.zeros((samples_number, self.data_processing_parameters['spectrogram_length'],self.data_processing_parameters['feature_bin_count']),dtype='float32' )
     labels_placeholder = np.zeros(samples_number)
+    speaker_int_placeholder = np.zeros((samples_number, 64), dtype='float32' )
     embeddings_placeholder = np.zeros((samples_number, 64), dtype='float32' )
 
     # Required for noise analysis
@@ -304,9 +335,15 @@ class AudioProcessor(object):
 
         label_index = self.word_to_index[sample['label']]
         labels_placeholder[i] = label_index
-        embeddings_placeholder[i] = pd.read_csv(sample['embeddings'], header=None).to_numpy()[1]
+        if sample['label'] == SILENCE_LABEL or sample['label'] == UNKNOWN_WORD_LABEL:
+          speaker_int_placeholder[i] = 2999
+          embeddings_placeholder[i] = np.ones((64), dtype='float32' )
+        else:
+          speaker_int_placeholder[i] = sample['speaker_int']
+          embeddings_placeholder[i] = pd.read_csv(sample['embeddings'], header=None).to_numpy()[1]
 
-    return data_placeholder, labels_placeholder, embeddings_placeholder
+
+    return data_placeholder, labels_placeholder, speaker_int_placeholder
 
 
 class AudioGenerator(torch.utils.data.Dataset):

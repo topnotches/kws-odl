@@ -20,11 +20,13 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.nn.functional as F
+from torch.autograd import Variable
 from utils import npy_to_txt
 
 
 class DSCNN(torch.nn.Module):
-    def __init__(self, use_bias=False):
+    def __init__(self, use_bias=False, total_speakers = 3000):
         super(DSCNN, self).__init__()
 
         self.pad1  = nn.ConstantPad2d((1, 1, 5, 5), value=0.0)
@@ -69,7 +71,19 @@ class DSCNN(torch.nn.Module):
 
         self.avg   = torch.nn.AvgPool2d(kernel_size=(25, 5), stride=1)
         
-        self.fc1   = torch.nn.Linear(64, 10, bias=use_bias)
+
+        self.emb_vec = []
+
+        something = torch.ones(64, 1, 1, requires_grad=True)
+        something_else = torch.ones(64, 1, 1, requires_grad=False)
+
+        for i in range(total_speakers):
+            self.emb_vec.append(something.to(torch.device('cuda')))
+
+        self.emb_vec[2999] = something_else.to(torch.device('cuda'))
+
+            
+        self.fc1   = torch.nn.Linear(64, 12, bias=use_bias)
         # self.soft  = torch.nn.Softmax(dim=1)
         # self.soft = F.log_softmax(x, dim=1)
 
@@ -110,9 +124,14 @@ class DSCNN(torch.nn.Module):
             print("Sum: ", str(torch.sum(x.int())))
             x = self.avg(x)
             npy_to_txt(9, x.int().cpu().detach().numpy())
-
-            embeddings = self.bn10(embeddings)
-
+    
+            x = self.avg(x)
+            selected_emb_vec = torch.stack([self.emb_vec[idx] for idx in embeddings])
+            x = selected_emb_vec * x
+            #print(x[0,0,0,0])
+            #print(embeddings[0,0,0,0])
+            #x = embeddings * x
+            #print(x[0,0,0,0])
             
             x = torch.flatten(x, 1)
             x = self.fc1(x)
@@ -156,12 +175,14 @@ class DSCNN(torch.nn.Module):
             x = self.relu9(x)
             
             x = self.avg(x)
-            
-            embeddings = self.bn10(embeddings)
-            x = embeddings * x
+            selected_emb_vec = torch.stack([self.emb_vec[idx] for idx in embeddings])
+            x = selected_emb_vec * x
+            #print(x[0,0,0,0])
+            #print(embeddings[0,0,0,0])
+            #x = embeddings * x
+            #print(x[0,0,0,0])
             
             x = torch.flatten(x, 1)
-            
             x = self.fc1(x)
 
         return x

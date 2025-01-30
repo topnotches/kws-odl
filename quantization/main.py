@@ -1,7 +1,7 @@
-STEP_DO_TRAIN           = True
+STEP_DO_TRAIN           = False
 STEP_DO_EXPORT_MODEL    = True
 STEP_DO_PROCESS_MFCCS   = True
-CHECKPOINT_PATH         = './model_acc_94.53125.pth'
+CHECKPOINT_PATH         = './model_acc_81.25.pth'
 CLASSES                 = 10
 EXPORT_OUTPUT_DIR_PATH  = '../simulation/exported_models/'
 EXPORT_OUTPUT_NAME      = 'export_params_nclass_' + str(CLASSES) + '.csv'
@@ -41,7 +41,7 @@ if STEP_DO_TRAIN:
     print("Dataset split (Train/Valid/Test):", train_size, "/", valid_size, "/", test_size)
 
     print("Printing model summary...")
-    summary(model, [(1, 49, data_processing_parameters['feature_bin_count']), (64,1,1)])
+    #summary(model, [(1, 49, data_processing_parameters['feature_bin_count']), -1])
     dummy_input = torch.rand(1, 1, 49, data_processing_parameters['feature_bin_count']).to(device)
 
     print("Initializing training environment...")

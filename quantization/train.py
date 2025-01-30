@@ -56,7 +56,9 @@ class Train():
             inputs, labels, embeddings = data[0]
             inputs = torch.Tensor(inputs[:,None,:,:]).to(self.device)
             labels = torch.Tensor(labels).long().to(self.device)
-            embeddings = torch.Tensor(embeddings[:,:,None,None]).to(self.device)
+            #embeddings = torch.Tensor(embeddings[:,:,None,None]).to(self.device)
+            embeddings = torch.tensor(embeddings[:,1], dtype=torch.long, device=self.device).to(self.device)
+            
             model = model.to(self.device)  
 
             if (integer):
@@ -105,7 +107,8 @@ class Train():
                 inputs, labels, embeddings = data[0]
                 inputs = torch.Tensor(inputs[:,None,:,:]).to(self.device)
                 labels = torch.Tensor(labels).to(self.device).long()
-                embeddings = torch.Tensor(embeddings[:,:,None,None]).to(self.device)
+                #embeddings = torch.Tensor(embeddings[:,:,None,None]).to(self.device)
+                embeddings = torch.tensor(embeddings[:,1], dtype=torch.long, device=self.device).to(self.device)
 
                 # Zero out the parameter gradients after each mini-batch
                 self.optimizer.zero_grad()
