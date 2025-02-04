@@ -3,8 +3,8 @@
 #include <stdio.h>
 
 #define NUMBER_OF_CLASSES   12
-#define EPOCHS              100000
-#define BATCH_SIZE          45
+#define EPOCHS              10000
+#define BATCH_SIZE          12
 #define LAYER_SELECT        28
 
 

@@ -1,7 +1,7 @@
 DATA_FOLDER_PATH                        ='../dataset_xvector'
 CHECKPOINT_PATH                         = './testlogs/lightning_logs/version_38/checkpoints/epoch=15-step=16000.ckpt'#'./testlogs/lightning_logs/version_0/checkpoints/epoch=14-step=14970.ckpt'
 TRAIN_X_VECTOR_MODEL                    = False
-EXTRACT_X_VECTORS                       = True
+EXTRACT_X_VECTORS                       = False
 TRAIN_LDA                               = True
 TEST_LDA                                = True
 ALL_LDA                                 = True
@@ -42,6 +42,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from torch.utils.data import DataLoader
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.preprocessing import StandardScaler
 
 import plda_classifier as pc
 from config import Config
@@ -329,68 +330,80 @@ if __name__ == "__main__":
         print()
     
 
-    if(config.train_lda):
+    if config.train_lda:
         print('Applying LDA to training x-vectors...')
         if not os.path.exists(EXTRACTED_LDA_OUTPUT_PATH):
             os.makedirs(EXTRACTED_LDA_OUTPUT_PATH)
+        
         x_vectors_train = pd.read_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TRAIN)
         x_vectors_train.columns = ['index', 'id', 'label', 'xvector']
         x_id_train = np.array(x_vectors_train['id'])
         x_label_train = np.array(x_vectors_train['label'], dtype=int)
         x_vec_train = np.array([np.array(x_vec[1:-1].split(), dtype=np.float64) for x_vec in x_vectors_train['xvector']])
-
-
+        
+        # Apply LDA
         lda = LinearDiscriminantAnalysis(n_components=config.lda_rank_f)
         x_vec_train_lda = lda.fit_transform(x_vec_train, x_label_train)
-
-        x_vectors_train['xvector'] = [str(list(x)) for x in x_vec_train_lda]
+        
+        # Standardize LDA-transformed x-vectors
+        scaler = StandardScaler()
+        x_vec_train_lda_std = scaler.fit_transform(x_vec_train_lda)
+        
+        # Save standardized LDA-transformed x-vectors
+        x_vectors_train['xvector'] = [str(list(x)) for x in x_vec_train_lda_std]
         x_vectors_train.to_csv(EXTRACTED_LDA_OUTPUT_PATH_TRAIN, index=False)
-        print("Done with training LDA!")
+        print("Done with training LDA and standardization!")
         print()
         print()
 
-
-    if(config.test_lda):
+    if config.test_lda:
         print('Applying LDA to test x-vectors...')
         if not os.path.exists(EXTRACTED_LDA_OUTPUT_PATH):
             os.makedirs(EXTRACTED_LDA_OUTPUT_PATH)
+        
         x_vectors_test = pd.read_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_TEST)
         x_vectors_test.columns = ['index', 'id', 'label', 'xvector']
         x_id_test = np.array(x_vectors_test['id'])
         x_label_test = np.array(x_vectors_test['label'], dtype=int)
         x_vec_test = np.array([np.array(x_vec[1:-1].split(), dtype=np.float64) for x_vec in x_vectors_test['xvector']])
-
-
-        x_vec_test_lda = lda.transform(x_vec_test)
-
-        # Save LDA-transformed x-vectors
         
-        x_vectors_test['xvector'] = [str(list(x)) for x in x_vec_test_lda]
+        # Apply LDA
+        x_vec_test_lda = lda.transform(x_vec_test)
+        
+        # Standardize LDA-transformed x-vectors
+        x_vec_test_lda_std = scaler.transform(x_vec_test_lda)
+        
+        # Save standardized LDA-transformed x-vectors
+        x_vectors_test['xvector'] = [str(list(x)) for x in x_vec_test_lda_std]
         x_vectors_test.to_csv(EXTRACTED_LDA_OUTPUT_PATH_TEST, index=False)
-        print("Done parsing test-set with LDA!")
+        print("Done parsing test-set with LDA and standardization!")
         print()
         print()
-    if(config.all_lda):
+
+    if config.all_lda:
         print('Applying LDA to ALL x-vectors...')
         if not os.path.exists(EXTRACTED_LDA_OUTPUT_PATH):
             os.makedirs(EXTRACTED_LDA_OUTPUT_PATH)
+        
         x_vectors_all = pd.read_csv(EXTRACTED_XVECTOR_OUTPUT_PATH_ALL)
         x_vectors_all.columns = ['index', 'id', 'label', 'xvector']
         x_id_all = np.array(x_vectors_all['id'])
         x_label_all = np.array(x_vectors_all['label'], dtype=int)
         x_vec_all = np.array([np.array(x_vec[1:-1].split(), dtype=np.float64) for x_vec in x_vectors_all['xvector']])
-
-
+        
+        # Apply LDA
         x_vec_all_lda = lda.transform(x_vec_all)
-
-        # Save LDA-transformed x-vectors
         
-        x_vectors_all['xvector'] = [str(list(x)) for x in x_vec_all_lda]
+        # Standardize LDA-transformed x-vectors
+        x_vec_all_lda_std = scaler.transform(x_vec_all_lda)
+        
+        # Save standardized LDA-transformed x-vectors
+        x_vectors_all['xvector'] = [str(list(x)) for x in x_vec_all_lda_std]
         x_vectors_all.to_csv(EXTRACTED_LDA_OUTPUT_PATH_ALL, index=False)
-        print("Done parsing test-set with LDA!")
+        print("Done parsing all x-vectors with LDA and standardization!")
         print()
         print()
-        
+
     if(config.export_all_lda): 
         
         if not os.path.exists(EXPORT_EMBEDDINGS_OUTPUT_DIR):

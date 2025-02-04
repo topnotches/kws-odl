@@ -7,9 +7,9 @@ from collections import Counter
 
 def create_mozilla_layout(validated_file, clips_dir, output_path):
     # Ensure the output directories exist
-    dev_path = output_path / "train"
-    test_path = output_path / "test"
-    all_path = output_path / "all"
+    dev_path = output_path / "vox1_dev_wav"
+    test_path = output_path / "vox1_test_wav"
+    all_path = output_path / "vox1_all_wav"
 
     # Remove contents of dev and test directories if they exist
     if dev_path.exists():

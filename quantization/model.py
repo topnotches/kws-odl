@@ -65,9 +65,9 @@ class DSCNN(torch.nn.Module):
         self.conv9 = torch.nn.Conv2d(in_channels = 64, out_channels = 64, kernel_size = (1, 1), stride = (1, 1), bias = use_bias)
         self.bn9   = torch.nn.BatchNorm2d(64)
         self.relu9 = torch.nn.ReLU()
-        self.bn10   = torch.nn.BatchNorm2d(64)
+        #self.bn10   = torch.nn.BatchNorm2d(64)
 
-        self.emb_norm = nn.InstanceNorm2d(num_features = 1, affine=False, track_running_stats=False)
+        #self.emb_norm = nn.InstanceNorm2d(num_features = 1, affine=False, track_running_stats=False)
 
         self.avg   = torch.nn.AvgPool2d(kernel_size=(25, 5), stride=1)
         

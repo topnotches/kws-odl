@@ -36,6 +36,7 @@ public:
     std::vector<uint8_t> get_labels_train();
     std::vector<uint32_t> get_pick_list();
     std::tuple<std::vector<float>,std::vector<uint8_t>> get_batch();
+    std::tuple<std::vector<float>,std::vector<uint8_t>> get_validation_set();
     bool get_training_pool_empty();
     void reset_training_pool();
     void print_progress_bar(uint32_t epoch, float error = 0.1);

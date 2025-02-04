@@ -29,7 +29,7 @@ auto load_batch_from_paths(std::vector<std::string> paths) {
 
 int  main() {
 
-    std::string exported_params = "./exported_models/export_params_nclass_12.csv";
+    std::string exported_params = "./exported_models/export_params_nclass_10.csv";
 
     std::vector<std::string> test_mfccs_path = {"../dataset_mfccs_raw/yes/d21fd169_nohash_0","../dataset_mfccs_raw/yes/d21fd169_nohash_0","../dataset_mfccs_raw/yes/d21fd169_nohash_1"};
     
@@ -42,7 +42,7 @@ int  main() {
     layer softmax(LayerTypes::softmax, model.back().get_output_size());
     layer crossentropy(LayerTypes::cross_entropy_loss, softmax.get_output_size());
 
-    dataloader dataloader(words, "d21fd169", BATCH_SIZE, 1.0); // Change '/' to the userID
+    dataloader dataloader(words, "c50f55b8", BATCH_SIZE, 0.9); // Change '/' to the userID
 
     float error = 0.0f;
     float momentum = 0.0;
@@ -77,7 +77,6 @@ int  main() {
             }
             temp_err /= crossentropy.layer_outputs.size();
 
-            error = (momentum)*error+(1-momentum)*temp_err;
             
 
             //float sum_of_elems = 0.0f;
@@ -88,6 +87,28 @@ int  main() {
             dataloader.print_progress_bar(i,error);
             
         } else {
+            momentum = 0.0;
+            auto myvalset = dataloader.get_validation_set();
+            
+            std::vector<float> labels_onehot;
+            // Convert int labels to vector of dim [batchsize classes]
+            for (auto label : std::get<1>(myvalset)) {
+                std::vector<float> temp;
+                temp = int_to_float_onehot(2 + label,12);
+
+                labels_onehot.insert(labels_onehot.end(), temp.begin(), temp.end());
+            }
+            model_forward(model, std::get<0>(myvalset));
+            softmax.forward(model.back().layer_outputs.data());
+            crossentropy.forward(softmax.layer_outputs.data(), labels_onehot.data());
+            float temp_err = 0.0f;
+            
+            for (auto output : crossentropy.layer_outputs) {
+                temp_err += output;
+            }
+            temp_err /= crossentropy.layer_outputs.size();
+            error = (momentum)*error+(1-momentum)*temp_err;
+
             dataloader.reset_training_pool();
             //std::cout << std::endl; // New line between epochs
             i++;

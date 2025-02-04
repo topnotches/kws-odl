@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <iomanip>
 
 #include <filesystem>
 #include <string>
@@ -97,6 +98,18 @@ std::tuple<std::vector<float>,std::vector<uint8_t>> dataloader::get_batch() {
     }
     return std::make_tuple(input_data, input_labels);
 }
+std::tuple<std::vector<float>,std::vector<uint8_t>> dataloader::get_validation_set() {
+    std::vector<float> input_data;
+    std::vector<uint8_t> input_labels;
+    for (auto val_data : this->dataloader_inputs_validation) {
+            input_data.insert(input_data.end(), val_data.begin(), val_data.end());
+
+    }
+    for (auto val_label : this->dataloader_labels_validation) {
+        input_labels.push_back(val_label);
+    }
+    return std::make_tuple(input_data, input_labels);
+}
 
 void dataloader::print_progress_bar(uint32_t epoch, float error) {
     float progress = (float)(dataloader_num_batches - (this->dataloader_pick_list.size() / this->dataloader_batch_size)) / dataloader_num_batches;
@@ -113,7 +126,7 @@ void dataloader::print_progress_bar(uint32_t epoch, float error) {
         else if (i == pos) std::cout << ">";
         else std::cout << " ";
     }
-    std::cout << "] " << int(progress * 100.0) << "%, Loss: " << error << "%\r";
+    std::cout << "] " << std::setw(3) << std::setfill(' ') << int(progress * 100) << "%, Loss: " << error << "\r";
     std::cout.flush();
 
     std::cout << std::endl;

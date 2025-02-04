@@ -5,7 +5,7 @@
 #include <iostream>
 
 void fusion_mult_sequential(const float* fusion_input, float* fusion_output, const float* fusion_embeddings, const uint8_t fusion_features, const uint8_t fusion_batch_size) {
-    
+    #pragma omp parallel for //collapse(2) schedule(dynamic)
     for (uint8_t index_batch = 0; index_batch < fusion_batch_size; index_batch++) {
         for (uint8_t index_feature = 0; index_feature < fusion_features; index_feature++) {
             fusion_output[index_batch * fusion_features + index_feature] = fusion_input[index_batch * fusion_features + index_feature] * fusion_embeddings[index_feature];
