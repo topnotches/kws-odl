@@ -10,6 +10,21 @@
 #include "defs.hpp"
 #include "layer.hpp"
 #include "model_utils.hpp"
+#include "layer_analyzer.hpp"
+
+extern layer_analyzer batchnorm_analyzer;
+extern layer_analyzer conv_analyzer;
+extern layer_analyzer crossloss_analyzer;
+extern layer_analyzer dense_fw_analyzer;
+extern layer_analyzer dense_bw_analyzer;
+extern layer_analyzer dw_analyzer;
+extern layer_analyzer fusion_fw_analyzer;
+extern layer_analyzer fusion_bw_analyzer;
+extern layer_analyzer relu_analyzer;
+extern layer_analyzer softmax_fw_analyzer;
+extern layer_analyzer softmax_bw_analyzer;
+
+
 float average(const float* vec, uint16_t size) {
     float sum = 0.0f;
     for (uint16_t i = 0; i < size; i++) {
@@ -41,8 +56,11 @@ int  main() {
 
     layer softmax(LayerTypes::softmax, model.back().get_output_size());
     layer crossentropy(LayerTypes::cross_entropy_loss, softmax.get_output_size());
-
+#if DO_LAYER_ANALYSIS
+    dataloader dataloader(words, "c50f55b8_nohash_19", BATCH_SIZE, 1); // Change '/' to the userID
+#else
     dataloader dataloader(words, "c50f55b8", BATCH_SIZE, 0.9); // Change '/' to the userID
+#endif
 
     float error = 0.0f;
     float momentum = 0.0;
@@ -84,8 +102,23 @@ int  main() {
             //sum_of_elems += *it;
             //std::cout << sum_of_elems << std::endl;
 
+#if DO_LAYER_ANALYSIS
+            batchnorm_analyzer.print_stats_colnames();
+            batchnorm_analyzer.print_stats_raw();
+            conv_analyzer.print_stats_raw();
+            crossloss_analyzer.print_stats_raw();
+            dense_fw_analyzer.print_stats_raw();
+            dense_bw_analyzer.print_stats_raw();
+            dw_analyzer.print_stats_raw();
+            fusion_fw_analyzer.print_stats_raw();
+            fusion_bw_analyzer.print_stats_raw();
+            relu_analyzer.print_stats_raw();
+            softmax_fw_analyzer.print_stats_raw();
+            softmax_bw_analyzer.print_stats_raw();
+#else
             dataloader.print_progress_bar(i,error);
-            
+#endif
+
         } else {
             momentum = 0.0;
             auto myvalset = dataloader.get_validation_set();

@@ -6,7 +6,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <iostream>
-#include "conv_layer.hpp"
+#include "layer_analyzer.hpp"
+extern layer_analyzer conv_analyzer;
 
 void conv_layer_sequential(float *conv_input_features, float *conv_output_features, float *conv_kernel_weights, float *conv_kernel_biases,
                             const uint16_t conv_input_width, const uint16_t conv_input_height, const uint16_t conv_input_depth,
@@ -25,7 +26,11 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
     const int32_t conv_batch_output_feature_points_per_batch = conv_width_limit * conv_height_limit * output_feats;
 
     for (int32_t index_batch = 0; index_batch < conv_batch_size; index_batch++) {
+        
+#if DO_LAYER_ANALYSIS
+#else
         #pragma omp parallel for //collapse(3) schedule(dynamic)
+#endif
         for (int32_t index_kernel = 0; index_kernel < output_feats; index_kernel++) {
             for (int32_t index_row = 0; index_row < conv_height_limit; index_row++) {
                 for (int32_t index_column = 0; index_column < conv_width_limit; index_column++) {
@@ -53,15 +58,19 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
                                 
                                 if (conv_input_row >= 0 && conv_input_row < conv_input_height &&
                                     conv_input_col >= 0 && conv_input_col < conv_input_width) {       // padding
-                              
 
                                     conv_sum += conv_kernel_weights[conv_kernel_select_offset + conv_kernel_full_offset]*conv_input_features[conv_input_full_offset];
-                        
+                                    conv_analyzer.incr_loads();
+                                    conv_analyzer.incr_loads();
+                                    conv_analyzer.incr_additions();
+                                    conv_analyzer.incr_multiplications();
                                 }
                             }
                         }
                     }
                     conv_output_features[conv_batch_output_offset + conv_output_feature_select_offset + index_row * conv_width_limit + index_column] = conv_sum + conv_kernel_biases[index_kernel];
+                    conv_analyzer.incr_stores();
+                    conv_analyzer.incr_additions();
                 }
             }
         }

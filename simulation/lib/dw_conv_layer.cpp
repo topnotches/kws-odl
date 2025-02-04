@@ -1,12 +1,13 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "dw_conv_layer.hpp"
+#include "layer_analyzer.hpp"
+extern layer_analyzer dw_analyzer;
 
 void dw_conv_layer_sequential(float *dw_input_features, float *dw_output_features, float *dw_kernel_weights, float *dw_kernel_biases,
                             const uint16_t dw_input_width, const uint16_t dw_input_height, const uint16_t dw_input_depth,
                             const uint8_t dw_stride, const uint8_t dw_kernel_width, const uint8_t dw_kernel_height, const uint8_t dw_batch_size,
                             const uint8_t dw_pad_top, const uint8_t dw_pad_bottom, const uint8_t dw_pad_left, const uint8_t dw_pad_right) {
-
     uint32_t dw_batch_input_offset = 0;
     uint32_t dw_batch_output_offset = 0;
     
@@ -19,7 +20,11 @@ void dw_conv_layer_sequential(float *dw_input_features, float *dw_output_feature
     const uint32_t dw_batch_output_feature_points_per_batch = dw_width_limit * dw_height_limit * dw_input_depth;
 
     for (int32_t index_batch = 0; index_batch < dw_batch_size; index_batch++) { // batch
+    
+#if DO_LAYER_ANALYSIS
+#else
         #pragma omp parallel for //collapse(3)  // till i collapse
+#endif
         for (int32_t index_layer = 0; index_layer < dw_input_depth; index_layer++) { // layer
             for (int32_t index_row = 0; index_row < dw_height_limit; index_row++) { // out
                 for (int32_t index_column = 0; index_column < dw_width_limit ; index_column++) {
@@ -44,10 +49,16 @@ void dw_conv_layer_sequential(float *dw_input_features, float *dw_output_feature
                                 dw_input_col >= 0 && dw_input_col < dw_input_width) {       // padding
 
                                 dw_sum += dw_input_features[dw_input_full_offset] * dw_kernel_weights[dw_kernel_full_offset];
+                                dw_analyzer.incr_loads();
+                                dw_analyzer.incr_loads();
+                                dw_analyzer.incr_additions();
+                                dw_analyzer.incr_multiplications();
                             }
                         }
                     }
                     dw_output_features[dw_batch_output_offset + dw_output_feature_select_offset + index_row * dw_width_limit + index_column] = dw_sum + dw_kernel_biases[index_layer];
+                    dw_analyzer.incr_additions();
+                    dw_analyzer.incr_stores();
                 }
 
             }

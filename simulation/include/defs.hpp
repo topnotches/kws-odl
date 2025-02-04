@@ -1,10 +1,17 @@
 #ifndef DEFS_H
 #define DEFS_H
 #include <stdio.h>
+#include "layer_analyzer.hpp"
+
+#define DO_LAYER_ANALYSIS false
+#define DO_FULL_BATCHNORM_LAYER_ANALYSIS false
+
+
+
 
 #define NUMBER_OF_CLASSES   12
-#define EPOCHS              10000
-#define BATCH_SIZE          12
+#define EPOCHS              1
+#define BATCH_SIZE          18
 #define LAYER_SELECT        28
 
 

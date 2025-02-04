@@ -1,14 +1,20 @@
 #include <stdint.h>
 #include <stdio.h>
-#include <string.h> // For memset
+#include <string.h>
 #include "dense_layer.hpp"
+#include "layer_analyzer.hpp"
+extern layer_analyzer dense_fw_analyzer;
+extern layer_analyzer dense_bw_analyzer;
 
 
 void dense_layer(float *dense_input, float *dense_output, float *dense_weights, float *dense_biases,
               const uint16_t input_size, const uint16_t dense_output_size, const uint16_t dense_batch_size) {
     memset(dense_output, 0, dense_batch_size * dense_output_size * sizeof(float));
 
+#if DO_LAYER_ANALYSIS
+#else
     #pragma omp parallel for //collapse(2)
+#endif
     for (uint16_t index_batch = 0; index_batch < dense_batch_size; index_batch++) {
         for (uint16_t index_output = 0; index_output < dense_output_size; index_output++) {
             uint16_t batch_offset_input = index_batch * input_size;
@@ -17,6 +23,10 @@ void dense_layer(float *dense_input, float *dense_output, float *dense_weights, 
                 dense_output[batch_offset_output + index_output] += 
                     dense_input[batch_offset_input + index_input] * 
                     dense_weights[index_output * input_size + index_input];
+                    dense_fw_analyzer.incr_loads();
+                    dense_fw_analyzer.incr_loads();
+                    dense_fw_analyzer.incr_additions();
+                    dense_fw_analyzer.incr_multiplications();
             }
             dense_output[batch_offset_output + index_output] += dense_biases[index_output];
         }
@@ -32,7 +42,10 @@ void dense_layer_backward_sequential(float* dense_grad_input,
     // Initialize gradient input
     memset(dense_grad_input, 0, dense_batch_size * dense_input_size * sizeof(float));
 
+#if DO_LAYER_ANALYSIS
+#else
     #pragma omp parallel for //collapse(2)
+#endif
     for (uint16_t index_batch = 0; index_batch < dense_batch_size; index_batch++) {
         for (uint16_t index_output = 0; index_output < dense_output_size; index_output++) {
             // Compute gradient w.r.t. inputs
@@ -40,6 +53,10 @@ void dense_layer_backward_sequential(float* dense_grad_input,
                 dense_grad_input[index_batch * dense_input_size + index_input] += 
                     dense_grad_output[index_batch * dense_output_size + index_output] * 
                     dense_weights[index_output * dense_input_size + index_input];
+                    dense_bw_analyzer.incr_loads();
+                    dense_bw_analyzer.incr_loads();
+                    dense_bw_analyzer.incr_additions();
+                    dense_bw_analyzer.incr_multiplications();
 
             }
         }

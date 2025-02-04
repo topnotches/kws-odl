@@ -17,7 +17,11 @@ void avgpool2d_layer_sequential(float *avgpool2d_inputs, float *avgpool2d_output
     const uint32_t avgpool2d_batch_output_feature_points_per_batch = avgpool2d_width_limit * avgpool2d_height_limit * avgpool2d_input_depth;
 
     for (uint32_t index_batch = 0; index_batch < avgpool2d_batch_size; index_batch++) { // batch
+
+#if DO_LAYER_ANALYSIS
+#else
         #pragma omp parallel for //collapse(3)
+#endif
         for (uint32_t index_layer = 0; index_layer < avgpool2d_input_depth; index_layer++) { // layer
             for (uint32_t index_row = 0; index_row < avgpool2d_width_limit; index_row++) { // out
                 for (uint32_t index_column = 0; index_column < avgpool2d_height_limit; index_column++) {
