@@ -98,12 +98,11 @@ std::tuple<std::vector<float>,std::vector<uint8_t>> dataloader::get_batch() {
     }
     return std::make_tuple(input_data, input_labels);
 }
-std::tuple<std::vector<float>,std::vector<uint8_t>> dataloader::get_validation_set() {
-    std::vector<float> input_data;
+std::tuple<std::vector<std::vector<float>>,std::vector<uint8_t>> dataloader::get_validation_set() {
+    std::vector<std::vector<float>> input_data;
     std::vector<uint8_t> input_labels;
     for (auto val_data : this->dataloader_inputs_validation) {
-            input_data.insert(input_data.end(), val_data.begin(), val_data.end());
-
+            input_data.push_back(val_data);
     }
     for (auto val_label : this->dataloader_labels_validation) {
         input_labels.push_back(val_label);
@@ -132,6 +131,9 @@ void dataloader::print_progress_bar(uint32_t epoch, float error) {
     std::cout << std::endl;
 }
 
+uint16_t dataloader::get_validation_size() {
+    return this->dataloader_validation_size;
+}
 bool dataloader::get_training_pool_empty() {
     if (this->dataloader_batch_size <= this->dataloader_pick_list.size()) {
         return 1;

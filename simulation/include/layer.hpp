@@ -21,11 +21,11 @@ private:
     float layer_adam_beta2 = 0.99;
     std::vector<float> layer_adam_momentum;
     std::vector<float> layer_adam_velocity;
-    float layer_adam_epsilon = 1e-10;
+    float layer_adam_epsilon = 1e-8;
     uint32_t layer_adam_time_step = 1;
 public:
+std::vector<float> layer_gradient_outputs;
     std::vector<float> layer_outputs;
-    std::vector<float> layer_gradient_outputs;
     tensor_dim_sizes_t get_input_size();
     tensor_dim_sizes_t get_output_size();
     std::vector<float> get_weights();

@@ -151,8 +151,8 @@ void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
         for (uint16_t index_channel = 0; index_channel < bn_num_channels; index_channel++) {
             for (uint16_t index_feature = 0; index_feature < bn_num_features; index_feature++) {
                 uint32_t io_index = index_batch * bn_num_channels * bn_num_features + index_channel * bn_num_features + index_feature;
-                float normalized_value = (bn_input_features[io_index] - bn_means[index_channel]) /
-                                         sqrt(bn_variances[index_channel] + epsilon);
+                float normalized_value = (bn_input_features[io_index] - running_mean[index_channel]) /
+                                         sqrt(running_variance[index_channel] + epsilon);
                                          
                 batchnorm_analyzer.incr_loads();
                 batchnorm_analyzer.incr_loads();
@@ -163,6 +163,8 @@ void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
                 
                 // Apply affine transformation
                 bn_output_features[io_index] = bn_gamma[index_channel] * normalized_value + bn_beta[index_channel];
+
+                
                 batchnorm_analyzer.incr_loads();
                 batchnorm_analyzer.incr_loads();
                 batchnorm_analyzer.incr_stores();

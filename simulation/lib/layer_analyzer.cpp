@@ -27,6 +27,8 @@ layer_analyzer::~layer_analyzer() {
 }
 
 void layer_analyzer::print_stats() {
+#if DO_LAYER_ANALYSIS
+
     calc_intensity();
     std::cout << "Layer: " << std::setw(10)<< this->anal_layer_name
               << "      Loads/Stores: " << std::setw(10) << this->anal_loads + this->anal_stores
@@ -35,10 +37,12 @@ void layer_analyzer::print_stats() {
               << "      Divs: " << std::setw(10) << this->anal_divisions
               << "      Arith sum: " << std::setw(10) << this->anal_additions + this->anal_multiplications + this->anal_divisions
               << "      Intensity: " << std::setw(10) << this->anal_intensity << std::endl;
+#endif
 }
 
 
 void layer_analyzer::print_stats_colnames() {
+#if DO_LAYER_ANALYSIS
     std::cout << std::setw(15) << "Layer" << std::setw(15)
                 << "Loads/Stores" << std::setw(15) 
                 << "Adds" << std::setw(15) 
@@ -46,10 +50,13 @@ void layer_analyzer::print_stats_colnames() {
                 << "Divs" << std::setw(15) 
                 << "Arith sum" << std::setw(15) 
                 << "Intensity" << std::endl;
+#endif
 }
 
 
 void layer_analyzer::print_stats_raw() {
+#if DO_LAYER_ANALYSIS
+
     calc_intensity();
 
     std::cout << std::setw(15) << this->anal_layer_name << std::setw(15)
@@ -59,6 +66,7 @@ void layer_analyzer::print_stats_raw() {
              << this->anal_divisions << std::setw(15)
              << this->anal_additions + this->anal_multiplications + this->anal_divisions << std::setw(15)
              << this->anal_intensity << std::endl;
+#endif
 }
 
 

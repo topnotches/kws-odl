@@ -3,6 +3,7 @@
 #include "defs.hpp"
 #include <iostream>
 #include <math.h>
+#include <random>
 #include "misc_utils.hpp"
 
 #include "batch_norm_layer.hpp"
@@ -191,6 +192,7 @@ layer::layer(LayerTypes         layer_type,
             
             this->layer_outputs.resize(this->layer_dim_size_out.full);
             this->layer_gradient_outputs.resize(this->layer_dim_size_in.full);
+            std::cout << this->layer_dim_size_in.full<< std::endl;
 
             break;
         }
@@ -214,11 +216,11 @@ layer::layer(LayerTypes         layer_type,
             this->layer_type = LayerTypes::fusion;
             
             this->layer_dim_size_out = this->layer_dim_size_in; 
-
+            srand((unsigned)time(NULL));
             this->layer_outputs.resize(this->layer_dim_size_out.full);
             this->layer_dim_size_out.width = this->layer_dim_size_out.full / this->layer_dim_size_out.batch;
             this->layer_weights.resize(this->layer_dim_size_out.width); 
-            std::fill(this->layer_weights.begin(), this->layer_weights.end(), 0.5f); 
+            std::fill(this->layer_weights.begin(), this->layer_weights.end(), ((double)rand()/(double)RAND_MAX)    ); 
 
             this->layer_adam_momentum.resize(this->layer_weights.size());
             std::fill(this->layer_adam_momentum.begin(), this->layer_adam_momentum.end(), 0.0f); 
@@ -427,7 +429,7 @@ void layer::adam_optimize(const float* layer_adam_gradients_backprop, const uint
         float sum = 0.0f;
         for (uint32_t batch_index = 0; batch_index < this->layer_dim_size_in.batch; batch_index++) {
             sum += layer_adam_gradients_backprop[feature_index * this->layer_dim_size_in.batch + batch_index];
-        }
+            }
         avg_gradients[feature_index] = sum / this->layer_dim_size_in.batch;
     }
 
