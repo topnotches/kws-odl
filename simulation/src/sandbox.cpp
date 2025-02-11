@@ -76,6 +76,7 @@ int  main() {
         int epoch_err_lowest = 0.0f;
         
         std::vector<float> all_validation_error;
+        std::vector<float> all_validation_accuracies;
         
         while (i < EPOCHS) {
             
@@ -128,7 +129,7 @@ int  main() {
                 softmax_fw_analyzer.print_stats_raw();
                 softmax_bw_analyzer.print_stats_raw();
 #else
-                dataloader.print_progress_bar(i+1,error);
+                //dataloader.print_progress_bar(i+1,error);
 
 #endif
 
@@ -136,7 +137,8 @@ int  main() {
                 momentum = 0.0;
                 auto myvalset = dataloader.get_validation_set();
                 float temp_err = 0.0f;
-
+                float total = 0;
+                float correct = 0;
                 //std::cout <<bobberlobber << std::endl;
                 //std::cout <<bobberlobber << std::endl;
                 // Convert int labels to vector of dim [batchsize classes]
@@ -163,9 +165,28 @@ int  main() {
                     
                     for (auto output : crossentropy.layer_outputs) {
                         temp_err += output;
-                        
+                    }
+                    
+                    // Calculate predictions (softmax output)
+                    for (uint i = 0; i < BATCH_SIZE; i++) {
+                        float max_output = -1.0f;
+                        int predicted_label = -1;
+                        // Find the predicted class (argmax of softmax outputs)
+                        for (int j = 0; j < 12; j++) {
+                            if (softmax.layer_outputs[i * 12 + j] > max_output) {
+                                max_output = softmax.layer_outputs[i * 12 + j];
+                                predicted_label = j;
+                            }
+                        }
+
+                        // Check if prediction matches label
+                        if (predicted_label == vlabel) {
+                            correct = correct + 1.0f;
+                        }
+                        total = total + 1.0f;
                     }
                 }
+                
                 /*
                 for (auto label : std::get<1>(myvalset)) {
                     std::vector<float> temp;
@@ -195,6 +216,7 @@ int  main() {
                     err_initial       = error;
                 }
                 all_validation_error.push_back(error);
+                all_validation_accuracies.push_back(correct/total);
                 dataloader.reset_training_pool();
                 //std::cout << std::endl; // New line between epochs
                 i++;
@@ -218,11 +240,11 @@ int  main() {
         }
 
         // Write CSV header
-        file << "Epoch,Validation Loss" << std::endl;
+        file << "Epoch,Val_Loss,Val_Acc" << std::endl;
 
         // Write error messages and codes
         for (size_t i = 0; i < all_validation_error.size(); ++i) {
-            file << i << "," << all_validation_error[i] << std::endl;
+            file << i << "," << all_validation_error[i] "," << all_validation_accuracies[i] << std::endl;
         }
 
         // Close file

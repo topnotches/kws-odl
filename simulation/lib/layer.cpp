@@ -220,7 +220,7 @@ layer::layer(LayerTypes         layer_type,
             this->layer_outputs.resize(this->layer_dim_size_out.full);
             this->layer_dim_size_out.width = this->layer_dim_size_out.full / this->layer_dim_size_out.batch;
             this->layer_weights.resize(this->layer_dim_size_out.width); 
-            std::fill(this->layer_weights.begin(), this->layer_weights.end(), ((double)rand()/(double)RAND_MAX)    ); 
+            std::fill(this->layer_weights.begin(), this->layer_weights.end(), 1.0f); 
 
             this->layer_adam_momentum.resize(this->layer_weights.size());
             std::fill(this->layer_adam_momentum.begin(), this->layer_adam_momentum.end(), 0.0f); 
