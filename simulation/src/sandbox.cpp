@@ -180,7 +180,7 @@ int  main() {
                         }
 
                         // Check if prediction matches label
-                        if (predicted_label == vlabel) {
+                        if (predicted_label == 2 + vlabel) {
                             correct = correct + 1.0f;
                         }
                         total = total + 1.0f;
