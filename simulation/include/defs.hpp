@@ -10,7 +10,7 @@
 
 
 #define NUMBER_OF_CLASSES   12
-#define EPOCHS              1000
+#define EPOCHS              50
 #define TOTAL_RUNS          1000
 #define BATCH_SIZE          1
 #define LAYER_SELECT        28

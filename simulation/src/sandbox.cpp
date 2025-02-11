@@ -48,7 +48,7 @@ int  main() {
     while (run < TOTAL_RUNS) {
         auto validation_errors_file_name = "./val_loss_logs/run_"+ std::to_string(run) +".csv";
         run++;
-        std::string exported_params = "./exported_models/export_params_nclass_10.csv";
+        std::string exported_params = "./exported_models/model_baseline_hyperrparams_12_class.csv";
 
         std::vector<std::string> test_mfccs_path = {"../dataset_mfccs_raw/yes/d21fd169_nohash_0","../dataset_mfccs_raw/yes/d21fd169_nohash_0","../dataset_mfccs_raw/yes/d21fd169_nohash_1"};
         
@@ -63,7 +63,7 @@ int  main() {
 #if DO_LAYER_ANALYSIS
         dataloader dataloader(words, "c50f55b8_nohash_19", BATCH_SIZE, 1); // Change '/' to the userID
 #else
-        dataloader dataloader(words, "c50f55b8", BATCH_SIZE, 0.9); // Change '/' to the userID
+        dataloader dataloader(words, "c50f55b8", BATCH_SIZE, 0.7); // Change '/' to the userID
 #endif
         float error = 0.0f;
         float momentum = 0.0;
@@ -244,7 +244,7 @@ int  main() {
 
         // Write error messages and codes
         for (size_t i = 0; i < all_validation_error.size(); ++i) {
-            file << i << "," << all_validation_error[i] "," << all_validation_accuracies[i] << std::endl;
+            file << i << "," << all_validation_error[i] << "," << all_validation_accuracies[i] << std::endl;
         }
 
         // Close file
