@@ -263,9 +263,9 @@ int  main() {
             // Open CSV file
             std::ofstream file(validation_errors_file_name);
             
-
+            
             // Write CSV header
-            file << "Epoch,Val_Loss,Val_Acc" << std::endl;
+            file << "Epoch,Val_Loss,Val_Acc_Max,Val_Acc_Thr_60,Val_Acc_Thr_65,Val_Acc_Thr_70,Val_Acc_Thr_75,Val_Acc_Thr_80,Val_Acc_Thr_85,Val_Acc_Thr_90,Val_Acc_Thr_95" << std::endl;
 
             // Write error messages and codes
             for (size_t i = 0; i < all_validation_error.size(); ++i) {

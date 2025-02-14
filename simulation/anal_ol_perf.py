@@ -4,7 +4,7 @@ import glob
 import numpy as np
 
 # Get a list of all CSV files in the directory
-csv_files = glob.glob("./val_loss_logs/*.csv")
+csv_files = glob.glob("./user_perf_logs_temp_res/*.csv")
 
 # Check if any files were found
 if not csv_files:
@@ -22,18 +22,18 @@ for file in csv_files:
     df = pd.read_csv(file)
     
     # Store data for averaging
-    all_data[file] = df[["Epoch", "Val_Acc"]]
+    all_data[file] = df[["Epoch", "Val_Acc_Max"]]
     
     # Plot individual runs
-    plt.plot(df["Epoch"], df["Val_Acc"], alpha=0.5)  # Use filename as label
+    plt.plot(df["Epoch"], df["Val_Acc_Max"], alpha=0.5)  # Use filename as label
 
 # Set labels and title for individual runs
 plt.xlabel("Epoch")
-plt.ylabel("Val_Acc")
+plt.ylabel("Val_Acc_Max")
 plt.title("Validation Accuracy vs. Epoch (All Runs)")
 
 # Set y-axis limits dynamically
-all_vals = pd.concat([df["Val_Acc"] for df in all_data.values()])
+all_vals = pd.concat([df["Val_Acc_Max"] for df in all_data.values()])
 plt.ylim(all_vals.min() - 0.01, all_vals.max() + 0.01)
 
 # Rotate x-tick labels for better visibility
@@ -65,15 +65,15 @@ average_df = merged_df.groupby("Epoch").mean().reset_index()
 plt.figure(figsize=(10, 6))
 
 # Plot the average validation accuracy
-plt.plot(average_df["Epoch"], average_df["Val_Acc"], color="red", linewidth=2, label="Average Val_Acc")
+plt.plot(average_df["Epoch"], average_df["Val_Acc_Max"], color="red", linewidth=2, label="Average Val_Acc")
 
 # Set labels and title for average plot
 plt.xlabel("Epoch")
-plt.ylabel("Val_Acc")
+plt.ylabel("Val_Acc_Max")
 plt.title("Average Validation Accuracy vs. Epoch")
 
 # Set y-axis limits dynamically
-plt.ylim(average_df["Val_Acc"].min() - 0.01, average_df["Val_Acc"].max() + 0.01)
+plt.ylim(average_df["Val_Acc_Max"].min() - 0.01, average_df["Val_Acc_Max"].max() + 0.01)
 
 # Rotate x-tick labels for better visibility
 plt.xticks(rotation=45, ha='right')
