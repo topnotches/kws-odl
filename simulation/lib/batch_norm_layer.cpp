@@ -27,7 +27,7 @@ void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
     
 #if DO_LAYER_ANALYSIS
 #else
-    #pragma omp parallel for
+    //#pragma omp parallel for
 #endif
     for (uint16_t index_batch = 0; index_batch < bn_num_batches; index_batch++) {
         for (uint16_t index_channel = 0; index_channel < bn_num_channels; index_channel++) {
@@ -45,7 +45,7 @@ void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
             
 #if DO_LAYER_ANALYSIS
 #else
-            #pragma omp atomic
+            //#pragma omp atomic
 #endif
             bn_means[index_channel] += batch_sum;
 #if DO_FULL_BATCHNORM_LAYER_ANALYSIS
@@ -73,7 +73,7 @@ void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
     
 #if DO_LAYER_ANALYSIS
 #else
-    #pragma omp parallel for
+    //#pragma omp parallel for
 #endif
     for (uint16_t index_batch = 0; index_batch < bn_num_batches; index_batch++) {
         for (uint16_t index_channel = 0; index_channel < bn_num_channels; index_channel++) {
@@ -91,7 +91,7 @@ void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
             
 #if DO_LAYER_ANALYSIS
 #else
-            #pragma omp atomic
+            //#pragma omp atomic
 #endif
             bn_variances[index_channel] += batch_variance;
 #if DO_FULL_BATCHNORM_LAYER_ANALYSIS
@@ -117,7 +117,7 @@ void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
     
 #if DO_LAYER_ANALYSIS
 #else
-    #pragma omp parallel for
+    //#pragma omp parallel for
 #endif
     for (uint16_t index_channel = 0; index_channel < bn_num_channels; index_channel++) {
         running_mean[index_channel] = momentum * bn_means[index_channel] + (1.0f - momentum) * running_mean[index_channel];
@@ -145,7 +145,7 @@ void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
     
 #if DO_LAYER_ANALYSIS
 #else
-    #pragma omp parallel for
+    //#pragma omp parallel for
 #endif
     for (uint16_t index_batch = 0; index_batch < bn_num_batches; index_batch++) {
         for (uint16_t index_channel = 0; index_channel < bn_num_channels; index_channel++) {

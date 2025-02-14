@@ -23,7 +23,7 @@ void dw_conv_layer_sequential(float *dw_input_features, float *dw_output_feature
     
 #if DO_LAYER_ANALYSIS
 #else
-        #pragma omp parallel for //collapse(3)  // till i collapse
+        //#pragma omp parallel for //collapse(3)  // till i collapse
 #endif
         for (int32_t index_layer = 0; index_layer < dw_input_depth; index_layer++) { // layer
             for (int32_t index_row = 0; index_row < dw_height_limit; index_row++) { // out

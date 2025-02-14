@@ -10,8 +10,9 @@
 
 
 #define NUMBER_OF_CLASSES   12
-#define EPOCHS              50
-#define TOTAL_RUNS          1000
+#define EPOCHS              3000
+#define TOTAL_RUNS          5
+#define TRAIN_VAL_SPLIT     0.3
 #define BATCH_SIZE          1
 #define LAYER_SELECT        28
 

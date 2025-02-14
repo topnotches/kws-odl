@@ -9,7 +9,7 @@ void relu_layer(float *relu_input_features, float *relu_output_features, const i
     
 #if DO_LAYER_ANALYSIS
 #else
-    #pragma omp parallel for //collapse(3)
+    //#pragma omp parallel for //collapse(3)
 #endif
     for (uint16_t index_depth = 0; index_depth < relu_depth; index_depth++) {
         for (uint16_t index_height = 0; index_height < relu_height; index_height++) {

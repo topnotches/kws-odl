@@ -20,7 +20,7 @@ void avgpool2d_layer_sequential(float *avgpool2d_inputs, float *avgpool2d_output
 
 #if DO_LAYER_ANALYSIS
 #else
-        #pragma omp parallel for //collapse(3)
+        //#pragma omp parallel for //collapse(3)
 #endif
         for (uint32_t index_layer = 0; index_layer < avgpool2d_input_depth; index_layer++) { // layer
             for (uint32_t index_row = 0; index_row < avgpool2d_width_limit; index_row++) { // out

@@ -11,7 +11,7 @@ void fusion_mult_sequential(const float* fusion_input, float* fusion_output, con
     
 #if DO_LAYER_ANALYSIS
 #else
-    #pragma omp parallel for //collapse(2) schedule(dynamic)
+    //#pragma omp parallel for //collapse(2) schedule(dynamic)
 #endif
     for (uint8_t index_batch = 0; index_batch < fusion_batch_size; index_batch++) {
         for (uint8_t index_feature = 0; index_feature < fusion_features; index_feature++) {
@@ -33,7 +33,7 @@ void fusion_mult_backward_sequential(float* fusion_grad_input,
 
 #if DO_LAYER_ANALYSIS
 #else
-    #pragma omp parallel for //collapse(2) schedule(dynamic)
+    //#pragma omp parallel for //collapse(2) schedule(dynamic)
 #endif
     for (uint8_t index_batch = 0; index_batch < fusion_batch_size; index_batch++) {
         for (uint8_t index_feature = 0; index_feature < fusion_features; index_feature++) {

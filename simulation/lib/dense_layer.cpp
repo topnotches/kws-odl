@@ -14,7 +14,7 @@ void dense_layer(float *dense_input, float *dense_output, float *dense_weights, 
     for (uint16_t index_batch = 0; index_batch < dense_batch_size; index_batch++) {
 #if DO_LAYER_ANALYSIS
 #else
-            #pragma omp parallel for //collapse(2)
+            //#pragma omp parallel for //collapse(2)
 #endif
         for (uint16_t index_output = 0; index_output < dense_output_size; index_output++) {
             uint16_t batch_offset_input = index_batch * input_size;
@@ -45,7 +45,7 @@ void dense_layer_backward_sequential(float* dense_grad_input,
     for (uint16_t index_batch = 0; index_batch < dense_batch_size; index_batch++) {
 #if DO_LAYER_ANALYSIS
 #else
-    #pragma omp parallel for //collapse(2)
+    //#pragma omp parallel for //collapse(2)
 #endif
         for (uint16_t index_output = 0; index_output < dense_output_size; index_output++) {
             // Compute gradient w.r.t. inputs

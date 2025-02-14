@@ -10,7 +10,7 @@ void cross_entropy_loss_sequential(const float* crossloss_true_labels, const flo
     
 #if DO_LAYER_ANALYSIS
 #else
-    #pragma omp parallel for
+    //#pragma omp parallel for
 #endif
     for (uint8_t index_batch = 0; index_batch < crossloss_batch_size; index_batch++) {
         float temp_loss = 0;

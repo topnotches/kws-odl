@@ -29,7 +29,7 @@ void conv_layer_sequential(float *conv_input_features, float *conv_output_featur
         
 #if DO_LAYER_ANALYSIS
 #else
-        #pragma omp parallel for //collapse(3) schedule(dynamic)
+        //#pragma omp parallel for //collapse(3) schedule(dynamic)
 #endif
         for (int32_t index_kernel = 0; index_kernel < output_feats; index_kernel++) {
             for (int32_t index_row = 0; index_row < conv_height_limit; index_row++) {
