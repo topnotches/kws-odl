@@ -16,7 +16,7 @@
 #
 # Adapted by: Cristian Cioflan, ETH (cioflanc@iis.ee.ethz.ch)
 
-
+import csv
 import hashlib
 import math
 import os.path
@@ -86,15 +86,18 @@ class AudioProcessor(object):
       self.generate_background_noise()
       self.generate_data_dictionary(training_parameters)
       self.data_processing_parameters = data_processing_parameters
-          
-  def remove_speakers_with_few_entries(self, min_entries=6):
+  
+  def remove_speakers_with_more_entries(self, min_entries=6, output_csv='removed_speakers.csv'):
     """
     Removes all entries for speakers who have less than the specified minimum number of entries per class (label).
+    The removed speaker IDs are saved to a CSV file.
 
     Args:
-        min_entries (int): The minimum number of entries a speaker must have per class to remain in the dataset. Default is 6.
+        min_entries (int): The minimum number of entries a speaker must have per class to remain in the dataset.
+        output_csv (str): The file name for saving removed speaker IDs.
     """
     mywords = 'yes,no,up,down,left,right,on,off,stop,go,'
+    
     # Step 1: Count the number of entries per speaker per class
     speaker_label_counts = {}
     for set_index, data_list in self.data_set.items():
@@ -107,27 +110,24 @@ class AudioProcessor(object):
                 speaker_label_counts[speaker][label] = speaker_label_counts[speaker].get(label, 0) + 1
             else:
                 raise ValueError(f"Invalid entry format in dataset at index {set_index}: {entry}")
-
+    
     # Step 2: Identify valid speakers for each class
     valid_speakers_per_label = {}
     for speaker, labels in speaker_label_counts.items():
         for label, count in labels.items():
-          if mywords.__contains__(label):
-            if count < min_entries:
-              
-              if label not in valid_speakers_per_label:
-                  valid_speakers_per_label[label] = set()
-              valid_speakers_per_label[label].add(speaker)
-
+            if mywords.__contains__(label):
+                if count < min_entries:
+                    if label not in valid_speakers_per_label:
+                        valid_speakers_per_label[label] = set()
+                    valid_speakers_per_label[label].add(speaker)
+    
     # Step 3: Filter the dataset
     for set_index in self.data_set.keys():
         self.data_set[set_index] = [
             entry for entry in self.data_set[set_index]
             if isinstance(entry, dict) and entry.get('label') in valid_speakers_per_label and entry.get('speaker') in valid_speakers_per_label[entry.get('label')]
         ]
-
-
-
+    
   def generate_data_dictionary(self, training_parameters):
     # For each data set, generate a dictionary containing the path to each file, its label, and its speaker.
     # Make sure the shuffling and picking of unknowns is deterministic.
@@ -152,8 +152,8 @@ class AudioProcessor(object):
       # Ignore background noise, as it has been handled by generate_background_noise()
       if word == BACKGROUND_NOISE_LABEL:
         continue
-      #if wav_path.__contains__("4c6167ca"):#or wav_path.__contains__("c50f55b8"):
-      #  continue
+      if wav_path.__contains__("4c6167ca") or wav_path.__contains__("c50f55b8"):
+        continue
       
       all_words[word] = True
       # Determine the set to which the word should belong
@@ -217,10 +217,17 @@ class AudioProcessor(object):
       else:
         self.word_to_index[word] = UNKNOWN_WORD_INDEX
     self.word_to_index[SILENCE_LABEL] = SILENCE_INDEX
-    print("NUMBER OF SPEAKERS BEFORE FILTERING: ", len(set([entry['speaker'] for subset_name, subset in self.data_set.items() if subset_name != 'testing' for entry in subset])))
-    self.remove_speakers_with_few_entries(6)
-    print("NUMBER OF SPEAKERS AFTER FILTERING:  ", len(set([entry['speaker'] for subset_name, subset in self.data_set.items() if subset_name != 'testing' for entry in subset])))
-    
+    before_speakers = set(entry['speaker'] for subset_name, subset in self.data_set.items() if subset_name != 'foker' for entry in subset)
+    print("NUMBER OF SPEAKERS BEFORE FILTERING:", len(before_speakers))
+
+    self.remove_speakers_with_more_entries(3)
+
+    after_speakers = set(entry['speaker'] for subset_name, subset in self.data_set.items() if subset_name != 'foker' for entry in subset)
+    print("NUMBER OF SPEAKERS AFTER FILTERING:", len(after_speakers))
+
+    removed_speakers = before_speakers - after_speakers
+    print("REMOVED SPEAKERS:", removed_speakers if removed_speakers else "None")
+
     
 
 

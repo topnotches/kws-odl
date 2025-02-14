@@ -1,10 +1,12 @@
+STEP_DO_QAT_TRAIN       = False
 STEP_DO_TRAIN           = True
 STEP_DO_EXPORT_MODEL    = True
 STEP_DO_PROCESS_MFCCS   = True
-CHECKPOINT_PATH         = './model_acc_81.25.pth'
+CHECKPOINT_PATH         = 'model_acc_92.1875.pth'
 CLASSES                 = 10
 EXPORT_OUTPUT_DIR_PATH  = '../simulation/exported_models/'
 EXPORT_OUTPUT_NAME      = 'export_params_nclass_' + str(CLASSES) + '.csv'
+EXPORT_OUTPUT_NAME_QAT      = 'qat_export_params_nclass_' + str(CLASSES) + '.csv'
 EXPORT_OUTPUT_PATH      = EXPORT_OUTPUT_DIR_PATH + EXPORT_OUTPUT_NAME
 MFCCS_INPUT_PATHS        = ['../dataset_mfccs_raw/yes/d21fd169_nohash_0',
                             '../dataset_mfccs_raw/yes/d21fd169_nohash_1']  # Path(s) to MFCCs binary file
@@ -17,7 +19,7 @@ import os
 import time
 import csv
 from torchsummary import summary
-from model import DSCNN
+from model import DSCNN, DSCNN_fusable
 from utils import remove_txt, parameter_generation
 from train import Train
 import numpy as np
@@ -26,11 +28,43 @@ import numpy as np
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(torch.__version__)
 print(device)
-
-# Model generation
 model = DSCNN(use_bias=True)
 model.to(device)
+if (STEP_DO_QAT_TRAIN):
+    # Model generation
+    model_unprep = DSCNN_fusable(use_bias=True)
 
+    model_unprep.eval()
+    # attach a global qconfig, which contains information about what kind
+    # of observers to attach. Use 'x86' for server inference and 'qnnpack'
+    # for mobile inference. Other quantization configurations such as selecting
+    # symmetric or asymmetric quantization and MinMax or L2Norm calibration techniques
+    # can be specified here.
+    # Note: the old 'fbgemm' is still available but 'x86' is the recommended default
+    # for server inference.
+    # model_fp32.qconfig = torch.ao.quantization.get_default_qconfig('fbgemm')
+    model_unprep.qconfig = torch.ao.quantization.get_default_qat_qconfig('x86')
+
+    # fuse the activations to preceding layers, where applicable
+    # this needs to be done manually depending on the model architecture
+    model_unprep_fused = torch.ao.quantization.fuse_modules(
+        model_unprep,
+        [
+            "ConvBNReLU1",  # Conv, BN, ReLU in ConvBNReLU1
+        ]
+    )
+
+
+    # Prepare the model for QAT. This inserts observers and fake_quants in
+    # the model needs to be set to train for QAT logic to work
+    # the model that will observe weight and activation tensors during calibration.
+    model = torch.ao.quantization.prepare_qat(model_unprep_fused.train())
+
+    model.to(device)
+else:
+    model = DSCNN(use_bias=True)
+    model.to(device)
+    
 if STEP_DO_TRAIN:
     training_parameters, data_processing_parameters = parameter_generation()
     audio_processor = dataset.AudioProcessor(training_parameters, data_processing_parameters)
@@ -54,6 +88,18 @@ if STEP_DO_TRAIN:
     start = time.time()
     trainining_environment.train(model)
     print('Finished Training on GPU in {:.2f} seconds'.format(time.time() - start))
+    
+    if (STEP_DO_QAT_TRAIN):
+
+        # Convert the observed model to a quantized model. This does several things:
+        # quantizes the weights, computes and stores the scale and bias value to be
+        # used with each activation tensor, fuses modules where appropriate,
+        # and replaces key operators with quantized implementations.
+        model.eval()
+        model_int8 = torch.ao.quantization.convert(model)
+
+        torch.save(model_int8, "quantized_model_complete.pth")
+
 if STEP_DO_EXPORT_MODEL:
     model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=device))
 
