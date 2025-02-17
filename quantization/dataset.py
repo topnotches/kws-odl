@@ -220,7 +220,7 @@ class AudioProcessor(object):
     before_speakers = set(entry['speaker'] for subset_name, subset in self.data_set.items() if subset_name != 'foker' for entry in subset)
     print("NUMBER OF SPEAKERS BEFORE FILTERING:", len(before_speakers))
 
-    self.remove_speakers_with_more_entries(3)
+    self.remove_speakers_with_more_entries(5)
 
     after_speakers = set(entry['speaker'] for subset_name, subset in self.data_set.items() if subset_name != 'foker' for entry in subset)
     print("NUMBER OF SPEAKERS AFTER FILTERING:", len(after_speakers))
@@ -389,10 +389,10 @@ class AudioProcessor(object):
         labels_placeholder[i] = label_index
         if sample['label'] == SILENCE_LABEL or sample['label'] == UNKNOWN_WORD_LABEL:
           speaker_int_placeholder[i] = 2999
-          embeddings_placeholder[i] = np.ones((64), dtype='float32' )
+          #embeddings_placeholder[i] = np.ones((64), dtype='float32' )
         else:
           speaker_int_placeholder[i] = sample['speaker_int']
-          embeddings_placeholder[i] = pd.read_csv(sample['embeddings'], header=None).to_numpy()[1]
+          #embeddings_placeholder[i] = pd.read_csv(sample['embeddings'], header=None).to_numpy()[1]
 
 
     return data_placeholder, labels_placeholder, speaker_int_placeholder

@@ -268,16 +268,6 @@ class DSCNN_fusable(torch.nn.Module):
         self.avg   = torch.nn.AvgPool2d(kernel_size=(25, 5), stride=1)
         
 
-        self.emb_vec = []
-
-        something = torch.ones(64, 1, 1, requires_grad=True)
-        something_else = torch.ones(64, 1, 1, requires_grad=False)
-
-        for i in range(total_speakers):
-            self.emb_vec.append(something.to(torch.device('cuda')))
-
-        self.emb_vec[2999] = something_else.to(torch.device('cuda'))
-
             
         self.fc1   = torch.nn.Linear(64, 12, bias=use_bias)
         self.dequant = torch.ao.quantization.DeQuantStub()

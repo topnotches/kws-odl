@@ -16,7 +16,7 @@
 #
 # Author: Cristian Cioflan, ETH (cioflanc@iis.ee.ethz.ch)
 
-
+import datetime
 import dataset
 import torch
 
@@ -136,7 +136,7 @@ class Train():
             # Save best performing network
             if (tmp_acc > best_acc):
                 best_acc = tmp_acc
-                PATH = './model_acc_' + str(best_acc) + '.pth'
+                PATH = './model_acc_' + str(best_acc)+datetime.datetime.now().strftime("_%m_%d_%Y_%H%M%S") + '.pth'
                 torch.save(model.state_dict(), PATH)
 
         PATH = './model.pth'

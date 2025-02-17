@@ -1,8 +1,8 @@
-STEP_DO_QAT_TRAIN       = False
+STEP_DO_QAT_TRAIN       = True
 STEP_DO_TRAIN           = True
 STEP_DO_EXPORT_MODEL    = True
 STEP_DO_PROCESS_MFCCS   = True
-CHECKPOINT_PATH         = 'model_acc_92.1875.pth'
+CHECKPOINT_PATH         = 'none'
 CLASSES                 = 10
 EXPORT_OUTPUT_DIR_PATH  = '../simulation/exported_models/'
 EXPORT_OUTPUT_NAME      = 'export_params_nclass_' + str(CLASSES) + '.csv'
@@ -16,6 +16,7 @@ import torch
 import dataset
 import torch.nn as nn
 import os
+import torch.ao.quantization as quant
 import time
 import csv
 from torchsummary import summary
@@ -30,41 +31,94 @@ print(torch.__version__)
 print(device)
 model = DSCNN(use_bias=True)
 model.to(device)
+def get_qconfig8(bits):
+    qmax = 2**bits - 1
+    qmin_signed = -2**(bits-1)
+    qmax_signed = 2**(bits-1) - 1
+
+    return quant.QConfig(
+        activation=quant.FakeQuantize.with_args(
+            observer=quant.MovingAverageMinMaxObserver,
+            quant_min=0, quant_max=qmax,  # Unsigned activation
+            dtype=torch.quint8,
+            qscheme=torch.per_tensor_affine
+        ),
+        weight=quant.FakeQuantize.with_args(
+            observer=quant.MovingAverageMinMaxObserver,
+            quant_min=qmin_signed, quant_max=qmax_signed,  # Signed weight
+            dtype=torch.qint8,
+            qscheme=torch.per_tensor_symmetric
+        )
+    )
+def get_qconfig16(bits):
+    qmax = 2**bits - 1
+    qmin_signed = -2**(bits-1)
+    qmax_signed = 2**(bits-1) - 1
+
+    return quant.QConfig(
+        activation=quant.FakeQuantize.with_args(
+            observer=quant.MovingAverageMinMaxObserver,
+            quant_min=0, quant_max=qmax,  # Unsigned activation
+            dtype=torch.qint32,
+            qscheme=torch.per_tensor_affine
+        ),
+        weight=quant.FakeQuantize.with_args(
+            observer=quant.MovingAverageMinMaxObserver,
+            quant_min=qmin_signed, quant_max=qmax_signed,  # Signed weight
+            dtype=torch.qint32,
+            qscheme=torch.per_tensor_symmetric
+        )
+    )
 if (STEP_DO_QAT_TRAIN):
-    # Model generation
+    
     model_unprep = DSCNN_fusable(use_bias=True)
 
     model_unprep.eval()
-    # attach a global qconfig, which contains information about what kind
-    # of observers to attach. Use 'x86' for server inference and 'qnnpack'
-    # for mobile inference. Other quantization configurations such as selecting
-    # symmetric or asymmetric quantization and MinMax or L2Norm calibration techniques
-    # can be specified here.
-    # Note: the old 'fbgemm' is still available but 'x86' is the recommended default
-    # for server inference.
-    # model_fp32.qconfig = torch.ao.quantization.get_default_qconfig('fbgemm')
-    model_unprep.qconfig = torch.ao.quantization.get_default_qat_qconfig('x86')
 
-    # fuse the activations to preceding layers, where applicable
-    # this needs to be done manually depending on the model architecture
-    model_unprep_fused = torch.ao.quantization.fuse_modules(
+    
+    model_unprep_fused = torch.ao.quantization.fuse_modules_qat(
         model_unprep,
         [
-            "ConvBNReLU1",  # Conv, BN, ReLU in ConvBNReLU1
+            ["ConvBNReLU1.0","ConvBNReLU1.1","ConvBNReLU1.2"],
+            ["ConvBNReLU2.0","ConvBNReLU2.1","ConvBNReLU2.2"],
+            ["ConvBNReLU3.0","ConvBNReLU3.1","ConvBNReLU3.2"],
+            ["ConvBNReLU4.0","ConvBNReLU4.1","ConvBNReLU4.2"],
+            ["ConvBNReLU5.0","ConvBNReLU5.1","ConvBNReLU5.2"],
+            ["ConvBNReLU6.0","ConvBNReLU6.1","ConvBNReLU6.2"],
+            ["ConvBNReLU7.0","ConvBNReLU7.1","ConvBNReLU7.2"],
+            ["ConvBNReLU8.0","ConvBNReLU8.1","ConvBNReLU8.2"],
+            ["ConvBNReLU9.0","ConvBNReLU9.1","ConvBNReLU9.2"],
         ]
     )
 
 
-    # Prepare the model for QAT. This inserts observers and fake_quants in
-    # the model needs to be set to train for QAT logic to work
-    # the model that will observe weight and activation tensors during calibration.
+    
+    qat_configs = {
+        "ConvBNReLU1": get_qconfig8(8),
+        "ConvBNReLU2": get_qconfig8(4),
+        "ConvBNReLU3": get_qconfig8(4),
+        "ConvBNReLU4": get_qconfig8(4),
+        "ConvBNReLU5": get_qconfig8(4),
+        "ConvBNReLU6": get_qconfig8(4),
+        "ConvBNReLU7": get_qconfig8(4),
+        "ConvBNReLU8": get_qconfig8(4),
+        "ConvBNReLU9": get_qconfig8(4),
+        "fc1": get_qconfig16(16),
+    }
+    for name, module in model_unprep.named_modules():
+        for key, qconfig in qat_configs.items():
+            if name.startswith(key):  
+                module.qconfig = qconfig
+
+    
+    
+    
     model = torch.ao.quantization.prepare_qat(model_unprep_fused.train())
 
     model.to(device)
 else:
     model = DSCNN(use_bias=True)
     model.to(device)
-    
 if STEP_DO_TRAIN:
     training_parameters, data_processing_parameters = parameter_generation()
     audio_processor = dataset.AudioProcessor(training_parameters, data_processing_parameters)
@@ -75,7 +129,6 @@ if STEP_DO_TRAIN:
     print("Dataset split (Train/Valid/Test):", train_size, "/", valid_size, "/", test_size)
 
     print("Printing model summary...")
-    #summary(model, [(1, 49, data_processing_parameters['feature_bin_count']), -1])
     dummy_input = torch.rand(1, 1, 49, data_processing_parameters['feature_bin_count']).to(device)
 
     print("Initializing training environment...")
@@ -86,20 +139,17 @@ if STEP_DO_TRAIN:
 
     print("Starting training...")
     start = time.time()
+
+    # Train the model now that it's prepared for QAT
     trainining_environment.train(model)
     print('Finished Training on GPU in {:.2f} seconds'.format(time.time() - start))
-    
-    if (STEP_DO_QAT_TRAIN):
 
-        # Convert the observed model to a quantized model. This does several things:
-        # quantizes the weights, computes and stores the scale and bias value to be
-        # used with each activation tensor, fuses modules where appropriate,
-        # and replaces key operators with quantized implementations.
-        model.eval()
+    # Convert the model to quantized format after training
+    if STEP_DO_QAT_TRAIN:
+        model.eval()  # Ensure it's in eval mode before converting
         model_int8 = torch.ao.quantization.convert(model)
 
         torch.save(model_int8, "quantized_model_complete.pth")
-
 if STEP_DO_EXPORT_MODEL:
     model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=device))
 
