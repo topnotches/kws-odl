@@ -152,9 +152,10 @@ class AudioProcessor(object):
       # Ignore background noise, as it has been handled by generate_background_noise()
       if word == BACKGROUND_NOISE_LABEL:
         continue
-      if wav_path.__contains__("4c6167ca") or wav_path.__contains__("c50f55b8"):
+      if not((wav_path.__contains__("b5cf6ea8")) or (wav_path.__contains__("cce7416f")) or (wav_path.__contains__("c1d39ce8")) or (wav_path.__contains__("b66f4f93")) or (wav_path.__contains__("5f9cd2eb")) or (wav_path.__contains__("893705bb"))): #or wav_path.__contains__("4c6167ca") or wav_path.__contains__("c50f55b8"):
         continue
       
+      #{ (not wav_path.__contains__("b5cf6ea8")) or (not wav_path.__contains__("cce7416f")) or (not wav_path.__contains__("c1d39ce8")) or (not wav_path.__contains__("b66f4f93")) or (not wav_path.__contains__("5f9cd2eb")) or (not wav_path.__contains__("893705bb")):
       all_words[word] = True
       # Determine the set to which the word should belong
       set_index = which_set(wav_path, training_parameters['validation_percentage'], training_parameters['testing_percentage'])
@@ -220,7 +221,7 @@ class AudioProcessor(object):
     before_speakers = set(entry['speaker'] for subset_name, subset in self.data_set.items() if subset_name != 'foker' for entry in subset)
     print("NUMBER OF SPEAKERS BEFORE FILTERING:", len(before_speakers))
 
-    self.remove_speakers_with_more_entries(5)
+    self.remove_speakers_with_more_entries(11111)
 
     after_speakers = set(entry['speaker'] for subset_name, subset in self.data_set.items() if subset_name != 'foker' for entry in subset)
     print("NUMBER OF SPEAKERS AFTER FILTERING:", len(after_speakers))

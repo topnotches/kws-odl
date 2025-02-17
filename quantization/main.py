@@ -94,27 +94,28 @@ if (STEP_DO_QAT_TRAIN):
 
     
     qat_configs = {
-        "ConvBNReLU1": get_qconfig8(8),
-        "ConvBNReLU2": get_qconfig8(4),
-        "ConvBNReLU3": get_qconfig8(4),
-        "ConvBNReLU4": get_qconfig8(4),
-        "ConvBNReLU5": get_qconfig8(4),
-        "ConvBNReLU6": get_qconfig8(4),
-        "ConvBNReLU7": get_qconfig8(4),
-        "ConvBNReLU8": get_qconfig8(4),
-        "ConvBNReLU9": get_qconfig8(4),
+        "ConvBNReLU1.0": get_qconfig8(8),
+        "ConvBNReLU2.0": get_qconfig8(4),
+        "ConvBNReLU3.0": get_qconfig8(4),
+        "ConvBNReLU4.0": get_qconfig8(4),
+        "ConvBNReLU5.0": get_qconfig8(4),
+        "ConvBNReLU6.0": get_qconfig8(4),
+        "ConvBNReLU7.0": get_qconfig8(4),
+        "ConvBNReLU8.0": get_qconfig8(4),
+        "ConvBNReLU9.0": get_qconfig8(4),
         "fc1": get_qconfig16(16),
     }
-    for name, module in model_unprep.named_modules():
+    for name, module in model_unprep_fused.named_modules():
         for key, qconfig in qat_configs.items():
             if name.startswith(key):  
                 module.qconfig = qconfig
 
     
-    
+
     
     model = torch.ao.quantization.prepare_qat(model_unprep_fused.train())
 
+    print("Model qconfig before training:", model.qconfig)
     model.to(device)
 else:
     model = DSCNN(use_bias=True)
@@ -148,8 +149,18 @@ if STEP_DO_TRAIN:
     if STEP_DO_QAT_TRAIN:
         model.eval()  # Ensure it's in eval mode before converting
         model_int8 = torch.ao.quantization.convert(model)
+        
+        # Print layer types to check if they are quantized
+        print("\nModel structure after quantization:")
+        print(model_int8)  
+
+        # Print parameters and check if they are quantized
+        print("\nModel parameters after quantization:")
+        for name, param in model_int8.named_parameters():
+            print(f"{name}: dtype={param.dtype}, shape={param.shape}")
 
         torch.save(model_int8, "quantized_model_complete.pth")
+
 if STEP_DO_EXPORT_MODEL:
     model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=device))
 
