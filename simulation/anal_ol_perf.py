@@ -2,9 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import glob
 import numpy as np
-
+MINIMUM_VAL_SAMPS = 1
 # Get a list of all CSV files in the directory
-csv_files = glob.glob("./user_perf_logs_temp_res/*.csv")
+csv_files = glob.glob("./user_perf_logs/*.csv")
 
 # Check if any files were found
 if not csv_files:
@@ -21,11 +21,12 @@ all_data = {}
 for file in csv_files:
     df = pd.read_csv(file)
     
-    # Store data for averaging
-    all_data[file] = df[["Epoch", "Val_Acc_Max"]]
-    
-    # Plot individual runs
-    plt.plot(df["Epoch"], df["Val_Acc_Max"], alpha=0.5)  # Use filename as label
+    if df["Sample_Count"][0] >= MINIMUM_VAL_SAMPS:
+        # Store data for averaging
+        all_data[file] = df[["Epoch", "Val_Acc_Max"]]
+        
+        # Plot individual runs
+        plt.plot(df["Epoch"], df["Val_Acc_Max"], alpha=0.5)  # Use filename as label
 
 # Set labels and title for individual runs
 plt.xlabel("Epoch")
@@ -106,12 +107,12 @@ all_data = {}
 # Iterate over all files and plot their data
 for file in csv_files:
     df = pd.read_csv(file)
-    
-    # Store data for averaging
-    all_data[file] = df[["Epoch", "Val_Loss"]]
-    
-    # Plot individual runs
-    plt.plot(df["Epoch"], df["Val_Loss"], alpha=0.5)  # Use filename as label
+    if df["Sample_Count"][0] >= MINIMUM_VAL_SAMPS:
+        # Store data for averaging
+        all_data[file] = df[["Epoch", "Val_Loss"]]
+        
+        # Plot individual runs
+        plt.plot(df["Epoch"], df["Val_Loss"], alpha=0.5)  # Use filename as label
 
 # Set labels and title for individual runs
 plt.xlabel("Epoch")

@@ -41,7 +41,8 @@ public:
     uint16_t get_validation_size();
     void reset_training_pool();
     void print_progress_bar(uint32_t epoch, float error = 0.1);
-
+    void set_train_set(std::vector<std::vector<float>>);
+    void set_validation_set(std::vector<std::vector<float>>);
 };
 
 

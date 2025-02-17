@@ -176,3 +176,9 @@ std::vector<float> dataloader::shuffle_vector(std::vector<float> vector) {
     std::random_shuffle(vector.begin(), vector.end());
     return vector;
 }
+void dataloader::set_train_set(std::vector<std::vector<float>> cached_list) {
+    this->dataloader_inputs_train = cached_list;
+}
+void dataloader::set_validation_set(std::vector<std::vector<float>> cached_list) {
+    this->dataloader_inputs_validation = cached_list;
+}

@@ -44,9 +44,8 @@ auto load_batch_from_paths(std::vector<std::string> paths) {
 }
 
 int  main() {
-    std::vector<std::string> all_user_ids = {"050170cb", "964e8cfd", "bbd0bbd0", "7846fd85", "b528edb3", "07089da9", "cd671b5f", "5ebc1cda", "7213ed54", "92a9c5e6", "8fe67225", "c1d39ce8", "d962e5ac", "28ed6bc9", "b0ae6326", "b8874962", "f2f0d244", "a1e71565", "3a3ee7ed", "ddedba85", "56eb74ae", "7ea032f3", "c8b904e3", "2bdbe5f7", "b97c9f77", "3cc595de", "3b3d2f59", "69a1a79f", "eb3f7d82", "7e7ca854", "9b8a7439", "bde0f20a", "0d90d8e1", "b5cf6ea8", "cd85758f", "97f4c236", "645ed69d", "679463fc", "95fd5a0f", "067f61e2", "617de221", "20fd451f", "f68160c0", "1ecfb537", "c9b653a0", "0e6e36c9", "6565a81d", "3d794813", "fb7eb481", "d5b963aa", "b29f8b23", "31f01a8d", "9151f184", "1496195a", "9ff2d2f4", "fb727898", "d9aa8c90", "ca4d5368", "ec989d6d", "893705bb", "234d6a48", "4e6902d0", "3c257192", "fbb56351", "e3e0f145", "da040491", "72242187", "b9515bf3", "8eb4a1bf", "f30285c8", "8281a2a8", "f9643d42", "f2e9b610", "b87bdb22", "a05a90c1", "18e910f4", "0ba018fc", "b4aa9fef", "cd7f8c1b", "d070ea86", "d3831f6a", "0d82fd99", "96a48d28", "322d17d3", "122c5aa7", "321aba74", "ace072ba", "a9ca1818", "4c6944d6", "3bfd30e6", "d21fd169", "779de043", "35d1b6ee", "834f03fe", "525eaa62", "f822b9bf", "02ade946", "72e382bd", "332d33b1", "94d370bf", "845f8553", "f736ab63", "b0f5b16d", "85851131", "b66f4f93", "8134f43f", "9aa21fa9", "8e05039f", "a7200079", "686d030b", "a5d1becc", "acfd5b5e", "b49caed3", "0ff728b5", "eb0676ec", "d278d8ef", "324210dd", "b2ae3928", "e6327279", "61e2f74f", "b4ea0d9a", "37dca74f", "38d78313", "30060aba", "e71a9381", "ed032775", "d394ef8e", "fb8c31a9", "f5341341", "9a76f8c3", "179a61b7", "0717b9f6", "28e47b1a", "5c39594f", "ac9dee0e", "c22ebf46", "dae01802", "c1e0e8e3", "195c120a", "742d6431", "f568162b", "439c84f4", "616420be", "c79159aa", "1b4c9b89", "15dd287d", "bcf614a2", "a929f9b9", "ffd2ba2f", "131e738d", "c9b5ff26", "2aca1e72", "bb6d4301", "57152045", "8dc18a75", "953fe1ad", "f5626af6", "978240e1", "4cee0c60", "a6d586b7", "25132942", "c120e80e", "3bb68054", "1e02ffc5", "d1dd03ed", "fc3ba625", "c93d5e22", "9be15e93", "29fb33da", "b5552931", "14c7b073", "51c5601d", "4fd1443e", "3a69f765", "2927c601", "15c563d7", "e53139ad", "9886d8bf", "833d9f56", "1a994c9f", "c39703ec", "81332c92", "c22d3f18", "d264f7b6", "211b928a", "6c968bd9", "5f5eef60", "e41a903b", "1e9e6bdd", "229978fd", "1dc86f91", "5cf1ecce", "b69002d4", "21832144", "de89e2ca", "61abbf52", "f5733968", "08ab231c", "a77fbcfd", "890cc926", "2e75d37a", "3102f006", "2fcb6397", "94de6a6a", "32ad5b65", "ef77b778", "cb72dfb6", "333784b7", "98ea0818", "333d7ddb", "ad63d93c", "73f20b00", "87d5e978", "c7dc7278", "6ace4fe1", "64df20d8", "c634a189", "2f0ce4d9", "89947bd7", "e0315cf6", "0ea9c8ce", "3c4aa5ef", "ca4912b6", "f2e59fea", "cfbedff9", "f19c1390", "b9f46737", "113b3fbc", "e1469561", "fa57ab3b", "3f45a0cf", "7211390b", "0f46028a", "87070229", "4c3cddb8", "f01a0d63", "beb458a4", "3d53244b", "0b7ee1a0", "106a6183", "e11fbc6e", "bab36420", "ef3367d9", "bdee441c", "676f8138", "017c4098", "bbc30633", "6ef407da", "1ed0b13d", "3291330e", "71d0ded4", "b308773d", "e9bc5cc2", "cc6ee39b", "6727b579", "63f7a489", "9e92ef0c", "9b02d503", "3e31dffe", "8769c34c", "c948d727", "70a00e98", "0137b3f4", "f0659908", "8b25410a", "574ec766", "763188c4", "bdd22e4d", "a7acbbeb", "499be02e", "2da58b32", "472b8045", "db24628d", "ff2b842e", "888a0c49", "a16013b7", "5170b77f", "235b444f", "b83c1acf", "0f7266cf", "3589bc72", "171edea9", "a2cc5444", "365908bd", "0d6d7360", "5b09db89", "fbf3dd31", "aff582a1", "06f6c194", "6aa8def4", "25e95412", "5f9cd2eb", "0eb48e10", "8e523821", "ce0cb033", "b69fe0e2", "2b5e346d", "74241b28", "3bc21161", "0132a06d", "692a88e6", "ccca5655", "f798ac78", "e4be0cf6", "e7ea8b76", "42a99aec", "fa52ddf6", "3b195250", "a04817c2", "42f81601", "29229c21", "4a1e736b", "c6ee87a7", "2356b88d", "b76f6088", "51055bda", "23da904f", "471a0925", "3a929277", "30276d03", "d98dd124", "10ace7eb", "a045368c", "c4e00ee9", "eaa83485", "24befdb3", "f035e2ea", "201e28a9", "f8ba7c0e", "773e26f7", "f0522ff4", "bfd26d6b", "39833acb", "099d52ad", "1acc97de", "f575faf3", "3b4f8f24", "6c429c7b", "54aecbd5", "ee1d8d49", "eeaf97c3", "2fee065a", "a1cff772", "51f7a034", "7fb8d703", "6bf5baf3", "c0445658", "54b6d355", "da584bc0", "617aeb6c", "61ab8fbc", "197f4153", "e49428d9", "cce7416f", "578d3efb", "bd76a7fd", "cc4f9250", "5a5721f8", "d0faf7e4", "ceef6d96", "e0c782d5", "e882abb2", "cdee383b", "bb05582b", "bbf38549", "22296dbe", "5e3dde6b", "cb62dbf1"};
-
-    #pragma omp parallel for
+    std::vector<std::string> all_user_ids = {"c50f55b8", "050170cb", "964e8cfd", "bbd0bbd0", "7846fd85", "b528edb3", "07089da9", "cd671b5f", "5ebc1cda", "7213ed54", "92a9c5e6", "8fe67225", "c1d39ce8", "d962e5ac", "28ed6bc9", "b0ae6326", "b8874962", "f2f0d244", "a1e71565", "3a3ee7ed", "ddedba85", "56eb74ae", "7ea032f3", "c8b904e3", "2bdbe5f7", "b97c9f77", "3cc595de", "3b3d2f59", "69a1a79f", "eb3f7d82", "7e7ca854", "9b8a7439", "bde0f20a", "0d90d8e1", "b5cf6ea8", "cd85758f", "97f4c236", "645ed69d", "679463fc", "95fd5a0f", "067f61e2", "617de221", "20fd451f", "f68160c0", "1ecfb537", "c9b653a0", "0e6e36c9", "6565a81d", "3d794813", "fb7eb481", "d5b963aa", "b29f8b23", "31f01a8d", "9151f184", "1496195a", "9ff2d2f4", "fb727898", "d9aa8c90", "ca4d5368", "ec989d6d", "893705bb", "234d6a48", "4e6902d0", "3c257192", "fbb56351", "e3e0f145", "da040491", "72242187", "b9515bf3", "8eb4a1bf", "f30285c8", "8281a2a8", "f9643d42", "f2e9b610", "b87bdb22", "a05a90c1", "18e910f4", "0ba018fc", "b4aa9fef", "cd7f8c1b", "d070ea86", "d3831f6a", "0d82fd99", "96a48d28", "322d17d3", "122c5aa7", "321aba74", "ace072ba", "a9ca1818", "4c6944d6", "3bfd30e6", "d21fd169", "779de043", "35d1b6ee", "834f03fe", "525eaa62", "f822b9bf", "02ade946", "72e382bd", "332d33b1", "94d370bf", "845f8553", "f736ab63", "b0f5b16d", "85851131", "b66f4f93", "8134f43f", "9aa21fa9", "8e05039f", "a7200079", "686d030b", "a5d1becc", "acfd5b5e", "b49caed3", "0ff728b5", "eb0676ec", "d278d8ef", "324210dd", "b2ae3928", "e6327279", "61e2f74f", "b4ea0d9a", "37dca74f", "38d78313", "30060aba", "e71a9381", "ed032775", "d394ef8e", "fb8c31a9", "f5341341", "9a76f8c3", "179a61b7", "0717b9f6", "28e47b1a", "5c39594f", "ac9dee0e", "c22ebf46", "dae01802", "c1e0e8e3", "195c120a", "742d6431", "f568162b", "439c84f4", "616420be", "c79159aa", "1b4c9b89", "15dd287d", "bcf614a2", "a929f9b9", "ffd2ba2f", "131e738d", "c9b5ff26", "2aca1e72", "bb6d4301", "57152045", "8dc18a75", "953fe1ad", "f5626af6", "978240e1", "4cee0c60", "a6d586b7", "25132942", "c120e80e", "3bb68054", "1e02ffc5", "d1dd03ed", "fc3ba625", "c93d5e22", "9be15e93", "29fb33da", "b5552931", "14c7b073", "51c5601d", "4fd1443e", "3a69f765", "2927c601", "15c563d7", "e53139ad", "9886d8bf", "833d9f56", "1a994c9f", "c39703ec", "81332c92", "c22d3f18", "d264f7b6", "211b928a", "6c968bd9", "5f5eef60", "e41a903b", "1e9e6bdd", "229978fd", "1dc86f91", "5cf1ecce", "b69002d4", "21832144", "de89e2ca", "61abbf52", "f5733968", "08ab231c", "a77fbcfd", "890cc926", "2e75d37a", "3102f006", "2fcb6397", "94de6a6a", "32ad5b65", "ef77b778", "cb72dfb6", "333784b7", "98ea0818", "333d7ddb", "ad63d93c", "73f20b00", "87d5e978", "c7dc7278", "6ace4fe1", "64df20d8", "c634a189", "2f0ce4d9", "89947bd7", "e0315cf6", "0ea9c8ce", "3c4aa5ef", "ca4912b6", "f2e59fea", "cfbedff9", "f19c1390", "b9f46737", "113b3fbc", "e1469561", "fa57ab3b", "3f45a0cf", "7211390b", "0f46028a", "87070229", "4c3cddb8", "f01a0d63", "beb458a4", "3d53244b", "0b7ee1a0", "106a6183", "e11fbc6e", "bab36420", "ef3367d9", "bdee441c", "676f8138", "017c4098", "bbc30633", "6ef407da", "1ed0b13d", "3291330e", "71d0ded4", "b308773d", "e9bc5cc2", "cc6ee39b", "6727b579", "63f7a489", "9e92ef0c", "9b02d503", "3e31dffe", "8769c34c", "c948d727", "70a00e98", "0137b3f4", "f0659908", "8b25410a", "574ec766", "763188c4", "bdd22e4d", "a7acbbeb", "499be02e", "2da58b32", "472b8045", "db24628d", "ff2b842e", "888a0c49", "a16013b7", "5170b77f", "235b444f", "b83c1acf", "0f7266cf", "3589bc72", "171edea9", "a2cc5444", "365908bd", "0d6d7360", "5b09db89", "fbf3dd31", "aff582a1", "06f6c194", "6aa8def4", "25e95412", "5f9cd2eb", "0eb48e10", "8e523821", "ce0cb033", "b69fe0e2", "2b5e346d", "74241b28", "3bc21161", "0132a06d", "692a88e6", "ccca5655", "f798ac78", "e4be0cf6", "e7ea8b76", "42a99aec", "fa52ddf6", "3b195250", "a04817c2", "42f81601", "29229c21", "4a1e736b", "c6ee87a7", "2356b88d", "b76f6088", "51055bda", "23da904f", "471a0925", "3a929277", "30276d03", "d98dd124", "10ace7eb", "a045368c", "c4e00ee9", "eaa83485", "24befdb3", "f035e2ea", "201e28a9", "f8ba7c0e", "773e26f7", "f0522ff4", "bfd26d6b", "39833acb", "099d52ad", "1acc97de", "f575faf3", "3b4f8f24", "6c429c7b", "54aecbd5", "ee1d8d49", "eeaf97c3", "2fee065a", "a1cff772", "51f7a034", "7fb8d703", "6bf5baf3", "c0445658", "54b6d355", "da584bc0", "617aeb6c", "61ab8fbc", "197f4153", "e49428d9", "cce7416f", "578d3efb", "bd76a7fd", "cc4f9250", "5a5721f8", "d0faf7e4", "ceef6d96", "e0c782d5", "e882abb2", "cdee383b", "bb05582b", "bbf38549", "22296dbe", "5e3dde6b", "cb62dbf1"};
+    #pragma omp parallel for num_threads(18) 
     for (auto uid : all_user_ids) {
         for (uint32_t run = 0; run < TOTAL_RUNS; run++) {
             auto validation_errors_file_name = "./user_perf_logs/"+uid+"_run_"+ std::to_string(run) +".csv";
@@ -82,11 +81,12 @@ int  main() {
             std::vector<float> all_validation_accuracies_threshold_85;
             std::vector<float> all_validation_accuracies_threshold_90;
             std::vector<float> all_validation_accuracies_threshold_95;
+            std::vector<std::vector<float>> all_avg_train_activations;
+            std::vector<std::vector<float>> all_avg_validation_activations;
             
             while (i < EPOCHS) {
                 
                 if (dataloader.get_training_pool_empty()) {
-                    ii++;
                     auto mybatch = dataloader.get_batch();
                     std::vector<float> labels_onehot;
                     // Convert int labels to vector of dim [batchsize classes]
@@ -96,7 +96,13 @@ int  main() {
 
                         labels_onehot.insert(labels_onehot.end(), temp.begin(), temp.end());
                     }
-                    model_forward(model, std::get<0>(mybatch));
+                    if (i == 0) {
+                        model_forward(model, std::get<0>(mybatch));
+                        all_avg_train_activations.push_back(model[27].layer_outputs);
+                    } else {
+                        model[28].forward(std::get<0>(mybatch).data());
+                        model[29].forward(model[28].layer_outputs.data());
+                    }
                     softmax.forward(model.back().layer_outputs.data());
                     crossentropy.forward(softmax.layer_outputs.data(), labels_onehot.data());
                     softmax.backward(labels_onehot.data());
@@ -134,12 +140,13 @@ int  main() {
   //                  softmax_fw_analyzer.print_stats_raw();
   //                  softmax_bw_analyzer.print_stats_raw();
   //  #else
-  //                  //dataloader.print_progress_bar(i+1,error);
+  //                  dataloader.print_progress_bar(i+1,error);
 //
   //  #endif
 
                 } else {
                     momentum = 0.0;
+
                     auto myvalset = dataloader.get_validation_set();
                     float temp_err = 0.0f;
                     float total = 0;
@@ -171,8 +178,13 @@ int  main() {
                             labels_onehot.insert(labels_onehot.end(), temp.begin(), temp.end());
                             actual_inputs.insert(actual_inputs.end(), vinput.begin(), vinput.end());
                         }
-
-                        model_forward(model, actual_inputs);
+                        if (i == 0) {
+                            model_forward(model, actual_inputs);
+                            all_avg_validation_activations.push_back(model[27].layer_outputs);
+                        } else {
+                            model[28].forward(actual_inputs.data());
+                            model[29].forward(model[28].layer_outputs.data());
+                        }
                         softmax.forward(model.back().layer_outputs.data());
                         crossentropy.forward(softmax.layer_outputs.data(), labels_onehot.data());
                         
@@ -254,6 +266,11 @@ int  main() {
                     all_validation_accuracies_threshold_95.push_back(correct_validation_accuracies_threshold_95/total);
                     dataloader.reset_training_pool();
                     //std::cout << std::endl; // New line between epochs
+                    if (i == 0) {
+                        dataloader.set_train_set(all_avg_train_activations);
+                        dataloader.set_validation_set(all_avg_validation_activations);
+                    }
+                    
                     i++;
                 }
             }
