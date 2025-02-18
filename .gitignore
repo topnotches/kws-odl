@@ -2,6 +2,7 @@ dataset*
 *.log
 version_*
 *.gz
+*.png
 *.tar
 *.zip
 __pycache__
