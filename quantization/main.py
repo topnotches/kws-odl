@@ -1,7 +1,7 @@
 STEP_DO_QAT_TRAIN       = True
 STEP_DO_TRAIN           = True
-STEP_DO_EXPORT_MODEL    = True
-STEP_DO_PROCESS_MFCCS   = True
+STEP_DO_EXPORT_MODEL    = False
+STEP_DO_PROCESS_MFCCS   = False
 CHECKPOINT_PATH         = 'none'
 CLASSES                 = 10
 EXPORT_OUTPUT_DIR_PATH  = '../simulation/exported_models/'
@@ -103,7 +103,7 @@ if (STEP_DO_QAT_TRAIN):
         "ConvBNReLU7.0": get_qconfig8(4),
         "ConvBNReLU8.0": get_qconfig8(4),
         "ConvBNReLU9.0": get_qconfig8(4),
-        "fc1": get_qconfig16(16),
+        "fc1": get_qconfig8(8),
     }
     for name, module in model_unprep_fused.named_modules():
         for key, qconfig in qat_configs.items():
@@ -148,8 +148,11 @@ if STEP_DO_TRAIN:
     # Convert the model to quantized format after training
     if STEP_DO_QAT_TRAIN:
         model.eval()  # Ensure it's in eval mode before converting
-        model_int8 = torch.ao.quantization.convert(model)
-        
+        for name, module in model.named_modules():
+            if hasattr(module, 'weight_fake_quant'):
+                print(f"{name} weight observer dtype: {module.weight_fake_quant.dtype}")
+        model_int8 = torch.ao.quantization.convert(model.cpu())
+    
         # Print layer types to check if they are quantized
         print("\nModel structure after quantization:")
         print(model_int8)  
@@ -158,8 +161,11 @@ if STEP_DO_TRAIN:
         print("\nModel parameters after quantization:")
         for name, param in model_int8.named_parameters():
             print(f"{name}: dtype={param.dtype}, shape={param.shape}")
-
-        torch.save(model_int8, "quantized_model_complete.pth")
+        for name, module in model_int8.named_modules():
+            if hasattr(module, 'weight'):
+                print(f"{name} - Quantized Weight:")
+                print(module.weight().int_repr())  # Get int values
+        torch.save(model_int8.state_dict(), "quantized_model_complete.pth")
 
 if STEP_DO_EXPORT_MODEL:
     model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=device))
