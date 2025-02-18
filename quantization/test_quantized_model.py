@@ -88,7 +88,7 @@ model_int8.eval()
 print("\nModel Parameters:")
 for name, param in model.named_parameters():
     print(f"{name}: shape {param.shape}")
-    print(param.detach().cpu().numpy().flatten()[:])  # Print first 10 values for brevity
+    print(param.detach().cpu().numpy().flatten()[:]) 
 
 # Dictionary to store activations
 activations = {}
@@ -124,7 +124,7 @@ print("\nModel Output:", output_numpy)
 print("\nIntermediate Activations:")
 for layer_name, activation in activations.items():
     print(f"{layer_name}: shape {activation.shape}")
-    print(activation.flatten()[:])  # Print first 10 values for brevity
+    print(activation.flatten()[:]) 
 #for name, module in model_int8.named_modules():
 #    if hasattr(module, 'weight'):
 #        weight = module.weight()

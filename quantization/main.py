@@ -39,13 +39,13 @@ def get_qconfig8(bits):
     return quant.QConfig(
         activation=quant.FakeQuantize.with_args(
             observer=quant.MovingAverageMinMaxObserver,
-            quant_min=0, quant_max=qmax,  # Unsigned activation
+            quant_min=0, quant_max=qmax,
             dtype=torch.quint8,
             qscheme=torch.per_tensor_affine
         ),
         weight=quant.FakeQuantize.with_args(
             observer=quant.MovingAverageMinMaxObserver,
-            quant_min=qmin_signed, quant_max=qmax_signed,  # Signed weight
+            quant_min=qmin_signed, quant_max=qmax_signed,
             dtype=torch.qint8,
             qscheme=torch.per_tensor_symmetric
         )
@@ -58,13 +58,13 @@ def get_qconfig16(bits):
     return quant.QConfig(
         activation=quant.FakeQuantize.with_args(
             observer=quant.MovingAverageMinMaxObserver,
-            quant_min=0, quant_max=qmax,  # Unsigned activation
+            quant_min=0, quant_max=qmax,
             dtype=torch.qint32,
             qscheme=torch.per_tensor_affine
         ),
         weight=quant.FakeQuantize.with_args(
             observer=quant.MovingAverageMinMaxObserver,
-            quant_min=qmin_signed, quant_max=qmax_signed,  # Signed weight
+            quant_min=qmin_signed, quant_max=qmax_signed,
             dtype=torch.qint32,
             qscheme=torch.per_tensor_symmetric
         )
@@ -141,30 +141,16 @@ if STEP_DO_TRAIN:
     print("Starting training...")
     start = time.time()
 
-    # Train the model now that it's prepared for QAT
     trainining_environment.train(model)
     print('Finished Training on GPU in {:.2f} seconds'.format(time.time() - start))
 
-    # Convert the model to quantized format after training
     if STEP_DO_QAT_TRAIN:
-        model.eval()  # Ensure it's in eval mode before converting
+        model.eval() 
         for name, module in model.named_modules():
             if hasattr(module, 'weight_fake_quant'):
                 print(f"{name} weight observer dtype: {module.weight_fake_quant.dtype}")
         model_int8 = torch.ao.quantization.convert(model.cpu())
     
-        # Print layer types to check if they are quantized
-        print("\nModel structure after quantization:")
-        print(model_int8)  
-
-        # Print parameters and check if they are quantized
-        print("\nModel parameters after quantization:")
-        for name, param in model_int8.named_parameters():
-            print(f"{name}: dtype={param.dtype}, shape={param.shape}")
-        for name, module in model_int8.named_modules():
-            if hasattr(module, 'weight'):
-                print(f"{name} - Quantized Weight:")
-                print(module.weight().int_repr())  # Get int values
         torch.save(model_int8.state_dict(), "quantized_model_complete.pth")
 
 if STEP_DO_EXPORT_MODEL:
