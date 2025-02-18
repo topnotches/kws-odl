@@ -45,6 +45,7 @@ class Train():
         # Validate model
 
         training_parameters = self.training_parameters
+        old_batchsize = training_parameters['batch_size']
         training_parameters['batch_size'] = batch_size
         data = dataset.AudioGenerator(mode, self.audio_processor, training_parameters)
         model.eval()  
@@ -84,6 +85,8 @@ class Train():
                 conf_matrix(labels, predicted, self.training_parameters)
 
         print('Accuracy of the network on the %s set: %.2f %%' % (mode, 100 * correct / total))
+        training_parameters['batch_size'] = old_batchsize
+        
         return(100 * correct / total)
 
 
