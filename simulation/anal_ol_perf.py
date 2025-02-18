@@ -23,18 +23,18 @@ for file in csv_files:
     
     if df["Sample_Count"][0] >= MINIMUM_VAL_SAMPS:
         # Store data for averaging
-        all_data[file] = df[["Epoch", "Val_Acc_Max"]]
+        all_data[file] = df[["Epoch", "Val_Acc_Thr_75"]]
         
         # Plot individual runs
-        plt.plot(df["Epoch"], df["Val_Acc_Max"], alpha=0.5)  # Use filename as label
+        plt.plot(df["Epoch"], df["Val_Acc_Thr_75"], alpha=0.5)  # Use filename as label
 
 # Set labels and title for individual runs
 plt.xlabel("Epoch")
-plt.ylabel("Val_Acc_Max")
+plt.ylabel("Val_Acc_Thr_75")
 plt.title("Validation Accuracy vs. Epoch (All Runs)")
 
 # Set y-axis limits dynamically
-all_vals = pd.concat([df["Val_Acc_Max"] for df in all_data.values()])
+all_vals = pd.concat([df["Val_Acc_Thr_75"] for df in all_data.values()])
 plt.ylim(all_vals.min() - 0.01, all_vals.max() + 0.01)
 
 # Rotate x-tick labels for better visibility
@@ -66,15 +66,15 @@ average_df = merged_df.groupby("Epoch").mean().reset_index()
 plt.figure(figsize=(10, 6))
 
 # Plot the average validation accuracy
-plt.plot(average_df["Epoch"], average_df["Val_Acc_Max"], color="red", linewidth=2, label="Average Val_Acc")
+plt.plot(average_df["Epoch"], average_df["Val_Acc_Thr_75"], color="red", linewidth=2, label="Average Val_Acc")
 
 # Set labels and title for average plot
 plt.xlabel("Epoch")
-plt.ylabel("Val_Acc_Max")
+plt.ylabel("Val_Acc_Thr_75")
 plt.title("Average Validation Accuracy vs. Epoch")
 
 # Set y-axis limits dynamically
-plt.ylim(average_df["Val_Acc_Max"].min() - 0.01, average_df["Val_Acc_Max"].max() + 0.01)
+plt.ylim(average_df["Val_Acc_Thr_75"].min() - 0.01, average_df["Val_Acc_Thr_75"].max() + 0.01)
 
 # Rotate x-tick labels for better visibility
 plt.xticks(rotation=45, ha='right')

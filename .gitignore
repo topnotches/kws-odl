@@ -11,7 +11,7 @@ simulation/bin/
 *copy*
 __pycache__/
 #xvector
-
+xvector/
 xvector/__pycache__/
 
 *.py[cod]
