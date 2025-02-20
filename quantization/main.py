@@ -31,16 +31,16 @@ print(torch.__version__)
 print(device)
 model = DSCNN(use_bias=True)
 model.to(device)
-def get_qconfig8(bits):
-    qmax = 2**bits - 1
-    qmin_signed = -2**(bits-1)
-    qmax_signed = 2**(bits-1) - 1
+def get_qconfig8(bits_w,bits_a):
+    qmax = 2**bits_a - 1
+    qmin_signed = -2**(bits_w-1)
+    qmax_signed = 2**(bits_w-1) - 1
 
     return quant.QConfig(
         activation=quant.FakeQuantize.with_args(
             observer=quant.MovingAverageMinMaxObserver,
             quant_min=0, quant_max=qmax,
-            dtype=torch.quint8,
+            dtype=torch.qint32,
             qscheme=torch.per_tensor_affine
         ),
         weight=quant.FakeQuantize.with_args(
@@ -94,16 +94,16 @@ if (STEP_DO_QAT_TRAIN):
 
     
     qat_configs = {
-        "ConvBNReLU1.0": get_qconfig8(8),
-        "ConvBNReLU2.0": get_qconfig8(4),
-        "ConvBNReLU3.0": get_qconfig8(4),
-        "ConvBNReLU4.0": get_qconfig8(4),
-        "ConvBNReLU5.0": get_qconfig8(4),
-        "ConvBNReLU6.0": get_qconfig8(4),
-        "ConvBNReLU7.0": get_qconfig8(4),
-        "ConvBNReLU8.0": get_qconfig8(4),
-        "ConvBNReLU9.0": get_qconfig8(4),
-        "fc1": get_qconfig8(8),
+        "ConvBNReLU1.0": get_qconfig8(8,16),
+        "ConvBNReLU2.0": get_qconfig8(4,4),
+        "ConvBNReLU3.0": get_qconfig8(4,4),
+        "ConvBNReLU4.0": get_qconfig8(4,4),
+        "ConvBNReLU5.0": get_qconfig8(4,4),
+        "ConvBNReLU6.0": get_qconfig8(4,4),
+        "ConvBNReLU7.0": get_qconfig8(4,4),
+        "ConvBNReLU8.0": get_qconfig8(4,4),
+        "ConvBNReLU9.0": get_qconfig8(4,16),
+        "fc1": get_qconfig8(8,16),
     }
     for name, module in model_unprep_fused.named_modules():
         for key, qconfig in qat_configs.items():
