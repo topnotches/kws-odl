@@ -1,16 +1,3 @@
-STEP_DO_QAT_TRAIN       = True
-STEP_DO_TRAIN           = True
-STEP_DO_EXPORT_MODEL    = False
-STEP_DO_PROCESS_MFCCS   = False
-CHECKPOINT_PATH         = 'none'
-CLASSES                 = 10
-EXPORT_OUTPUT_DIR_PATH  = '../simulation/exported_models/'
-EXPORT_OUTPUT_NAME      = 'export_params_nclass_' + str(CLASSES) + '.csv'
-EXPORT_OUTPUT_NAME_QAT      = 'qat_export_params_nclass_' + str(CLASSES) + '.csv'
-EXPORT_OUTPUT_PATH      = EXPORT_OUTPUT_DIR_PATH + EXPORT_OUTPUT_NAME
-MFCCS_INPUT_PATHS        = ['../dataset_mfccs_raw/yes/d21fd169_nohash_0',
-                            '../dataset_mfccs_raw/yes/d21fd169_nohash_1']  # Path(s) to MFCCs binary file
-MFCCS_OUTPUT_PATH       = './output_mfccs.bin' # Path to save model output
 
 import torch
 import dataset
@@ -21,7 +8,9 @@ import time
 import csv
 from torchsummary import summary
 from model import DSCNN, DSCNN_fusable
-from utils import remove_txt, parameter_generation
+from utils import *
+
+import shutil
 from train import Train
 import numpy as np
 
@@ -31,44 +20,7 @@ print(torch.__version__)
 print(device)
 model = DSCNN(use_bias=True)
 model.to(device)
-def get_qconfig8(bits_w,bits_a):
-    qmax = 2**bits_a - 1
-    qmin_signed = -2**(bits_w-1)
-    qmax_signed = 2**(bits_w-1) - 1
 
-    return quant.QConfig(
-        activation=quant.FakeQuantize.with_args(
-            observer=quant.MovingAverageMinMaxObserver,
-            quant_min=0, quant_max=qmax,
-            dtype=torch.qint32,
-            qscheme=torch.per_tensor_affine
-        ),
-        weight=quant.FakeQuantize.with_args(
-            observer=quant.MovingAverageMinMaxObserver,
-            quant_min=qmin_signed, quant_max=qmax_signed,
-            dtype=torch.qint8,
-            qscheme=torch.per_tensor_symmetric
-        )
-    )
-def get_qconfig16(bits):
-    qmax = 2**bits - 1
-    qmin_signed = -2**(bits-1)
-    qmax_signed = 2**(bits-1) - 1
-
-    return quant.QConfig(
-        activation=quant.FakeQuantize.with_args(
-            observer=quant.MovingAverageMinMaxObserver,
-            quant_min=0, quant_max=qmax,
-            dtype=torch.qint32,
-            qscheme=torch.per_tensor_affine
-        ),
-        weight=quant.FakeQuantize.with_args(
-            observer=quant.MovingAverageMinMaxObserver,
-            quant_min=qmin_signed, quant_max=qmax_signed,
-            dtype=torch.qint32,
-            qscheme=torch.per_tensor_symmetric
-        )
-    )
 if (STEP_DO_QAT_TRAIN):
     
     model_unprep = DSCNN_fusable(use_bias=True)
@@ -78,33 +30,10 @@ if (STEP_DO_QAT_TRAIN):
     
     model_unprep_fused = torch.ao.quantization.fuse_modules_qat(
         model_unprep,
-        [
-            ["ConvBNReLU1.0","ConvBNReLU1.1","ConvBNReLU1.2"],
-            ["ConvBNReLU2.0","ConvBNReLU2.1","ConvBNReLU2.2"],
-            ["ConvBNReLU3.0","ConvBNReLU3.1","ConvBNReLU3.2"],
-            ["ConvBNReLU4.0","ConvBNReLU4.1","ConvBNReLU4.2"],
-            ["ConvBNReLU5.0","ConvBNReLU5.1","ConvBNReLU5.2"],
-            ["ConvBNReLU6.0","ConvBNReLU6.1","ConvBNReLU6.2"],
-            ["ConvBNReLU7.0","ConvBNReLU7.1","ConvBNReLU7.2"],
-            ["ConvBNReLU8.0","ConvBNReLU8.1","ConvBNReLU8.2"],
-            ["ConvBNReLU9.0","ConvBNReLU9.1","ConvBNReLU9.2"],
-        ]
+        quant_fuse_list
     )
 
 
-    
-    qat_configs = {
-        "ConvBNReLU1.0": get_qconfig8(8,16),
-        "ConvBNReLU2.0": get_qconfig8(4,4),
-        "ConvBNReLU3.0": get_qconfig8(4,4),
-        "ConvBNReLU4.0": get_qconfig8(4,4),
-        "ConvBNReLU5.0": get_qconfig8(4,4),
-        "ConvBNReLU6.0": get_qconfig8(4,4),
-        "ConvBNReLU7.0": get_qconfig8(4,4),
-        "ConvBNReLU8.0": get_qconfig8(4,4),
-        "ConvBNReLU9.0": get_qconfig8(4,16),
-        "fc1": get_qconfig8(8,16),
-    }
     for name, module in model_unprep_fused.named_modules():
         for key, qconfig in qat_configs.items():
             if name.startswith(key):  
@@ -121,6 +50,12 @@ else:
     model = DSCNN(use_bias=True)
     model.to(device)
 if STEP_DO_TRAIN:
+    
+    if not os.path.isdir(CHECKPOINT_SAVE_PATH):
+        os.mkdir(CHECKPOINT_SAVE_PATH)
+        shutil.copyfile('./utils.py', CHECKPOINT_SAVE_PATH+'/000_utils_setup.log', follow_symlinks = True)
+    else:
+        assert False, "HELLOOOOO. THE DIRECTORY IS ALREADY THERE, FOKER!"
     training_parameters, data_processing_parameters = parameter_generation()
     audio_processor = dataset.AudioProcessor(training_parameters, data_processing_parameters)
 
@@ -156,11 +91,11 @@ if STEP_DO_TRAIN:
 if STEP_DO_EXPORT_MODEL:
     model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=device))
 
-    if not os.path.isdir(EXPORT_OUTPUT_DIR_PATH):
-        os.mkdir(EXPORT_OUTPUT_DIR_PATH)
+    if not os.path.isdir(EXPORT_OUTPUT_DIR_PATH_FLOAT):
+        os.mkdir(EXPORT_OUTPUT_DIR_PATH_FLOAT)
 
     try:
-        with open(EXPORT_OUTPUT_PATH, mode='w', newline='') as csv_file:
+        with open(EXPORT_OUTPUT_PATH_FLOAT, mode='w', newline='') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(["Name", "Shape", "Values"])
 
@@ -181,7 +116,7 @@ if STEP_DO_EXPORT_MODEL:
                                             module.running_var.cpu().numpy().flatten().tolist()])
                             processed_bn_layers.add(bn_layer_name)  # Mark as processed to avoid duplicates
 
-        print(f"Model parameters and BatchNorm stats exported successfully to {EXPORT_OUTPUT_PATH}.")
+        print(f"Model parameters and BatchNorm stats exported successfully to {EXPORT_OUTPUT_PATH_FLOAT}.")
 
     except Exception as e:
         print(f"Error exporting model parameters: {e}")

@@ -17,6 +17,7 @@
 # Author: Cristian Cioflan, ETH (cioflanc@iis.ee.ethz.ch)
 
 import datetime
+from utils import *
 import dataset
 import torch
 
@@ -96,7 +97,7 @@ class Train():
         best_acc = 0
         for epoch in range(0, self.training_parameters['epochs']):
 
-            print("Epoch: " + str(epoch+1) +"/" + str(self.training_parameters['epochs']))  
+            print("Epoch: " + str(epoch+1) + "/" + str(self.training_parameters['epochs']))  
             data = dataset.AudioGenerator('training', self.audio_processor, self.training_parameters)
             model.train()
             self.scheduler.step()
@@ -139,9 +140,9 @@ class Train():
             # Save best performing network
             if (tmp_acc > best_acc):
                 best_acc = tmp_acc
-                PATH = './model_acc_' + str(best_acc)+datetime.datetime.now().strftime("_%m_%d_%Y_%H%M%S") + '.pth'
+                PATH = CHECKPOINT_SAVE_PATH + '/model_acc_' + str(best_acc)+datetime.datetime.now().strftime("_%m_%d_%Y_%H%M%S") + '.pth'
                 torch.save(model.state_dict(), PATH)
 
-        PATH = './model.pth'
+        PATH = CHECKPOINT_SAVE_PATH + '_model_final.pth'
         torch.save(model.state_dict(), PATH)
         

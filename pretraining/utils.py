@@ -20,12 +20,52 @@
 import os
 
 from sklearn.metrics import confusion_matrix
+import torch
+import torch.nn as nn
+import torch.ao.quantization as quant
 
 import numpy as np
 import seaborn as sn
 import pandas as pd
 import matplotlib.pyplot as plt
+def get_qconfig8(bits_w,bits_a):
+    qmax = 2**bits_a - 1
+    qmin_signed = -2**(bits_w-1)
+    qmax_signed = 2**(bits_w-1) - 1
 
+    return quant.QConfig(
+        activation=quant.FakeQuantize.with_args(
+            observer=quant.MovingAverageMinMaxObserver,
+            quant_min=0, quant_max=qmax,
+            dtype=torch.qint32,
+            qscheme=torch.per_tensor_affine
+        ),
+        weight=quant.FakeQuantize.with_args(
+            observer=quant.MovingAverageMinMaxObserver,
+            quant_min=qmin_signed, quant_max=qmax_signed,
+            dtype=torch.qint8,
+            qscheme=torch.per_tensor_symmetric
+        )
+    )
+def get_qconfig16(bits):
+    qmax = 2**bits - 1
+    qmin_signed = -2**(bits-1)
+    qmax_signed = 2**(bits-1) - 1
+
+    return quant.QConfig(
+        activation=quant.FakeQuantize.with_args(
+            observer=quant.MovingAverageMinMaxObserver,
+            quant_min=0, quant_max=qmax,
+            dtype=torch.qint32,
+            qscheme=torch.per_tensor_affine
+        ),
+        weight=quant.FakeQuantize.with_args(
+            observer=quant.MovingAverageMinMaxObserver,
+            quant_min=qmin_signed, quant_max=qmax_signed,
+            dtype=torch.qint32,
+            qscheme=torch.per_tensor_symmetric
+        )
+    )
 
 def npy_to_txt(layer_number, activations):
     # Saving the input
@@ -109,7 +149,7 @@ def parameter_generation():
     'data_dir':'../dataset',
     'data_url':'https://storage.googleapis.com/download.tensorflow.org/data/speech_commands_v0.02.tar.gz',
     'epochs':40,
-    'batch_size':4,
+    'batch_size':8,
     'silence_percentage':0.0,
     'unknown_percentage':0.0,
     'validation_percentage':10.0,
@@ -126,3 +166,45 @@ def parameter_generation():
     training_parameters['time_shift_samples'] = time_shift_samples
 
     return training_parameters, data_processing_parameters
+
+quant_fuse_list = [
+            ["ConvBNReLU1.0","ConvBNReLU1.1","ConvBNReLU1.2"],
+            ["ConvBNReLU2.0","ConvBNReLU2.1","ConvBNReLU2.2"],
+            ["ConvBNReLU3.0","ConvBNReLU3.1","ConvBNReLU3.2"],
+            ["ConvBNReLU4.0","ConvBNReLU4.1","ConvBNReLU4.2"],
+            ["ConvBNReLU5.0","ConvBNReLU5.1","ConvBNReLU5.2"],
+            ["ConvBNReLU6.0","ConvBNReLU6.1","ConvBNReLU6.2"],
+            ["ConvBNReLU7.0","ConvBNReLU7.1","ConvBNReLU7.2"],
+            ["ConvBNReLU8.0","ConvBNReLU8.1","ConvBNReLU8.2"],
+            ["ConvBNReLU9.0","ConvBNReLU9.1","ConvBNReLU9.2"],
+        ]
+qat_configs = {
+    "ConvBNReLU1.0": get_qconfig8(4,4),
+    "ConvBNReLU2.0": get_qconfig8(4,4),
+    "ConvBNReLU3.0": get_qconfig8(4,4),
+    "ConvBNReLU4.0": get_qconfig8(4,4),
+    "ConvBNReLU5.0": get_qconfig8(4,4),
+    "ConvBNReLU6.0": get_qconfig8(4,4),
+    "ConvBNReLU7.0": get_qconfig8(4,4),
+    "ConvBNReLU8.0": get_qconfig8(4,4),
+    "ConvBNReLU9.0": get_qconfig8(4,16),
+    "fc1": get_qconfig8(8,16),
+}
+
+STEP_DO_QAT_TRAIN               = True
+STEP_DO_TRAIN                   = True
+STEP_DO_EXPORT_MODEL            = False
+STEP_DO_PROCESS_MFCCS           = False
+CHECKPOINT_PATH                 = 'none'
+CLASSES                         = 10
+NOT_PRETRAIN_BUT_OL_WORD_LIMIT  = 5
+HYPERPARAMETER_SETUP            = 'qat_44_44_44_44_416_816_bs_8_split_5_and_above'
+CHECKPOINT_SAVE_PATH            = './run_' + HYPERPARAMETER_SETUP
+EXPORT_OUTPUT_DIR_PATH_FLOAT    = '../simulation/exported_models_float/'
+EXPORT_OUTPUT_DIR_PATH_FIXED    = '../simulation/exported_models_fixed/'
+EXPORT_OUTPUT_NAME_FLOAT        = 'export_params_nclass_' + str(CLASSES) + '.csv'
+EXPORT_OUTPUT_NAME_FIXED        = 'qat_export_params_nclass_' + str(CLASSES) + '.csv'
+EXPORT_OUTPUT_PATH_FLOAT        = EXPORT_OUTPUT_DIR_PATH_FLOAT + EXPORT_OUTPUT_NAME_FLOAT
+MFCCS_INPUT_PATHS               = ['../dataset_mfccs_raw/yes/d21fd169_nohash_0',
+                                    '../dataset_mfccs_raw/yes/d21fd169_nohash_1']  # Path(s) to MFCCs binary file
+MFCCS_OUTPUT_PATH               = './output_mfccs.bin' # Path to save model output
