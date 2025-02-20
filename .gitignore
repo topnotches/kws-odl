@@ -1,4 +1,6 @@
-dataset*
+dataset
+dataset/*
+dataset_*
 *.log
 version_*
 *.gz
