@@ -8,7 +8,20 @@
 
 
 
+/***************************/
+/* MODEL FORMAT PARAMETERS */
+/***************************/
+#define DO_FLOAT true
 
+typedef struct quant_param_t {
+    float scale_in = 1;
+    float scale_out = 1;
+    float scale_weight = 1;
+} quant_param;
+
+/*****************************/
+/* SIMULATION RUN PARAMETERS */
+/*****************************/
 #define NUMBER_OF_CLASSES   12
 #define EPOCHS              10000
 #define TOTAL_RUNS          10

@@ -249,7 +249,7 @@ layer::~layer() {
 void layer::forward(float *layer_input, float *labels_input) {
     switch (this->layer_type) {
         case LayerTypes::conv: {
-            conv_layer_sequential(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
+            conv_layer_float(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
                             this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth,
                             this->layer_conv_hypr_params.kernel_stride, this->layer_conv_hypr_params.kernel_width, this->layer_conv_hypr_params.kernel_height,
                             this->layer_conv_hypr_params.kernel_count, this->layer_dim_size_out.batch,
@@ -258,7 +258,7 @@ void layer::forward(float *layer_input, float *labels_input) {
             break;
         }
         case LayerTypes::dw_conv: {
-            dw_conv_layer_sequential(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
+            dw_conv_layer_float(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
                                         this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth,
                                         this->layer_conv_hypr_params.kernel_stride, this->layer_conv_hypr_params.kernel_width,
                                         this->layer_conv_hypr_params.kernel_height, this->layer_dim_size_in.batch,
@@ -269,14 +269,14 @@ void layer::forward(float *layer_input, float *labels_input) {
         }
         case LayerTypes::dense: {
 
-            dense_layer(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
+            dense_layer_float(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
                         this->layer_dense_hypr_params.size_in, this->layer_dense_hypr_params.size_out, this->layer_dim_size_out.batch);
 
             break;
         }
         case LayerTypes::batchnorm: {
 
-            batch_norm_sequential(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
+            batch_norm_float(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
                                     this->layer_bn_means.data(), this->layer_bn_variances.data(),
                                     this->layer_dim_size_in.width * this->layer_dim_size_in.height, this->layer_dim_size_in.depth, this->layer_dim_size_in.batch);
 
@@ -284,11 +284,11 @@ void layer::forward(float *layer_input, float *labels_input) {
           }  
         case LayerTypes::relu: {
 
-            relu_layer(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth*this->layer_dim_size_in.batch);
+            relu_layer_float(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth*this->layer_dim_size_in.batch);
             break;
         }
         case LayerTypes::avgpool2d: {
-            avgpool2d_layer_sequential(layer_input, this->layer_outputs.data(),
+            avgpool2d_layer_float(layer_input, this->layer_outputs.data(),
                                         this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth,
                                         this->layer_conv_hypr_params.kernel_stride, this->layer_conv_hypr_params.kernel_width,
                                         this->layer_conv_hypr_params.kernel_height, this->layer_dim_size_in.batch,
@@ -297,15 +297,15 @@ void layer::forward(float *layer_input, float *labels_input) {
             break;
         }
         case LayerTypes::softmax: {
-            softmax_layer_sequential(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.batch, this->layer_dim_size_in.width);
+            softmax_layer_float(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.batch, this->layer_dim_size_in.width);
             break;
         }
         case LayerTypes::cross_entropy_loss: {
-            cross_entropy_loss_sequential(labels_input, layer_input, this->layer_outputs.data(),  this->layer_dim_size_out.batch, this->layer_dim_size_in.width);
+            cross_entropy_loss_float(labels_input, layer_input, this->layer_outputs.data(),  this->layer_dim_size_out.batch, this->layer_dim_size_in.width);
             break;
         }
         case LayerTypes::fusion: {
-            fusion_mult_sequential(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_dim_size_out.width, this->layer_dim_size_out.batch);
+            fusion_mult_float(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_dim_size_out.width, this->layer_dim_size_out.batch);
 
             break;
         }
@@ -327,7 +327,7 @@ void layer::backward(float *layer_gradient_input) {
             break;
         }
         case LayerTypes::dense: {
-            dense_layer_backward_sequential(
+            dense_layer_backward_float(
                              this->layer_gradient_outputs.data(), 
                                 layer_gradient_input,
                                 this->layer_weights.data(),
@@ -350,7 +350,7 @@ void layer::backward(float *layer_gradient_input) {
             break;
         }
         case LayerTypes::softmax: {
-            softmax_layer_backward_sequential(this->layer_outputs.data(), 
+            softmax_layer_backward_float(this->layer_outputs.data(), 
                                         layer_gradient_input, 
                                         this->layer_gradient_outputs.data(), 
                                         this->layer_dim_size_out.batch, 
@@ -362,7 +362,7 @@ void layer::backward(float *layer_gradient_input) {
             break;
         }
         case LayerTypes::fusion: {
-            fusion_mult_backward_sequential(
+            fusion_mult_backward_float(
                                         this->layer_gradient_outputs.data(), 
                                         layer_gradient_input, 
                                         this->layer_weights.data(), 

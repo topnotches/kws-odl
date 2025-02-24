@@ -5,7 +5,7 @@
 #include "conv_layer.hpp"
 #include "misc_utils.hpp"
 
-void test_conv_layer_sequential() {
+void test_conv_layer_float() {
     // Define input dimensions and parameters
     const uint16_t input_width = 12;
     const uint16_t input_height = 4;
@@ -107,7 +107,7 @@ void test_conv_layer_sequential() {
     float output_features[batch_size * output_width * output_height * output_feature_map_count];
 
     // Run the convolution layer
-    conv_layer_sequential(input_features, output_features, conv_weights,conv_biases,
+    conv_layer_float(input_features, output_features, conv_weights,conv_biases,
                           input_width, input_height, input_depth,
                           stride, kernel_width, kernel_height, output_feature_map_count, batch_size,
                           pad_top, pad_bottom, pad_left, pad_right);
@@ -132,6 +132,6 @@ void test_conv_layer_sequential() {
 }
 
 int main() {
-    test_conv_layer_sequential();
+    test_conv_layer_float();
     return 0;
 }

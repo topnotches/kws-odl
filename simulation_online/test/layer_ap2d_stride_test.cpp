@@ -5,7 +5,7 @@
 #include "avgpool2d_layer.hpp"
 #include "misc_utils.hpp"
 
-void test_avgpool2d_layer_sequential() {
+void test_avgpool2d_layer_float() {
     // Define input dimensions and parameters
     const uint16_t input_width = 4;
     const uint16_t input_height = 4;
@@ -88,7 +88,7 @@ void test_avgpool2d_layer_sequential() {
     float output_features[batch_size * output_width * output_height * input_depth];
 
     // Run the average pooling layer
-    avgpool2d_layer_sequential(input_features, output_features,
+    avgpool2d_layer_float(input_features, output_features,
                                input_width, input_height, input_depth,
                                stride, kernel_width, kernel_height, batch_size,
                                pad_top, pad_bottom, pad_left, pad_right);
@@ -112,6 +112,6 @@ void test_avgpool2d_layer_sequential() {
 }
 
 int main() {
-    test_avgpool2d_layer_sequential();
+    test_avgpool2d_layer_float();
     return 0;
 }

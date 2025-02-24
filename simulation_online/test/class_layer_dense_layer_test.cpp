@@ -7,7 +7,7 @@
 #include "layer.hpp"
 
 
-void test_dense_layer_sequential() {
+void test_dense_layer_float() {
 
     const uint8_t input_size = 200;
     const uint8_t output_size = 100;
@@ -64,6 +64,6 @@ void test_dense_layer_sequential() {
 }
 
 int main() {
-    test_dense_layer_sequential();
+    test_dense_layer_float();
     return 0;
 }

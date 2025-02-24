@@ -8,7 +8,7 @@
 
 extern layer_analyzer batchnorm_analyzer;
 
-void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
+void batch_norm_float(float *bn_input_features, float *bn_output_features,
                            float *bn_gamma, float *bn_beta,
                            float *running_mean, float *running_variance,
                            const uint16_t bn_num_features, const uint16_t bn_num_channels, const uint16_t bn_num_batches) {
@@ -170,6 +170,42 @@ void batch_norm_sequential(float *bn_input_features, float *bn_output_features,
                 batchnorm_analyzer.incr_stores();
                 batchnorm_analyzer.incr_additions();
                 batchnorm_analyzer.incr_multiplications();
+
+            }
+        }
+    }
+}
+
+
+
+void batch_norm_fixed(int32_t *bn_input_features, int32_t *bn_output_features,
+    int32_t *bn_gamma, int32_t *bn_beta,
+    int32_t *running_mean, int32_t *running_variance,
+    const uint16_t bn_num_features, const uint16_t bn_num_channels, const uint16_t bn_num_batches, const float rescale_value) {
+
+    for (uint16_t index_batch = 0; index_batch < bn_num_batches; index_batch++) {
+        for (uint16_t index_channel = 0; index_channel < bn_num_channels; index_channel++) {
+            for (uint16_t index_feature = 0; index_feature < bn_num_features; index_feature++) {
+            int32_t io_index = index_batch * bn_num_channels * bn_num_features + index_channel * bn_num_features + index_feature;
+            int32_t normalized_value = (bn_input_features[io_index] - running_mean[index_channel]) /
+                            sqrt(running_variance[index_channel] + 1); // TODO and FIXME: "... + 1" is a dirty little epsilon replacement trick >;)
+                            
+            batchnorm_analyzer.incr_loads();
+            batchnorm_analyzer.incr_loads();
+            batchnorm_analyzer.incr_loads();
+            batchnorm_analyzer.incr_additions();
+            batchnorm_analyzer.incr_additions();
+            batchnorm_analyzer.incr_divisions();
+
+            // Apply affine transformation
+            bn_output_features[io_index] = bn_gamma[index_channel] * normalized_value + bn_beta[index_channel];
+
+
+            batchnorm_analyzer.incr_loads();
+            batchnorm_analyzer.incr_loads();
+            batchnorm_analyzer.incr_stores();
+            batchnorm_analyzer.incr_additions();
+            batchnorm_analyzer.incr_multiplications();
 
             }
         }

@@ -4,7 +4,7 @@
 #include <assert.h>
 #include "batch_norm_layer.hpp"
 
-void test_batch_norm_sequential() {
+void test_batch_norm_float() {
     // Define input dimensions and parameters
     const uint16_t num_features = 2;
     const uint16_t num_batches = 4;
@@ -29,7 +29,7 @@ void test_batch_norm_sequential() {
     float output_features[num_features * num_batches];
 
     // Run the batch normalization layer
-    batch_norm_sequential(input_features, output_features, gamma, beta, num_features, num_batches);
+    batch_norm_float(input_features, output_features, gamma, beta, num_features, num_batches);
 
     // Validate the output features
     for (uint16_t feature = 0; feature < num_features; feature++) {
@@ -44,6 +44,6 @@ void test_batch_norm_sequential() {
 }
 
 int main() {
-    test_batch_norm_sequential();
+    test_batch_norm_float();
     return 0;
 }

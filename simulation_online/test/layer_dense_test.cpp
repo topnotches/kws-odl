@@ -6,7 +6,7 @@
 #include "misc_utils.hpp"
 
 
-void test_dense_layer_sequential() {
+void test_dense_layer_float() {
 
     const uint8_t input_size = 200;
     const uint8_t output_size = 100;
@@ -29,7 +29,7 @@ void test_dense_layer_sequential() {
 
     init_flarr_to_num(expected_output_features, output_size*batch_size, weight_init_value * input_init_value * input_size + bias_init_value);
     
-    dense_layer(input_features, output_features, weights, biases, input_size, output_size, batch_size);
+    dense_layer_float(input_features, output_features, weights, biases, input_size, output_size, batch_size);
 
 
     // Validate the output features
@@ -47,6 +47,6 @@ void test_dense_layer_sequential() {
 }
 
 int main() {
-    test_dense_layer_sequential();
+    test_dense_layer_float();
     return 0;
 }

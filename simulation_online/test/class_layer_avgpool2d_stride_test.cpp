@@ -6,7 +6,7 @@
 #include "misc_utils.hpp"
 #include "layer.hpp"
 
-void test_avgpool2d_layer_sequential() {
+void test_avgpool2d_layer_float() {
     // Define input dimensions and parameters
     const uint16_t input_width = 4;
     const uint16_t input_height = 4;
@@ -135,6 +135,6 @@ void test_avgpool2d_layer_sequential() {
 }
 
 int main() {
-    test_avgpool2d_layer_sequential();
+    test_avgpool2d_layer_float();
     return 0;
 }

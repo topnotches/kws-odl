@@ -6,7 +6,7 @@
 #include "misc_utils.hpp"
 #include "layer.hpp"
 
-void test_batch_norm_sequential() {
+void test_batch_norm_float() {
     // Define input dimensions and parameters
     const uint16_t num_features = 2;
     const uint16_t num_batches = 4;
@@ -55,6 +55,6 @@ void test_batch_norm_sequential() {
 }
 
 int main() {
-    test_batch_norm_sequential();
+    test_batch_norm_float();
     return 0;
 }

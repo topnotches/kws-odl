@@ -37,7 +37,7 @@ float average(const float* vec, uint16_t size) {
 auto load_batch_from_paths(std::vector<std::string> paths) {
     std::vector<float> input_mfccs = {};
     for (auto path : paths) {
-        auto temp_floats = load_mffcs_bin(path);
+        auto temp_floats = load_mffcs_bin_float(path);
         input_mfccs.insert(input_mfccs.end(), temp_floats.begin(), temp_floats.end());
     }
     return input_mfccs;
@@ -67,7 +67,6 @@ int  main() {
             float error = 0.0f;
             float momentum = 0.0;
             uint32_t i = 0;
-            uint32_t ii = 0;
             
             std::vector<float> all_validation_error;
             std::vector<float> all_validation_accuracies_max;
@@ -85,7 +84,7 @@ int  main() {
             while (i < EPOCHS) {
                 
                 if (dataloader.get_training_pool_empty()) {
-                    auto mybatch = dataloader.get_batch();
+                    auto mybatch = dataloader.get_batch_float();
                     std::vector<float> labels_onehot;
                     for (auto label : std::get<1>(mybatch)) {
                         std::vector<float> temp;
@@ -133,7 +132,7 @@ int  main() {
                 } else {
                     momentum = 0.0;
 
-                    auto myvalset = dataloader.get_validation_set();
+                    auto myvalset = dataloader.get_validation_set_float();
                     float temp_err = 0.0f;
                     float total = 0;
                     float correct = 0;

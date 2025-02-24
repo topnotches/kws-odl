@@ -16,15 +16,18 @@ dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::st
 
     uint8_t label = 0;
     this->dataloader_path_names_train = {};
-    this->dataloader_inputs_train = {};
+    this->dataloader_inputs_train_float = {};
+    this->dataloader_inputs_train_fixed = {};
     this->dataloader_labels_train = {};
     this->dataloader_path_names_validation = {};
-    this->dataloader_inputs_validation = {};
+    this->dataloader_inputs_validation_float = {};
+    this->dataloader_inputs_validation_fixed = {};
     this->dataloader_labels_validation = {};
     this->dataloader_pick_list = {};
     
     std::vector<std::string>        temp_dataloader_path_names;
-    std::vector<std::vector<float>> temp_dataloader_inputs;
+    std::vector<std::vector<float>> temp_dataloader_inputs_float;
+    std::vector<std::vector<int32_t>> temp_dataloader_inputs_fixed;
     std::vector<uint8_t>            temp_dataloader_labels;
 
     for (std::string target_word : dataloader_target_words) {
@@ -32,7 +35,8 @@ dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::st
         for (const auto & entry : fs::directory_iterator(dir_path)) {
             if (entry.path().string().find(dataloader_speaker_id) != std::string::npos) {
                 temp_dataloader_path_names.push_back(entry.path().string());
-                temp_dataloader_inputs.push_back(load_mffcs_bin(entry.path().string()));
+                temp_dataloader_inputs_float.push_back(load_mffcs_bin_float(entry.path().string()));
+                temp_dataloader_inputs_fixed.push_back(load_mffcs_bin_fixed(entry.path().string()));
                 temp_dataloader_labels.push_back(label);
             }
         }
@@ -40,8 +44,10 @@ dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::st
     }
     
     std::vector<uint32_t> indexes;
-    for (uint32_t i = 0; i < temp_dataloader_path_names.size(); ++i)
+    for (uint32_t i = 0; i < temp_dataloader_path_names.size(); ++i) {
         indexes.push_back(i);
+    }
+
     indexes = this->shuffle_vector(indexes);
     this->dataloader_total_size = indexes.size();
     this->dataloader_train_size = (uint32_t) ((float) dataloader_total_size * dataloader_train_split);
@@ -57,11 +63,13 @@ dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::st
     for (uint32_t i = 0; i < indexes.size(); i++) {
         if (i < this->dataloader_train_size) {
             this->dataloader_path_names_train.push_back(temp_dataloader_path_names[indexes[i]]);
-            this->dataloader_inputs_train.push_back(temp_dataloader_inputs[indexes[i]]);
+            this->dataloader_inputs_train_float.push_back(temp_dataloader_inputs_float[indexes[i]]);
+            this->dataloader_inputs_train_fixed.push_back(temp_dataloader_inputs_fixed[indexes[i]]);
             this->dataloader_labels_train.push_back(temp_dataloader_labels[indexes[i]]);
         } else {
             this->dataloader_path_names_validation.push_back(temp_dataloader_path_names[indexes[i]]);
-            this->dataloader_inputs_validation.push_back(temp_dataloader_inputs[indexes[i]]);
+            this->dataloader_inputs_validation_float.push_back(temp_dataloader_inputs_float[indexes[i]]);
+            this->dataloader_inputs_validation_fixed.push_back(temp_dataloader_inputs_fixed[indexes[i]]);
             this->dataloader_labels_validation.push_back(temp_dataloader_labels[indexes[i]]);
         }
     }
@@ -76,17 +84,19 @@ dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::st
     //    std::cout << this->dataloader_path_names_train[i] << std::endl;
     //}
 }
+
 dataloader::~dataloader( ) {
     
 }
-std::tuple<std::vector<float>,std::vector<uint8_t>> dataloader::get_batch() {
+
+std::tuple<std::vector<float>,std::vector<uint8_t>> dataloader::get_batch_float() {
     std::vector<float> input_data;
     std::vector<uint8_t> input_labels;
     if (this->dataloader_batch_size <= this->dataloader_pick_list.size()) {
         for (uint8_t i = 0; i < this->dataloader_batch_size; i++) {
             //std::cout << "Picked name: " <<  this->dataloader_path_names_train[this->dataloader_pick_list.back()]<<std::endl;
 
-            std::vector<float> temp_input_data = this->dataloader_inputs_train[this->dataloader_pick_list.back()];
+            std::vector<float> temp_input_data = this->dataloader_inputs_train_float[this->dataloader_pick_list.back()];
             input_data.insert(input_data.end(), temp_input_data.begin(), temp_input_data.end());
             
             uint8_t temp_input_labels = this->dataloader_labels_train[this->dataloader_pick_list.back()];
@@ -98,10 +108,41 @@ std::tuple<std::vector<float>,std::vector<uint8_t>> dataloader::get_batch() {
     }
     return std::make_tuple(input_data, input_labels);
 }
-std::tuple<std::vector<std::vector<float>>,std::vector<uint8_t>> dataloader::get_validation_set() {
+std::tuple<std::vector<int32_t>,std::vector<uint8_t>> dataloader::get_batch_fixed() {
+    std::vector<int32_t> input_data;
+    std::vector<uint8_t> input_labels;
+    if (this->dataloader_batch_size <= this->dataloader_pick_list.size()) {
+        for (uint8_t i = 0; i < this->dataloader_batch_size; i++) {
+            //std::cout << "Picked name: " <<  this->dataloader_path_names_train[this->dataloader_pick_list.back()]<<std::endl;
+
+            std::vector<int32_t> temp_input_data = this->dataloader_inputs_train_fixed[this->dataloader_pick_list.back()];
+            input_data.insert(input_data.end(), temp_input_data.begin(), temp_input_data.end());
+            
+            uint8_t temp_input_labels = this->dataloader_labels_train[this->dataloader_pick_list.back()];
+            this->dataloader_pick_list.pop_back();
+            input_labels.push_back(temp_input_labels);
+        }
+    } else {
+        KHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN("ERROR: batch size is larger than residuals");
+    }
+    return std::make_tuple(input_data, input_labels);
+}
+
+std::tuple<std::vector<std::vector<float>>,std::vector<uint8_t>> dataloader::get_validation_set_float() {
     std::vector<std::vector<float>> input_data;
     std::vector<uint8_t> input_labels;
-    for (auto val_data : this->dataloader_inputs_validation) {
+    for (auto val_data : this->dataloader_inputs_validation_float) {
+            input_data.push_back(val_data);
+    }
+    for (auto val_label : this->dataloader_labels_validation) {
+        input_labels.push_back(val_label);
+    }
+    return std::make_tuple(input_data, input_labels);
+}
+std::tuple<std::vector<std::vector<int32_t>>,std::vector<uint8_t>> dataloader::get_validation_set_fixed() {
+    std::vector<std::vector<int32_t>> input_data;
+    std::vector<uint8_t> input_labels;
+    for (auto val_data : this->dataloader_inputs_validation_fixed) {
             input_data.push_back(val_data);
     }
     for (auto val_label : this->dataloader_labels_validation) {
@@ -154,8 +195,11 @@ std::vector<std::string> dataloader::get_path_names_train() {
     return this->dataloader_path_names_train;
 }
 
-std::vector<std::vector<float>> dataloader::get_inputs_train() {
-    return this->dataloader_inputs_train;
+std::vector<std::vector<float>> dataloader::get_inputs_train_float() {
+    return this->dataloader_inputs_train_float;
+}
+std::vector<std::vector<int32_t>> dataloader::get_inputs_train_fixed() {
+    return this->dataloader_inputs_train_fixed;
 }
 
 std::vector<uint8_t> dataloader::get_labels_train() {
@@ -171,14 +215,27 @@ std::vector<uint32_t> dataloader::shuffle_vector(std::vector<uint32_t> vector) {
     std::random_shuffle(vector.begin(), vector.end());
     return vector;
 }
+std::vector<int32_t> dataloader::shuffle_vector(std::vector<int32_t> vector) {
+    std::srand(time(NULL));
+    std::random_shuffle(vector.begin(), vector.end());
+    return vector;
+}
 std::vector<float> dataloader::shuffle_vector(std::vector<float> vector) {
     std::srand(time(NULL));
     std::random_shuffle(vector.begin(), vector.end());
     return vector;
 }
+
 void dataloader::set_train_set(std::vector<std::vector<float>> cached_list) {
-    this->dataloader_inputs_train = cached_list;
+    this->dataloader_inputs_train_float = cached_list;
 }
+void dataloader::set_train_set(std::vector<std::vector<int32_t>> cached_list) {
+    this->dataloader_inputs_train_fixed = cached_list;
+}
+
 void dataloader::set_validation_set(std::vector<std::vector<float>> cached_list) {
-    this->dataloader_inputs_validation = cached_list;
+    this->dataloader_inputs_validation_float = cached_list;
+}
+void dataloader::set_validation_set(std::vector<std::vector<int32_t>> cached_list) {
+    this->dataloader_inputs_validation_fixed = cached_list;
 }
