@@ -278,9 +278,10 @@ void layer_q::forward(int32_t *layer_input, int32_t *labels_input) {
         }
         case LayerTypes::batchnorm: {
 
-            batch_norm_fixed(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
-                                    this->layer_bn_means.data(), this->layer_bn_variances.data(),
-                                    this->layer_dim_size_in.width * this->layer_dim_size_in.height, this->layer_dim_size_in.depth, this->layer_dim_size_in.batch, this->layer_rescale_value, this->layer_quant_params.activation_bits);
+            KHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN("Trying forward() on BATCHNORM...");
+            //batch_norm_fixed(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
+            //                        this->layer_bn_means.data(), this->layer_bn_variances.data(),
+            //                        this->layer_dim_size_in.width * this->layer_dim_size_in.height, this->layer_dim_size_in.depth, this->layer_dim_size_in.batch, this->layer_rescale_value, this->layer_quant_params.activation_bits);
 
             break;
           }  
@@ -303,7 +304,7 @@ void layer_q::forward(int32_t *layer_input, int32_t *labels_input) {
             break;
         }
         case LayerTypes::cross_entropy_loss: {
-            cross_entropy_loss_fixed(labels_input, layer_input, this->layer_outputs.data(),  this->layer_dim_size_out.batch, this->layer_dim_size_in.width, this->layer_rescale_value, this->layer_quant_params.activation_bits);
+            cross_entropy_loss_fixed(labels_input, layer_input, this->layer_outputs.data(),  this->layer_dim_size_out.batch, this->layer_dim_size_in.width);
             break;
         }
         case LayerTypes::fusion: {
@@ -454,11 +455,17 @@ void layer_q::adam_optimize(const int32_t* layer_adam_gradients_backprop, const 
 }
 
 // getters
+float layer_q::get_rescale_value() {
+    return this->layer_rescale_value;
+}
 tensor_dim_sizes_t layer_q::get_input_size() {
     return this->layer_dim_size_in;
 }
 tensor_dim_sizes_t layer_q::get_output_size() {
     return this->layer_dim_size_out;
+}
+quant_param_t layer_q::get_qparams() {
+    return this->layer_quant_params;
 }
 std::vector<int32_t> layer_q::get_weights() {
     return this->layer_weights;

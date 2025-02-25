@@ -82,13 +82,15 @@ std::vector<int32_t> load_mffcs_bin_fixed(const std::string& filename) {
 
     // Resize the vector to hold the float data
     size_t numFloats = size / sizeof(float);
-    data.resize(numFloats);
+    data_float.resize(numFloats);
 
     // Read the binary file into the float vector
-    if (!file.read(reinterpret_cast<char*>(data.data()), size)) {
+    if (!file.read(reinterpret_cast<char*>(data_float.data()), size)) {
         std::cerr << "Error reading file: " << filename << std::endl;
         data.clear();
     }
+    //std::cout << "aaelkmfalekmflkaemf" << std::endl; 
+
     for (float dfltpnt : data_float) {
         data.push_back(static_cast<int>(dfltpnt));
     }
@@ -97,6 +99,11 @@ std::vector<int32_t> load_mffcs_bin_fixed(const std::string& filename) {
 
 std::vector<float> int_to_float_onehot(const uint8_t integer, const uint8_t max) {
     std::vector<float> onehot(max, 0.0);
+    onehot[integer] = 1.0f;
+    return onehot;
+}
+std::vector<int32_t> int_to_fixed_onehot(const uint8_t integer, const uint8_t max) {
+    std::vector<int32_t> onehot(max, 0.0);
     onehot[integer] = 1.0f;
     return onehot;
 }

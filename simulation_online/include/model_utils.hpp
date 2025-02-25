@@ -20,5 +20,6 @@ std::vector<layer> get_model(std::string model_path, uint8_t batch_size, uint8_t
 std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size, uint8_t num_classes);
 
 void model_forward(std::vector<layer> &model, std::vector<float> data);
+void model_forward(std::vector<layer_q> &model, std::vector<int32_t> data);
 
 #endif

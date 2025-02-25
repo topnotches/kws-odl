@@ -28,8 +28,10 @@ private:
 public:
     std::vector<int32_t> layer_gradient_outputs;
     std::vector<int32_t> layer_outputs;
+    float get_rescale_value();
     tensor_dim_sizes_t get_input_size();
     tensor_dim_sizes_t get_output_size();
+    quant_param_t get_qparams();
     std::vector<int32_t> get_weights();
     std::vector<int32_t> get_biases();
     std::vector<int32_t> get_layer_bn_means();

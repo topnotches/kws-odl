@@ -101,7 +101,7 @@ void avgpool2d_layer_fixed(int32_t *avgpool2d_inputs, int32_t *avgpool2d_outputs
                             }
                         }
                     }
-                    avgpool2d_outputs[avgpool2d_batch_output_offset + index_layer * avgpool2d_width_limit * avgpool2d_height_limit + index_row * avgpool2d_width_limit + index_column] = requantize_shift(avgpool2d_sum / avgpool2d_count, rescale_value, activation_bits);
+                    avgpool2d_outputs[avgpool2d_batch_output_offset + index_layer * avgpool2d_width_limit * avgpool2d_height_limit + index_row * avgpool2d_width_limit + index_column] = avgpool2d_sum / avgpool2d_count;
                 }
             }
         }

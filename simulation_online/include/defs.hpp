@@ -34,35 +34,35 @@ typedef struct quant_param_t {
 
 // Layer 2, Depthwise Convolution
 #define LAYER_2_QPARAM_WEIGHT_BITS 4
-#define LAYER_2_QPARAM_ACTIVA_BITS 4
+#define LAYER_2_QPARAM_ACTIVA_BITS 8
 
 // Layer 3, Pointwise Convolution
 #define LAYER_3_QPARAM_WEIGHT_BITS 4
-#define LAYER_3_QPARAM_ACTIVA_BITS 4
+#define LAYER_3_QPARAM_ACTIVA_BITS 8
 
 // Layer 4, Depthwise Convolution
 #define LAYER_4_QPARAM_WEIGHT_BITS 4
-#define LAYER_4_QPARAM_ACTIVA_BITS 4
+#define LAYER_4_QPARAM_ACTIVA_BITS 8
 
 // Layer 5, Pointwise Convolution
 #define LAYER_5_QPARAM_WEIGHT_BITS 4
-#define LAYER_5_QPARAM_ACTIVA_BITS 4
+#define LAYER_5_QPARAM_ACTIVA_BITS 8
 
 // Layer 6, Depthwise Convolution
 #define LAYER_6_QPARAM_WEIGHT_BITS 4
-#define LAYER_6_QPARAM_ACTIVA_BITS 4
+#define LAYER_6_QPARAM_ACTIVA_BITS 8
 
 // Layer 7, Pointwise Convolution
 #define LAYER_7_QPARAM_WEIGHT_BITS 4
-#define LAYER_7_QPARAM_ACTIVA_BITS 4
+#define LAYER_7_QPARAM_ACTIVA_BITS 8
 
 // Layer 8, Depthwise Convolution
 #define LAYER_8_QPARAM_WEIGHT_BITS 4
-#define LAYER_8_QPARAM_ACTIVA_BITS 4
+#define LAYER_8_QPARAM_ACTIVA_BITS 8
 
 // Layer 9, Pointwise Convolution
 #define LAYER_9_QPARAM_WEIGHT_BITS 4
-#define LAYER_9_QPARAM_ACTIVA_BITS 4
+#define LAYER_9_QPARAM_ACTIVA_BITS 16
 
 // Layer 11, Dense
 #define LAYER_11_QPARAM_WEIGHT_BITS 8
@@ -73,7 +73,7 @@ typedef struct quant_param_t {
 /*****************************/
 #define NUMBER_OF_CLASSES   12
 #define EPOCHS              10000
-#define TOTAL_RUNS          10
+#define TOTAL_RUNS          1
 #define TRAIN_VAL_SPLIT     0.7
 #define BATCH_SIZE          1
 #define LAYER_SELECT        28

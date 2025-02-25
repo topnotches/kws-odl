@@ -251,17 +251,18 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
     std::vector<layer_q> model;
 
 
-    std::vector<std::vector<std::string>> layer_params_str = load_layers_from_csv_to_vec(model_path + ".csv");
-    std::vector<std::vector<std::string>> layer_qparams_str = load_layers_from_csv_to_vec(model_path + ".csv");
+    std::vector<std::vector<std::string>> layer_params_str = load_layers_from_csv_to_vec(model_path + "weights.csv");
+    std::vector<std::vector<std::string>> layer_qparams_str = load_layers_from_csv_to_vec(model_path + "scales.csv");
     std::vector<std::vector<int32_t>> layer_params;
     std::vector<float> layer_qparams;
+    
+    
     for (auto layer_param: layer_params_str) {
         layer_params.push_back(str_to_int32_vec(layer_param[2]));
     }
     for (auto layer_qparam: layer_qparams_str) {
         layer_qparams.push_back(str_to_fl32_vec(layer_qparam[2])[0]);
     }
-
     tensor_dim_sizes_t mfccs_size;
     mfccs_size.height = 49;
     mfccs_size.width = 10;
@@ -384,36 +385,27 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
     ****************************************/
     // Layer 1, Convolution
     model.push_back(layer_q(LayerTypes::conv,         mfccs_size,                       qparam_conv_layer1, layer_params[0].data(),  layer_params[1].data(),   param_conv_layer1));
-    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
     // Layer 2, Depth-wise Separable Convolution
     model.push_back(layer_q(LayerTypes::dw_conv,      model.back().get_output_size(),   qparam_dw_conv_layer2, layer_params[2].data(),  layer_params[3].data(),   param_dw_conv_layer2));
-    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
     model.push_back(layer_q(LayerTypes::conv,         model.back().get_output_size(),   qparam_pw_conv_layer2, layer_params[4].data(),  layer_params[5].data(),   param_pw_conv_layer2));
-    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
 
     // Layer 3, Depth-wise Separable Convolution
     model.push_back(layer_q(LayerTypes::dw_conv,      model.back().get_output_size(),   qparam_dw_conv_layer3, layer_params[6].data(), layer_params[7].data(),  param_dw_conv_layer3));
-    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
     model.push_back(layer_q(LayerTypes::conv,         model.back().get_output_size(),   qparam_pw_conv_layer3, layer_params[8].data(),  layer_params[9].data(), param_pw_conv_layer3));
-    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
 
     // Layer 4, Depth-wise Separable Convolution
     model.push_back(layer_q(LayerTypes::dw_conv,      model.back().get_output_size(),   qparam_dw_conv_layer4, layer_params[10].data(),  layer_params[11].data(), param_dw_conv_layer4));
-    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
     model.push_back(layer_q(LayerTypes::conv,         model.back().get_output_size(),   qparam_pw_conv_layer4, layer_params[12].data(),  layer_params[13].data(), param_pw_conv_layer4));
-    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
 
     // Layer 5, Depth-wise Separable Convolution
     model.push_back(layer_q(LayerTypes::dw_conv,      model.back().get_output_size(),   qparam_dw_conv_layer5, layer_params[14].data(),  layer_params[15].data(), param_dw_conv_layer5));
-    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
     model.push_back(layer_q(LayerTypes::conv,         model.back().get_output_size(),   qparam_pw_conv_layer5, layer_params[16].data(),  layer_params[17].data(), param_pw_conv_layer5));
-    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
 
     // Layer 6, Average Pooling
     model.push_back(layer_q(LayerTypes::avgpool2d,    model.back().get_output_size(), {}, {}, {}, param_ap2d_conv_layer6));
     
     // Layer 7, Fusion
-    model.push_back(layer_q(LayerTypes::fusion,       model.back().get_output_size(),   qparam_fusion_layer6));
+    //model.push_back(layer_q(LayerTypes::fusion,       model.back().get_output_size(),   qparam_fusion_layer6));
     
     // Layer 8, Dense 
     model.push_back(layer_q(LayerTypes::dense,        model.back().get_output_size(),   qparam_dense_layer7, layer_params[18].data(),  layer_params[19].data(), {}, param_dense_layer7));
@@ -422,6 +414,14 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
 
 
 void model_forward(std::vector<layer> &model, std::vector<float> data) {
+    model[0].forward(data.data());
+    for (uint8_t layer_index = 1; layer_index < model.size(); layer_index++ ) {
+       model[layer_index].forward(model[layer_index - 1].layer_outputs.data());
+       //printf("size [%d %d %d %d]\n", model[layer_index-1].get_input_size().batch, model[layer_index-1].get_input_size().depth, model[layer_index-1].get_input_size().height, model[layer_index-1].get_input_size().width);
+    }
+}
+
+void model_forward(std::vector<layer_q> &model, std::vector<int32_t> data) {
     model[0].forward(data.data());
     for (uint8_t layer_index = 1; layer_index < model.size(); layer_index++ ) {
        model[layer_index].forward(model[layer_index - 1].layer_outputs.data());
