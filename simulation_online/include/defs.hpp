@@ -17,6 +17,8 @@ typedef struct quant_param_t {
     float scale_in = 1;
     float scale_out = 1;
     float scale_weight = 1;
+    float weight_bits = 1;
+    float activation_bits = 1;
 } quant_param;
 
 /*****************************/

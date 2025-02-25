@@ -36,6 +36,7 @@ layer_q::layer_q(LayerTypes     layer_type,
     this->layer_outputs.resize(0);
     this->layer_gradient_outputs.resize(0);
     this->layer_rescale_value = (layer_quant_params.scale_weight*layer_quant_params.scale_in)/layer_quant_params.scale_out;
+    this->layer_quant_params = layer_quant_params;
 
     this->layer_dim_size_in = layer_dim_size_in; // {width, height, depth, batch_size}
 

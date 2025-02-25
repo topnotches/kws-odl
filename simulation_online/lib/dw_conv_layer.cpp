@@ -90,10 +90,10 @@ void dw_conv_layer_fixed(int32_t *dw_input_features, int32_t *dw_output_features
 
     for (int32_t index_batch = 0; index_batch < dw_batch_size; index_batch++) { // batch
 
-        #if DO_LAYER_ANALYSIS
-        #else
+#if DO_LAYER_ANALYSIS
+#else
         //#pragma omp parallel for //collapse(3)  // till i collapse
-        #endif
+#endif
         for (int32_t index_layer = 0; index_layer < dw_input_depth; index_layer++) { // layer
             for (int32_t index_row = 0; index_row < dw_height_limit; index_row++) { // out
                 for (int32_t index_column = 0; index_column < dw_width_limit ; index_column++) {
