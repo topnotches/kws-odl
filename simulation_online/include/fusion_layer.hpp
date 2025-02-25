@@ -11,7 +11,7 @@ void fusion_mult_backward_float(float* fusion_grad_input,
                                     const uint8_t fusion_features, 
                                     const uint8_t fusion_batch_size);
 
-void fusion_mult_fixed(const int32_t* fusion_input, int32_t* fusion_output, const int32_t* fusion_embeddings, const uint8_t fusion_features, const uint8_t fusion_batch_size, const float rescale_value);
+void fusion_mult_fixed(const int32_t* fusion_input, int32_t* fusion_output, const int32_t* fusion_embeddings, const uint8_t fusion_features, const uint8_t fusion_batch_size, const float rescale_value, const uint8_t activation_bits);
 
 void fusion_mult_backward_fixed(int32_t* fusion_grad_input, 
                                     const int32_t* fusion_grad_output, 

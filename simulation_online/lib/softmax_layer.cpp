@@ -43,7 +43,7 @@ void softmax_layer_backward_float(const float* softmax_outputs,
         }
     }
 }
-void softmax_layer_fixed(const int32_t* softmax_inputs, int32_t* softmax_outputs, const uint8_t softmax_batch_size, const uint8_t softmax_num_labels, const float rescale_value) {
+void softmax_layer_fixed(const int32_t* softmax_inputs, int32_t* softmax_outputs, const uint8_t softmax_batch_size, const uint8_t softmax_num_labels, const float rescale_value, const uint8_t activation_bits) {
     for (uint8_t index_batch = 0; index_batch < softmax_batch_size; index_batch++) {
         int32_t denominator = 0;
         

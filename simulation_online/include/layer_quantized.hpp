@@ -7,6 +7,7 @@
 class layer_q {
 private:
     float layer_rescale_value;
+    quant_param_t layer_quant_params;
     std::vector<int32_t> layer_weights;
     std::vector<int32_t> layer_biases;
     tensor_dim_sizes_t layer_dim_size_in;  // {width, height, depth, batch_size}
@@ -25,7 +26,7 @@ private:
     int32_t layer_adam_epsilon = 1e-8;
     uint32_t layer_adam_time_step = 1;
 public:
-std::vector<int32_t> layer_gradient_outputs;
+    std::vector<int32_t> layer_gradient_outputs;
     std::vector<int32_t> layer_outputs;
     tensor_dim_sizes_t get_input_size();
     tensor_dim_sizes_t get_output_size();
@@ -36,9 +37,9 @@ std::vector<int32_t> layer_gradient_outputs;
     LayerTypes get_layer_type();
     layer_q(LayerTypes            layer_type, 
           tensor_dim_sizes_t    layer_dim_size_in, 
+          quant_param_t         layer_quant_params = {},
           int32_t                 *weights = nullptr, 
           int32_t                 *biases = nullptr, 
-          quant_param_t         layer_quant_params = {},
           conv_hypr_param_t     layer_conv_hypr_params = {},
           dense_hypr_param_t    layer_dense_hypr_params = {},
           int32_t                 *layer_bn_means = NULL,

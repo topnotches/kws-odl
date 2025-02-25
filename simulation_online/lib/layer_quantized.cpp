@@ -19,9 +19,9 @@
 
 layer_q::layer_q(LayerTypes     layer_type, 
           tensor_dim_sizes_t    layer_dim_size_in, 
+          quant_param_t         layer_quant_params,
           int32_t                *weights, 
           int32_t                *biases,
-          quant_param_t         layer_quant_params,
           conv_hypr_param_t     layer_conv_hypr_params,
           dense_hypr_param_t    layer_dense_hypr_params,
           int32_t                *layer_bn_means,
@@ -256,7 +256,7 @@ void layer_q::forward(int32_t *layer_input, int32_t *labels_input) {
                             this->layer_conv_hypr_params.kernel_stride, this->layer_conv_hypr_params.kernel_width, this->layer_conv_hypr_params.kernel_height,
                             this->layer_conv_hypr_params.kernel_count, this->layer_dim_size_out.batch,
                             this->layer_conv_hypr_params.pad_top, this->layer_conv_hypr_params.pad_bottom,
-                            this->layer_conv_hypr_params.pad_left, this->layer_conv_hypr_params.pad_right, this->layer_rescale_value);
+                            this->layer_conv_hypr_params.pad_left, this->layer_conv_hypr_params.pad_right, this->layer_rescale_value, this->layer_quant_params.activation_bits);
             break;
         }
         case LayerTypes::dw_conv: {
@@ -265,14 +265,14 @@ void layer_q::forward(int32_t *layer_input, int32_t *labels_input) {
                                         this->layer_conv_hypr_params.kernel_stride, this->layer_conv_hypr_params.kernel_width,
                                         this->layer_conv_hypr_params.kernel_height, this->layer_dim_size_in.batch,
                                         this->layer_conv_hypr_params.pad_top, this->layer_conv_hypr_params.pad_bottom,
-                                        this->layer_conv_hypr_params.pad_left, this->layer_conv_hypr_params.pad_right, this->layer_rescale_value);
+                                        this->layer_conv_hypr_params.pad_left, this->layer_conv_hypr_params.pad_right, this->layer_rescale_value, this->layer_quant_params.activation_bits);
 
             break;
         }
         case LayerTypes::dense: {
 
             dense_layer_fixed(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
-                        this->layer_dense_hypr_params.size_in, this->layer_dense_hypr_params.size_out, this->layer_dim_size_out.batch, this->layer_rescale_value);
+                        this->layer_dense_hypr_params.size_in, this->layer_dense_hypr_params.size_out, this->layer_dim_size_out.batch, this->layer_rescale_value, this->layer_quant_params.activation_bits);
 
             break;
         }
@@ -280,13 +280,13 @@ void layer_q::forward(int32_t *layer_input, int32_t *labels_input) {
 
             batch_norm_fixed(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
                                     this->layer_bn_means.data(), this->layer_bn_variances.data(),
-                                    this->layer_dim_size_in.width * this->layer_dim_size_in.height, this->layer_dim_size_in.depth, this->layer_dim_size_in.batch, this->layer_rescale_value);
+                                    this->layer_dim_size_in.width * this->layer_dim_size_in.height, this->layer_dim_size_in.depth, this->layer_dim_size_in.batch, this->layer_rescale_value, this->layer_quant_params.activation_bits);
 
             break;
           }  
         case LayerTypes::relu: {
 
-            relu_layer_fixed(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth*this->layer_dim_size_in.batch, this->layer_rescale_value);
+            relu_layer_fixed(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.width, this->layer_dim_size_in.height, this->layer_dim_size_in.depth*this->layer_dim_size_in.batch, this->layer_rescale_value, this->layer_quant_params.activation_bits);
             break;
         }
         case LayerTypes::avgpool2d: {
@@ -295,19 +295,19 @@ void layer_q::forward(int32_t *layer_input, int32_t *labels_input) {
                                         this->layer_conv_hypr_params.kernel_stride, this->layer_conv_hypr_params.kernel_width,
                                         this->layer_conv_hypr_params.kernel_height, this->layer_dim_size_in.batch,
                                         this->layer_conv_hypr_params.pad_top, this->layer_conv_hypr_params.pad_bottom,
-                                        this->layer_conv_hypr_params.pad_left, this->layer_conv_hypr_params.pad_right, this->layer_rescale_value);
+                                        this->layer_conv_hypr_params.pad_left, this->layer_conv_hypr_params.pad_right, this->layer_rescale_value, this->layer_quant_params.activation_bits);
             break;
         }
         case LayerTypes::softmax: {
-            softmax_layer_fixed(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.batch, this->layer_dim_size_in.width, this->layer_rescale_value);
+            softmax_layer_fixed(layer_input, this->layer_outputs.data(), this->layer_dim_size_in.batch, this->layer_dim_size_in.width, this->layer_rescale_value, this->layer_quant_params.activation_bits);
             break;
         }
         case LayerTypes::cross_entropy_loss: {
-            cross_entropy_loss_fixed(labels_input, layer_input, this->layer_outputs.data(),  this->layer_dim_size_out.batch, this->layer_dim_size_in.width, this->layer_rescale_value);
+            cross_entropy_loss_fixed(labels_input, layer_input, this->layer_outputs.data(),  this->layer_dim_size_out.batch, this->layer_dim_size_in.width, this->layer_rescale_value, this->layer_quant_params.activation_bits);
             break;
         }
         case LayerTypes::fusion: {
-            fusion_mult_fixed(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_dim_size_out.width, this->layer_dim_size_out.batch, this->layer_rescale_value);
+            fusion_mult_fixed(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_dim_size_out.width, this->layer_dim_size_out.batch, this->layer_rescale_value, this->layer_quant_params.activation_bits);
 
             break;
         }

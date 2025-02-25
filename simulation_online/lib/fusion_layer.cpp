@@ -3,6 +3,7 @@
 #include <math.h>
 #include <cstring>
 #include <iostream>
+#include "quantization_utils.hpp"
 #include "layer_analyzer.hpp"
 extern layer_analyzer fusion_fw_analyzer;
 extern layer_analyzer fusion_bw_analyzer;
@@ -49,7 +50,7 @@ void fusion_mult_backward_float(float* fusion_grad_input,
 
 
 
-void fusion_mult_fixed(const int32_t* fusion_input, int32_t* fusion_output, const int32_t* fusion_embeddings, const uint8_t fusion_features, const uint8_t fusion_batch_size, const float rescale_value) {
+void fusion_mult_fixed(const int32_t* fusion_input, int32_t* fusion_output, const int32_t* fusion_embeddings, const uint8_t fusion_features, const uint8_t fusion_batch_size, const float rescale_value, const uint8_t activation_bits) {
     
 #if DO_LAYER_ANALYSIS
 #else
@@ -57,7 +58,7 @@ void fusion_mult_fixed(const int32_t* fusion_input, int32_t* fusion_output, cons
 #endif
     for (uint8_t index_batch = 0; index_batch < fusion_batch_size; index_batch++) {
         for (uint8_t index_feature = 0; index_feature < fusion_features; index_feature++) {
-            fusion_output[index_batch * fusion_features + index_feature] = fusion_input[index_batch * fusion_features + index_feature] * fusion_embeddings[index_feature];
+            fusion_output[index_batch * fusion_features + index_feature] = requantize_shift(fusion_input[index_batch * fusion_features + index_feature] * fusion_embeddings[index_feature], rescale_value, activation_bits);
             fusion_fw_analyzer.incr_loads();
             fusion_fw_analyzer.incr_loads();
             fusion_fw_analyzer.incr_stores();

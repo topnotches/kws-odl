@@ -253,13 +253,13 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
 
     std::vector<std::vector<std::string>> layer_params_str = load_layers_from_csv_to_vec(model_path + ".csv");
     std::vector<std::vector<std::string>> layer_qparams_str = load_layers_from_csv_to_vec(model_path + ".csv");
-    std::vector<std::vector<float>> layer_params;
-    std::vector<std::vector<float>> layer_qparams;
+    std::vector<std::vector<int32_t>> layer_params;
+    std::vector<float> layer_qparams;
     for (auto layer_param: layer_params_str) {
         layer_params.push_back(str_to_int32_vec(layer_param[2]));
     }
     for (auto layer_qparam: layer_qparams_str) {
-        layer_qparams.push_back(str_to_fl32_vec(layer_qparam[2]));
+        layer_qparams.push_back(str_to_fl32_vec(layer_qparam[2])[0]);
     }
 
     tensor_dim_sizes_t mfccs_size;
@@ -277,48 +277,48 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
     **********************************************/
     quant_param_t qparam_conv_layer1;
     qparam_conv_layer1.scale_in             = 1;
-    qparam_conv_layer1.scale_out            = layer_qparam[0];
-    qparam_conv_layer1.scale_weight         = layer_qparam[1];
+    qparam_conv_layer1.scale_out            = layer_qparams[0];
+    qparam_conv_layer1.scale_weight         = layer_qparams[1];
 
     quant_param_t qparam_dw_conv_layer2;
     qparam_dw_conv_layer2.scale_in          =    qparam_conv_layer1.scale_out;
-    qparam_dw_conv_layer2.scale_out         = layer_qparam[2];
-    qparam_dw_conv_layer2.scale_weight      = layer_qparam[3];
+    qparam_dw_conv_layer2.scale_out         = layer_qparams[2];
+    qparam_dw_conv_layer2.scale_weight      = layer_qparams[3];
 
     quant_param_t qparam_pw_conv_layer2;
     qparam_pw_conv_layer2.scale_in          = qparam_dw_conv_layer2.scale_out;
-    qparam_pw_conv_layer2.scale_out         = layer_qparam[4];
-    qparam_pw_conv_layer2.scale_weight      = layer_qparam[5];
+    qparam_pw_conv_layer2.scale_out         = layer_qparams[4];
+    qparam_pw_conv_layer2.scale_weight      = layer_qparams[5];
 
     quant_param_t qparam_dw_conv_layer3;
     qparam_dw_conv_layer3.scale_in          = qparam_pw_conv_layer2.scale_out;
-    qparam_dw_conv_layer3.scale_out         = layer_qparam[6];
-    qparam_dw_conv_layer3.scale_weight      = layer_qparam[7];
+    qparam_dw_conv_layer3.scale_out         = layer_qparams[6];
+    qparam_dw_conv_layer3.scale_weight      = layer_qparams[7];
 
     quant_param_t qparam_pw_conv_layer3;
     qparam_pw_conv_layer3.scale_in          = qparam_dw_conv_layer3.scale_out;
-    qparam_pw_conv_layer3.scale_out         = layer_qparam[8];
-    qparam_pw_conv_layer3.scale_weight      = layer_qparam[9];
+    qparam_pw_conv_layer3.scale_out         = layer_qparams[8];
+    qparam_pw_conv_layer3.scale_weight      = layer_qparams[9];
 
     quant_param_t qparam_dw_conv_layer4;
     qparam_dw_conv_layer4.scale_in          = qparam_pw_conv_layer3.scale_out;
-    qparam_dw_conv_layer4.scale_out         = layer_qparam[10];
-    qparam_dw_conv_layer4.scale_weight      = layer_qparam[11];
+    qparam_dw_conv_layer4.scale_out         = layer_qparams[10];
+    qparam_dw_conv_layer4.scale_weight      = layer_qparams[11];
 
     quant_param_t qparam_pw_conv_layer4;
     qparam_pw_conv_layer4.scale_in          = qparam_dw_conv_layer4.scale_out;
-    qparam_pw_conv_layer4.scale_out         = layer_qparam[12];
-    qparam_pw_conv_layer4.scale_weight      = layer_qparam[13];
+    qparam_pw_conv_layer4.scale_out         = layer_qparams[12];
+    qparam_pw_conv_layer4.scale_weight      = layer_qparams[13];
 
     quant_param_t qparam_dw_conv_layer5;
     qparam_dw_conv_layer5.scale_in          = qparam_pw_conv_layer4.scale_out;
-    qparam_dw_conv_layer5.scale_out         = layer_qparam[14];
-    qparam_dw_conv_layer5.scale_weight      = layer_qparam[15];
+    qparam_dw_conv_layer5.scale_out         = layer_qparams[14];
+    qparam_dw_conv_layer5.scale_weight      = layer_qparams[15];
 
     quant_param_t qparam_pw_conv_layer5;
     qparam_pw_conv_layer5.scale_in          = qparam_dw_conv_layer5.scale_out;
-    qparam_pw_conv_layer5.scale_out         = layer_qparam[16];
-    qparam_pw_conv_layer5.scale_weight      = layer_qparam[17];
+    qparam_pw_conv_layer5.scale_out         = layer_qparams[16];
+    qparam_pw_conv_layer5.scale_weight      = layer_qparams[17];
 
     quant_param_t qparam_fusion_layer6;
     qparam_fusion_layer6.scale_in        = qparam_pw_conv_layer5.scale_out;
@@ -327,8 +327,8 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
 
     quant_param_t qparam_dense_layer7;
     qparam_dense_layer7.scale_in            = qparam_fusion_layer6.scale_out;
-    qparam_dense_layer7.scale_out           = layer_qparam[18];
-    qparam_dense_layer7.scale_weight        = layer_qparam[19];
+    qparam_dense_layer7.scale_out           = layer_qparams[18];
+    qparam_dense_layer7.scale_weight        = layer_qparams[19];
 
 
     qparam_conv_layer1.weight_bits = LAYER_1_QPARAM_WEIGHT_BITS;
@@ -413,10 +413,10 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
     model.push_back(layer_q(LayerTypes::avgpool2d,    model.back().get_output_size(), {}, {}, {}, param_ap2d_conv_layer6));
     
     // Layer 7, Fusion
-    model.push_back(layer_q(LayerTypes::fusion,       model.back().get_output_size(),   qparam_fusion_layer6);
+    model.push_back(layer_q(LayerTypes::fusion,       model.back().get_output_size(),   qparam_fusion_layer6));
     
     // Layer 8, Dense 
-    model.push_back(layer_q(LayerTypes::dense,        model.back().get_output_size(),   qparam_dense_layer7,layer_params[18].data(),  layer_params[19].data(), {}, param_dense_layer7));
+    model.push_back(layer_q(LayerTypes::dense,        model.back().get_output_size(),   qparam_dense_layer7, layer_params[18].data(),  layer_params[19].data(), {}, param_dense_layer7));
     return model;
 }
 

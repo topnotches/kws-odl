@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "conv_layer.hpp"
-
+#include "quantization_utils.hpp"
 #include <stdint.h>
 #include <stdio.h>
 #include <iostream>
@@ -84,7 +84,7 @@ void conv_layer_fixed(int32_t *conv_input_features, int32_t *conv_output_feature
     const uint16_t conv_input_width, const uint16_t conv_input_height, const uint16_t conv_input_depth,
     const uint8_t conv_stride, const uint8_t conv_kernel_width, const uint8_t conv_kernel_height,
     const uint8_t output_feats, const uint8_t conv_batch_size,
-    const uint8_t pad_top, const uint8_t pad_bottom, const uint8_t pad_left, const uint8_t pad_right, const float rescale_value) {
+    const uint8_t pad_top, const uint8_t pad_bottom, const uint8_t pad_left, const uint8_t pad_right, const float rescale_value, const uint8_t activation_bits) {
 
     int32_t conv_batch_input_offset = 0;
     int32_t conv_batch_output_offset = 0;
@@ -139,7 +139,7 @@ void conv_layer_fixed(int32_t *conv_input_features, int32_t *conv_output_feature
                         }
                     }
                     }
-                    conv_output_features[conv_batch_output_offset + conv_output_feature_select_offset + index_row * conv_width_limit + index_column] = conv_sum + conv_kernel_biases[index_kernel];
+                    conv_output_features[conv_batch_output_offset + conv_output_feature_select_offset + index_row * conv_width_limit + index_column] = requantize_shift(conv_sum + conv_kernel_biases[index_kernel], rescale_value, activation_bits);
                     conv_analyzer.incr_stores();
                     conv_analyzer.incr_additions();
                 }

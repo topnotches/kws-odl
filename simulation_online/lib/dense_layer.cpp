@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include "quantization_utils.hpp"
 #include "dense_layer.hpp"
 #include "layer_analyzer.hpp"
 extern layer_analyzer dense_fw_analyzer;
@@ -65,11 +66,8 @@ void dense_layer_backward_float(float* dense_grad_input,
 
 
 
-
-
-
 void dense_layer_fixed(int32_t *dense_input, int32_t *dense_output, int32_t *dense_weights, int32_t *dense_biases,
-    const uint16_t input_size, const uint16_t dense_output_size, const uint16_t dense_batch_size, const float rescale_value) {
+    const uint16_t input_size, const uint16_t dense_output_size, const uint16_t dense_batch_size, const float rescale_value, const uint8_t activation_bits) {
 memset(dense_output, 0, dense_batch_size * dense_output_size * sizeof(int32_t));
 
     for (uint16_t index_batch = 0; index_batch < dense_batch_size; index_batch++) {
@@ -89,7 +87,7 @@ memset(dense_output, 0, dense_batch_size * dense_output_size * sizeof(int32_t));
                     dense_fw_analyzer.incr_additions();
                     dense_fw_analyzer.incr_multiplications();
             }
-        dense_output[batch_offset_output + index_output] += dense_biases[index_output];
+            dense_output[batch_offset_output + index_output] = requantize_shift(dense_output[batch_offset_output + index_output] + dense_biases[index_output], rescale_value, activation_bits);
         }
     }
 }
