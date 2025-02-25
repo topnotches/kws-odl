@@ -17,9 +17,56 @@ typedef struct quant_param_t {
     float scale_in = 1;
     float scale_out = 1;
     float scale_weight = 1;
-    float weight_bits = 1;
-    float activation_bits = 1;
+    uint8_t weight_bits = 1;
+    uint8_t activation_bits = 1;
 } quant_param;
+
+// Layer 10, Fusion
+#define FUSION_QPARAM_WEIGHT_SCALE 1 // FIXME & TODO REAL NUMBER BRR
+#define LAYER_10_QPARAM_WEIGHT_BITS 24
+#define LAYER_10_QPARAM_ACTIVA_BITS 24
+
+// QUANTIZATION PARAMETERS FOR THE REST OF THE LAYERS:
+
+// Layer 1, Convolution
+#define LAYER_1_QPARAM_WEIGHT_BITS 8
+#define LAYER_1_QPARAM_ACTIVA_BITS 8
+
+// Layer 2, Depthwise Convolution
+#define LAYER_2_QPARAM_WEIGHT_BITS 4
+#define LAYER_2_QPARAM_ACTIVA_BITS 4
+
+// Layer 3, Pointwise Convolution
+#define LAYER_3_QPARAM_WEIGHT_BITS 4
+#define LAYER_3_QPARAM_ACTIVA_BITS 4
+
+// Layer 4, Depthwise Convolution
+#define LAYER_4_QPARAM_WEIGHT_BITS 4
+#define LAYER_4_QPARAM_ACTIVA_BITS 4
+
+// Layer 5, Pointwise Convolution
+#define LAYER_5_QPARAM_WEIGHT_BITS 4
+#define LAYER_5_QPARAM_ACTIVA_BITS 4
+
+// Layer 6, Depthwise Convolution
+#define LAYER_6_QPARAM_WEIGHT_BITS 4
+#define LAYER_6_QPARAM_ACTIVA_BITS 4
+
+// Layer 7, Pointwise Convolution
+#define LAYER_7_QPARAM_WEIGHT_BITS 4
+#define LAYER_7_QPARAM_ACTIVA_BITS 4
+
+// Layer 8, Depthwise Convolution
+#define LAYER_8_QPARAM_WEIGHT_BITS 4
+#define LAYER_8_QPARAM_ACTIVA_BITS 4
+
+// Layer 9, Pointwise Convolution
+#define LAYER_9_QPARAM_WEIGHT_BITS 4
+#define LAYER_9_QPARAM_ACTIVA_BITS 4
+
+// Layer 11, Dense
+#define LAYER_11_QPARAM_WEIGHT_BITS 8
+#define LAYER_11_QPARAM_ACTIVA_BITS 16
 
 /*****************************/
 /* SIMULATION RUN PARAMETERS */
