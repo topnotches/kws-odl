@@ -50,7 +50,7 @@ void fusion_mult_backward_float(float* fusion_grad_input,
 
 
 
-void fusion_mult_fixed(const int32_t* fusion_input, int32_t* fusion_output, const int32_t* fusion_embeddings, const uint8_t fusion_features, const uint8_t fusion_batch_size, const float rescale_value, const uint8_t activation_bits) {
+void fusion_mult_fixed(const int32_t* fusion_input, int32_t* fusion_output, const int32_t* fusion_embeddings, const uint8_t fusion_features, const uint8_t fusion_batch_size, const double rescale_value, const uint8_t activation_bits) {
     
 #if DO_LAYER_ANALYSIS
 #else
@@ -71,7 +71,7 @@ void fusion_mult_backward_fixed(int32_t* fusion_grad_input,
                                     const int32_t* fusion_embeddings, 
                                     const uint8_t fusion_features, 
                                     const uint8_t fusion_batch_size,
-                                    const float rescale_value) {
+                                    const double rescale_value) {
     
     memset(fusion_grad_input, 0, fusion_batch_size * fusion_features * sizeof(int32_t));
 

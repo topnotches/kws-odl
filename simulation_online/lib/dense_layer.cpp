@@ -67,7 +67,7 @@ void dense_layer_backward_float(float* dense_grad_input,
 
 
 void dense_layer_fixed(int32_t *dense_input, int32_t *dense_output, int32_t *dense_weights, int32_t *dense_biases,
-    const uint16_t input_size, const uint16_t dense_output_size, const uint16_t dense_batch_size, const float rescale_value, const uint8_t activation_bits) {
+    const uint16_t input_size, const uint16_t dense_output_size, const uint16_t dense_batch_size, const double rescale_value, const uint8_t activation_bits) {
 memset(dense_output, 0, dense_batch_size * dense_output_size * sizeof(int32_t));
 
     for (uint16_t index_batch = 0; index_batch < dense_batch_size; index_batch++) {
@@ -97,7 +97,7 @@ void dense_layer_backward_fixed(int32_t* dense_grad_input,
                       const uint16_t dense_input_size, 
                       const uint16_t dense_output_size, 
                       const uint16_t dense_batch_size,
-                      float rescale_value) {
+                      double rescale_value) {
 
     // Initialize gradient input
     memset(dense_grad_input, 0, dense_batch_size * dense_input_size * sizeof(int32_t));

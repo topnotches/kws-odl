@@ -222,7 +222,7 @@ layer_q::layer_q(LayerTypes     layer_type,
             this->layer_outputs.resize(this->layer_dim_size_out.full);
             this->layer_dim_size_out.width = this->layer_dim_size_out.full / this->layer_dim_size_out.batch;
             this->layer_weights.resize(this->layer_dim_size_out.width); 
-            std::fill(this->layer_weights.begin(), this->layer_weights.end(), 1.0f); 
+            std::fill(this->layer_weights.begin(), this->layer_weights.end(), (int)(pow(2, this->layer_quant_params.weight_bits-1) + 0.5)); 
 
             this->layer_adam_momentum.resize(this->layer_weights.size());
             std::fill(this->layer_adam_momentum.begin(), this->layer_adam_momentum.end(), 0.0f); 
@@ -418,7 +418,7 @@ void layer_q::print_layer_type() {
             break;
         }
         case LayerTypes::fusion: {
-            std::cout << "LAYER_TYPE: " << "cross_entropy_loss" << std::endl;
+            std::cout << "LAYER_TYPE: " << "fusion" << std::endl;
             break;
         }
         default: {
@@ -455,7 +455,7 @@ void layer_q::adam_optimize(const int32_t* layer_adam_gradients_backprop, const 
 }
 
 // getters
-float layer_q::get_rescale_value() {
+double layer_q::get_rescale_value() {
     return this->layer_rescale_value;
 }
 tensor_dim_sizes_t layer_q::get_input_size() {

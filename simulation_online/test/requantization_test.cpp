@@ -5,12 +5,12 @@
 #include <cassert>
 
 // Function prototype (ensure it matches the implementation you're testing)
-int32_t requantize_shift(int32_t large_number, const float rescale_value, const uint8_t activation_bits);
+int32_t requantize_shift(int32_t large_number, const double rescale_value, const uint8_t activation_bits);
 
 // Test case structure
 struct TestCase {
     int32_t large_number;
-    float rescale_value;
+    double rescale_value;
     uint8_t activation_bits;
     int32_t expected_result;
 };

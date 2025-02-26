@@ -59,14 +59,20 @@ int  main() {
             
             std::vector<layer_q> model = get_model_fixed(model_params_dir, BATCH_SIZE, NUMBER_OF_CLASSES);
             
+            quant_param_t qparam_softmax;
+            qparam_softmax.scale_in             = model.back().get_qparams().scale_out;
+            qparam_softmax.scale_out            = 1;
+            qparam_softmax.scale_weight         = 1;
+            qparam_softmax.weight_bits          = LAYER_SOFTMAX_QPARAM_WEIGHT_BITS;
+            qparam_softmax.activation_bits      = LAYER_SOFTMAX_QPARAM_ACTIVA_BITS;
 
-            //layer_q softmax(LayerTypes::softmax, model.back().get_output_size());
+            layer_q softmax(LayerTypes::softmax, model.back().get_output_size(), qparam_softmax);
             //layer_q crossentropy(LayerTypes::cross_entropy_loss, softmax.get_output_size());
 #if DO_LAYER_ANALYSIS
             dataloader dataloader(words, "c50f55b8_nohash_19", BATCH_SIZE, 1); // Change '/' to the userID
 #else
             //dataloader dataloader(words, uid, BATCH_SIZE, TRAIN_VAL_SPLIT); // Change '/' to the userID
-            dataloader dataloader({"up"}, "c50f55b8_nohash_1", BATCH_SIZE, 1); // Change '/' to the userID
+            dataloader dataloader({"no"}, "c50f55b8_nohash_3", BATCH_SIZE, 1); // Change '/' to the userID
 
 #endif
             //float error = 0.0f;
@@ -100,7 +106,7 @@ int  main() {
                     if (i == 0) {
                         model_forward(model, std::get<0>(mybatch));
                         //all_avg_train_activations.push_back(model[27].layer_outputs);
-                        std::cout << "2222" << std::endl;
+                        /*
                         for (auto layer : model) {
                             layer.print_layer_type();
                             std::cout << "scale_in:        " << std::to_string(layer.get_qparams().scale_in) << std::endl;
@@ -110,14 +116,18 @@ int  main() {
                             std::cout << "activation_bits: " << std::to_string(layer.get_qparams().activation_bits) << std::endl;
                             std::cout << "rescale_value:   " << std::to_string(layer.get_rescale_value()) << std::endl;
                         }
-                        for (auto q :  model[10].layer_outputs) {
+                        for (auto q :  model[11].layer_outputs) {
                             std::cout << std::to_string(q) << std::endl;
                         }
+                        */
                     } else {
                         //model[28].forward(std::get<0>(mybatch).data());
                         //model[29].forward(model[28].layer_outputs.data());
                     }
-                    //softmax.forward(model.back().layer_outputs.data());
+                    softmax.forward(model.back().layer_outputs.data());
+                    for (auto q :  softmax.layer_outputs) {
+                        std::cout << std::to_string(q) << std::endl;
+                    }
                     //crossentropy.forward(softmax.layer_outputs.data(), labels_onehot.data());
                     //softmax.backward(labels_onehot.data());
                     //model[29].backward(softmax.layer_gradient_outputs.data()); //dense

@@ -6,7 +6,7 @@
 #include "defs.hpp"
 class layer_q {
 private:
-    float layer_rescale_value;
+    double layer_rescale_value;
     quant_param_t layer_quant_params;
     std::vector<int32_t> layer_weights;
     std::vector<int32_t> layer_biases;
@@ -28,7 +28,7 @@ private:
 public:
     std::vector<int32_t> layer_gradient_outputs;
     std::vector<int32_t> layer_outputs;
-    float get_rescale_value();
+    double get_rescale_value();
     tensor_dim_sizes_t get_input_size();
     tensor_dim_sizes_t get_output_size();
     quant_param_t get_qparams();

@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <stdint.h>
+#include <math.h>
 #include <iostream>
 #include <fstream>
 
@@ -324,7 +325,7 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
     quant_param_t qparam_fusion_layer6;
     qparam_fusion_layer6.scale_in        = qparam_pw_conv_layer5.scale_out;
     qparam_fusion_layer6.scale_out       = qparam_pw_conv_layer5.scale_out;
-    qparam_fusion_layer6.scale_weight    = FUSION_QPARAM_WEIGHT_SCALE;
+    qparam_fusion_layer6.scale_weight    =  1.0f/((int)(pow(2, FUSION_QPARAM_WEIGHT_SCALE_SHIFT) + 0.5)); // Same as shifting the float :)
 
     quant_param_t qparam_dense_layer7;
     qparam_dense_layer7.scale_in            = qparam_fusion_layer6.scale_out;
@@ -405,7 +406,7 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
     model.push_back(layer_q(LayerTypes::avgpool2d,    model.back().get_output_size(), {}, {}, {}, param_ap2d_conv_layer6));
     
     // Layer 7, Fusion
-    //model.push_back(layer_q(LayerTypes::fusion,       model.back().get_output_size(),   qparam_fusion_layer6));
+    model.push_back(layer_q(LayerTypes::fusion,       model.back().get_output_size(),   qparam_fusion_layer6));
     
     // Layer 8, Dense 
     model.push_back(layer_q(LayerTypes::dense,        model.back().get_output_size(),   qparam_dense_layer7, layer_params[18].data(),  layer_params[19].data(), {}, param_dense_layer7));

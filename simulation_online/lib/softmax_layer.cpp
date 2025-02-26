@@ -1,7 +1,9 @@
 #include "softmax_layer.hpp"
 #include <math.h>
 #include <iostream>
+#include <string>
 #include "layer_analyzer.hpp"
+#include "quantization_utils.hpp"
 extern layer_analyzer softmax_fw_analyzer;
 extern layer_analyzer softmax_bw_analyzer;
 
@@ -43,20 +45,22 @@ void softmax_layer_backward_float(const float* softmax_outputs,
         }
     }
 }
-void softmax_layer_fixed(const int32_t* softmax_inputs, int32_t* softmax_outputs, const uint8_t softmax_batch_size, const uint8_t softmax_num_labels, const float rescale_value, const uint8_t activation_bits) {
+void softmax_layer_fixed(const int32_t* softmax_inputs, int32_t* softmax_outputs, const uint8_t softmax_batch_size, const uint8_t softmax_num_labels, const double rescale_value, const uint8_t activation_bits) {
+
     for (uint8_t index_batch = 0; index_batch < softmax_batch_size; index_batch++) {
         int32_t denominator = 0;
-        
+
         for (uint8_t index_input = 0; index_input < softmax_num_labels; index_input++) {
-            denominator += exp(softmax_inputs[index_input + index_batch * softmax_num_labels]);
+            denominator += (int32_t)(256*exp((double)requantize_shift(softmax_inputs[index_input + index_batch * softmax_num_labels], rescale_value, activation_bits, false)));
             softmax_fw_analyzer.incr_loads();
             softmax_fw_analyzer.incr_loads();
             softmax_fw_analyzer.incr_additions();
         }
-        //std::cout << "oasiej" << denominator << std::endl;
         for (uint8_t index_output = 0; index_output < softmax_num_labels; index_output++) {
             softmax_outputs[index_output + index_batch * softmax_num_labels] =
-                exp(softmax_inputs[index_output + index_batch * softmax_num_labels]) / denominator;
+            (int32_t)(256*64*exp((double)requantize_shift(softmax_inputs[index_output + index_batch * softmax_num_labels], rescale_value, activation_bits, false))) / denominator;
+            //std::cout << std::to_string(softmax_inputs[index_output + index_batch * softmax_num_labels]) << std::endl;
+                
                 softmax_fw_analyzer.incr_loads();
                 softmax_fw_analyzer.incr_loads();
                 softmax_fw_analyzer.incr_stores();
@@ -69,7 +73,7 @@ void softmax_layer_backward_fixed(const int32_t* softmax_outputs,
                             int32_t* softmax_gradients, 
                             const uint8_t softmax_batch_size, 
                             const uint8_t softmax_num_labels,
-                            const float rescale_value) {
+                            const double rescale_value) {
     for (uint8_t index_batch = 0; index_batch < softmax_batch_size; index_batch++) {
         for (uint8_t index_label = 0; index_label < softmax_num_labels; index_label++) {
             softmax_gradients[index_label + index_batch * softmax_num_labels] = 
