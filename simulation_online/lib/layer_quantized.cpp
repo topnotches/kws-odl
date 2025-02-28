@@ -5,6 +5,7 @@
 #include <math.h>
 #include <random>
 #include "misc_utils.hpp"
+#include "quantization_utils.hpp"
 
 #include "batch_norm_layer.hpp"
 #include "conv_layer.hpp"
@@ -36,34 +37,31 @@ layer_q::layer_q(LayerTypes     layer_type,
     this->layer_outputs.resize(0);
     this->layer_gradient_outputs.resize(0);
     this->layer_rescale_value = (layer_quant_params.scale_weight*layer_quant_params.scale_in)/layer_quant_params.scale_out;
+    this->layer_bw_rescale_value = (layer_quant_params.scale_weight*layer_quant_params.scale_out)/layer_quant_params.scale_in;
     this->layer_quant_params = layer_quant_params;
-
+    this->layer_adam_beta_scale = 1/((int)pow(2,this->layer_adam_beta_scale)+0.5);
     this->layer_dim_size_in = layer_dim_size_in; // {width, height, depth, batch_size}
 
-    switch (layer_type) {
+    switch (layer_type) { 
         case LayerTypes::conv: {
             this->layer_type = LayerTypes::conv; 
-            
-            this->layer_conv_hypr_params = layer_conv_hypr_params;
+                    this->layer_conv_hypr_params = layer_conv_hypr_params;
 
             this->layer_dim_size_out.width  = (this->layer_dim_size_in.width - this->layer_conv_hypr_params.kernel_width + this->layer_conv_hypr_params.pad_left + this->layer_conv_hypr_params.pad_right) / this->layer_conv_hypr_params.kernel_stride + 1;
             this->layer_dim_size_out.height = (this->layer_dim_size_in.height - this->layer_conv_hypr_params.kernel_height + this->layer_conv_hypr_params.pad_top + this->layer_conv_hypr_params.pad_bottom) / this->layer_conv_hypr_params.kernel_stride + 1;
             this->layer_dim_size_out.depth  = this->layer_conv_hypr_params.kernel_count;
             this->layer_dim_size_out.batch  = this->layer_dim_size_in.batch;
-            
             this->layer_dim_size_out.full = this->layer_dim_size_out.width *
                                             this->layer_dim_size_out.height *
                                             this->layer_dim_size_out.depth *
                                             this->layer_dim_size_out.batch;
-                                            
             uint32_t layer_conv_weight_count = this->layer_conv_hypr_params.kernel_width *
                                             this->layer_conv_hypr_params.kernel_height *
                                             this->layer_conv_hypr_params.kernel_count *
                                             this->layer_dim_size_in.depth;
 
             uint32_t layer_conv_bias_count = this->layer_conv_hypr_params.kernel_count;
-            
-            this->layer_weights.resize(0);
+                    this->layer_weights.resize(0);
             this->layer_weights.insert(this->layer_weights.end(), weights, weights + layer_conv_weight_count);
 
             this->layer_biases.resize(0);
@@ -78,23 +76,19 @@ layer_q::layer_q(LayerTypes     layer_type,
             this->layer_type = LayerTypes::dw_conv;
 
             this->layer_conv_hypr_params = layer_conv_hypr_params;
-            
-            this->layer_dim_size_out.width = (this->layer_dim_size_in.width - this->layer_conv_hypr_params.kernel_width + this->layer_conv_hypr_params.pad_left + this->layer_conv_hypr_params.pad_right) / this->layer_conv_hypr_params.kernel_stride + 1;
+                    this->layer_dim_size_out.width = (this->layer_dim_size_in.width - this->layer_conv_hypr_params.kernel_width + this->layer_conv_hypr_params.pad_left + this->layer_conv_hypr_params.pad_right) / this->layer_conv_hypr_params.kernel_stride + 1;
             this->layer_dim_size_out.height = (this->layer_dim_size_in.height - this->layer_conv_hypr_params.kernel_height + this->layer_conv_hypr_params.pad_top + this->layer_conv_hypr_params.pad_bottom) / this->layer_conv_hypr_params.kernel_stride + 1;
             this->layer_dim_size_out.depth  = this->layer_dim_size_in.depth;
             this->layer_dim_size_out.batch  = this->layer_dim_size_in.batch;
-            
-            this->layer_dim_size_out.full = this->layer_dim_size_out.width *
+                    this->layer_dim_size_out.full = this->layer_dim_size_out.width *
                                             this->layer_dim_size_out.height *
                                             this->layer_dim_size_out.depth *
                                             this->layer_dim_size_out.batch;
-        
-            uint32_t layer_conv_weight_count = this->layer_conv_hypr_params.kernel_width *
+                uint32_t layer_conv_weight_count = this->layer_conv_hypr_params.kernel_width *
                                             this->layer_conv_hypr_params.kernel_height *
                                             this->layer_dim_size_in.depth;
             uint32_t layer_conv_bias_count = this->layer_dim_size_in.depth;
-            
-            this->layer_weights.resize(0);
+                    this->layer_weights.resize(0);
             this->layer_weights.insert(this->layer_weights.end(), weights, weights + layer_conv_weight_count);
 
             this->layer_biases.resize(0);
@@ -110,8 +104,7 @@ layer_q::layer_q(LayerTypes     layer_type,
 
             this->layer_dense_hypr_params.size_in = this->layer_dim_size_in.full / this->layer_dim_size_in.batch;
             this->layer_dense_hypr_params.size_out = layer_dense_hypr_params.size_out;
-            
-            this->layer_dim_size_out.full = this->layer_dense_hypr_params.size_out * this->layer_dim_size_in.batch;
+                    this->layer_dim_size_out.full = this->layer_dense_hypr_params.size_out * this->layer_dim_size_in.batch;
             this->layer_dim_size_out.width = this->layer_dense_hypr_params.size_out; // change and test for change == 1
             this->layer_dim_size_out.height = 1;
             this->layer_dim_size_out.depth = 1;
@@ -119,8 +112,7 @@ layer_q::layer_q(LayerTypes     layer_type,
 
             uint32_t layer_dense_weight_count = this->layer_dense_hypr_params.size_in * this->layer_dense_hypr_params.size_out;
             uint32_t layer_dense_bias_count = this->layer_dense_hypr_params.size_out;
-            
-            this->layer_weights.resize(0);
+                    this->layer_weights.resize(0);
             this->layer_weights.insert(this->layer_weights.end(), weights, weights + layer_dense_weight_count);
 
             this->layer_biases.resize(0);
@@ -135,15 +127,13 @@ layer_q::layer_q(LayerTypes     layer_type,
 
             this->layer_type = LayerTypes::batchnorm;
             this->layer_dim_size_out = this->layer_dim_size_in;
-            
-            uint32_t layer_bn_weight_count = this->layer_dim_size_in.depth;
+                    uint32_t layer_bn_weight_count = this->layer_dim_size_in.depth;
             uint32_t layer_bn_bias_count = this->layer_dim_size_in.depth;
             this->layer_weights.resize(0);
             this->layer_weights.insert(this->layer_weights.end(), weights, weights + layer_bn_weight_count);
 
             this->layer_biases.resize(0);
             this->layer_biases.insert(this->layer_biases.end(), biases, biases + layer_bn_bias_count);
-            
             uint32_t layer_bn_mean_count = this->layer_dim_size_in.depth;
             uint32_t layer_bn_variance_count = this->layer_dim_size_in.depth;
             this->layer_bn_means.resize(0);
@@ -176,12 +166,10 @@ layer_q::layer_q(LayerTypes     layer_type,
             this->layer_dim_size_out.height = (this->layer_dim_size_in.height - this->layer_conv_hypr_params.kernel_height + this->layer_conv_hypr_params.pad_top + this->layer_conv_hypr_params.pad_bottom) / this->layer_conv_hypr_params.kernel_stride + 1;
             this->layer_dim_size_out.depth  = this->layer_dim_size_in.depth;
             this->layer_dim_size_out.batch  = this->layer_dim_size_in.batch;
-            
             this->layer_dim_size_out.full = this->layer_dim_size_out.width *
-                                            this->layer_dim_size_out.height *
-                                            this->layer_dim_size_out.depth *
-                                            this->layer_dim_size_out.batch;
-            
+                                    this->layer_dim_size_out.height *
+                                    this->layer_dim_size_out.depth *
+                                    this->layer_dim_size_out.batch;
             this->layer_outputs.resize(this->layer_dim_size_out.full);
             this->layer_gradient_outputs.resize(this->layer_dim_size_in.full);
 
@@ -189,10 +177,8 @@ layer_q::layer_q(LayerTypes     layer_type,
         }
         case LayerTypes::softmax: {
             this->layer_type = LayerTypes::softmax;
-            
-            this->layer_dim_size_out = this->layer_dim_size_in;
-            
-            this->layer_outputs.resize(this->layer_dim_size_out.full);
+                    this->layer_dim_size_out = this->layer_dim_size_in;
+                    this->layer_outputs.resize(this->layer_dim_size_out.full);
             this->layer_gradient_outputs.resize(this->layer_dim_size_in.full);
             std::cout << this->layer_dim_size_in.full<< std::endl;
 
@@ -200,7 +186,6 @@ layer_q::layer_q(LayerTypes     layer_type,
         }
         case LayerTypes::cross_entropy_loss: {
             this->layer_type = LayerTypes::cross_entropy_loss;
-            
             this->layer_dim_size_out.batch = this->layer_dim_size_in.batch; 
             this->layer_dim_size_out.full = this->layer_dim_size_in.batch; 
             this->layer_dim_size_out.depth = 1; 
@@ -213,10 +198,7 @@ layer_q::layer_q(LayerTypes     layer_type,
             break;
         }
         case LayerTypes::fusion: {
-            
-
             this->layer_type = LayerTypes::fusion;
-            
             this->layer_dim_size_out = this->layer_dim_size_in; 
             srand((unsigned)time(NULL));
             this->layer_outputs.resize(this->layer_dim_size_out.full);
@@ -225,10 +207,10 @@ layer_q::layer_q(LayerTypes     layer_type,
             std::fill(this->layer_weights.begin(), this->layer_weights.end(), (int)(pow(2, this->layer_quant_params.weight_bits-1) + 0.5)); 
 
             this->layer_adam_momentum.resize(this->layer_weights.size());
-            std::fill(this->layer_adam_momentum.begin(), this->layer_adam_momentum.end(), 0.0f); 
+            std::fill(this->layer_adam_momentum.begin(), this->layer_adam_momentum.end(), 0); 
 
             this->layer_adam_velocity.resize(this->layer_weights.size());
-            std::fill(this->layer_adam_velocity.begin(), this->layer_adam_velocity.end(), 0.0f); 
+            std::fill(this->layer_adam_velocity.begin(), this->layer_adam_velocity.end(), 0); 
 
             this->layer_gradient_outputs.resize(this->layer_dim_size_in.full);
 
@@ -240,7 +222,6 @@ layer_q::layer_q(LayerTypes     layer_type,
             break;
         }  
     }
-    
 }
 
 layer_q::~layer_q() {
@@ -309,6 +290,9 @@ void layer_q::forward(int32_t *layer_input, int32_t *labels_input) {
         }
         case LayerTypes::fusion: {
             fusion_mult_fixed(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_dim_size_out.width, this->layer_dim_size_out.batch, this->layer_rescale_value, this->layer_quant_params.activation_bits);
+            for (uint32_t i = 0; i < this->layer_dim_size_in.full; i ++) {
+                this->layer_inputs.push_back(layer_input[i]);
+            }
 
             break;
         }
@@ -337,7 +321,9 @@ void layer_q::backward(int32_t *layer_gradient_input) {
                                 this->layer_dense_hypr_params.size_in, 
                                 this->layer_dense_hypr_params.size_out, 
                                 this->layer_dim_size_in.batch,
-                                this->layer_rescale_value);
+                                this->layer_bw_rescale_value,
+                                this->layer_quant_params.gradient_bits);
+                                            
             break;
         }
         case LayerTypes::batchnorm: {
@@ -359,7 +345,8 @@ void layer_q::backward(int32_t *layer_gradient_input) {
                                         this->layer_gradient_outputs.data(), 
                                         this->layer_dim_size_out.batch, 
                                         this->layer_dim_size_out.width,
-                                        this->layer_rescale_value);
+                                        this->layer_bw_rescale_value,
+                                        this->layer_quant_params.gradient_bits);
             break;
         }
         case LayerTypes::cross_entropy_loss: {
@@ -369,10 +356,11 @@ void layer_q::backward(int32_t *layer_gradient_input) {
         case LayerTypes::fusion: {
             fusion_mult_backward_fixed(this->layer_gradient_outputs.data(), 
                                         layer_gradient_input, 
-                                        this->layer_weights.data(), 
+                                        this->layer_inputs.data(),
                                         this->layer_dim_size_out.width, 
                                         this->layer_dim_size_out.batch,
-                                        this->layer_rescale_value);
+                                        (this->layer_quant_params.scale_in*this->layer_quant_params.scale_out)/this->layer_quant_params.scale_weight,
+                                        this->layer_quant_params.gradient_bits);
             adam_optimize(this->layer_gradient_outputs.data(), this->layer_dim_size_out.width);
             break;
         }
@@ -434,24 +422,32 @@ void layer_q::adam_optimize(const int32_t* layer_adam_gradients_backprop, const 
         int32_t sum = 0.0f;
         for (uint32_t batch_index = 0; batch_index < this->layer_dim_size_in.batch; batch_index++) {
             sum += layer_adam_gradients_backprop[feature_index * this->layer_dim_size_in.batch + batch_index];
-            }
+        }
+       // std::cout << sum << std::endl;
+
         avg_gradients[feature_index] = sum / this->layer_dim_size_in.batch;
     }
+    float beta1_f = static_cast<float>(this->layer_adam_beta1) / 128.0f;
+    float beta2_f = static_cast<float>(this->layer_adam_beta2) / 128.0f;
+    float bias_correction1 = 1.0f - pow(beta1_f, static_cast<float>(this->layer_adam_time_step));
+    float bias_correction2 = 1.0f - pow(beta2_f, static_cast<float>(this->layer_adam_time_step));
 
     for (uint32_t index = 0; index < layer_adam_size; index++) {
-        this->layer_adam_momentum[index] = this->layer_adam_beta1 * this->layer_adam_momentum[index] + (1.0 - this->layer_adam_beta1) * avg_gradients[index];
+        this->layer_adam_momentum[index] = requantize_shift(this->layer_adam_beta1 * this->layer_adam_momentum[index], this->layer_adam_beta_scale, this->layer_quant_params.weight_bits) + requantize_shift((128 - this->layer_adam_beta1) * avg_gradients[index], this->layer_adam_beta_scale, this->layer_quant_params.weight_bits);
 
-        this->layer_adam_velocity[index] = this->layer_adam_beta2 * this->layer_adam_velocity[index] + 
-                                   (1.0 - this->layer_adam_beta2) * avg_gradients[index] * avg_gradients[index];
+        this->layer_adam_velocity[index] = requantize_shift(this->layer_adam_beta2 * this->layer_adam_velocity[index], this->layer_adam_beta_scale, this->layer_quant_params.weight_bits) + 
+                            requantize_shift( (128 - this->layer_adam_beta2) * avg_gradients[index] * avg_gradients[index], this->layer_adam_beta_scale, this->layer_quant_params.weight_bits);
 
-        int32_t m_hat = this->layer_adam_momentum[index] / (1.0f - pow(this->layer_adam_beta1, this->layer_adam_time_step));
-        int32_t v_hat = this->layer_adam_velocity[index] / (1.0f - pow(this->layer_adam_beta2, this->layer_adam_time_step));
+        int32_t m_hat = this->layer_adam_momentum[index] / bias_correction1;
+        int32_t v_hat = this->layer_adam_velocity[index] / bias_correction2;
 
-        this->layer_weights[index] -= this->layer_adam_learning_rate * m_hat / (sqrt(v_hat) + this->layer_adam_epsilon);
-       // std::cout <<this->layer_adam_velocity[index] << "!alkwmdaw" << (1.0f - pow(this->layer_adam_beta2, this->layer_adam_time_step)) << std::endl;
+        float weight_float = static_cast<float>(this->layer_weights[index]);
+        weight_float -= this->layer_adam_learning_rate * m_hat / (sqrt(v_hat) + this->layer_adam_epsilon);
+
+        this->layer_weights[index] = static_cast<int32_t>(weight_float);
     }
 
-    this->layer_adam_time_step++;
+    this->layer_adam_time_step++;   
 }
 
 // getters

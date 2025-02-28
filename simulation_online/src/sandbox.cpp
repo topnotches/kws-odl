@@ -61,22 +61,23 @@ int  main() {
             
             quant_param_t qparam_softmax;
             qparam_softmax.scale_in             = model.back().get_qparams().scale_out;
-            qparam_softmax.scale_out            = 1;
+            qparam_softmax.scale_out            = model.back().get_qparams().scale_out;
             qparam_softmax.scale_weight         = 1;
             qparam_softmax.weight_bits          = LAYER_SOFTMAX_QPARAM_WEIGHT_BITS;
             qparam_softmax.activation_bits      = LAYER_SOFTMAX_QPARAM_ACTIVA_BITS;
+            qparam_softmax.gradient_bits        = LAYER_SOFTMAX_QPARAM_GRADNT_BITS;
 
             layer_q softmax(LayerTypes::softmax, model.back().get_output_size(), qparam_softmax);
-            //layer_q crossentropy(LayerTypes::cross_entropy_loss, softmax.get_output_size());
+            layer crossentropy(LayerTypes::cross_entropy_loss, softmax.get_output_size());
 #if DO_LAYER_ANALYSIS
             dataloader dataloader(words, "c50f55b8_nohash_19", BATCH_SIZE, 1); // Change '/' to the userID
 #else
             //dataloader dataloader(words, uid, BATCH_SIZE, TRAIN_VAL_SPLIT); // Change '/' to the userID
-            dataloader dataloader({"no"}, "c50f55b8_nohash_3", BATCH_SIZE, 1); // Change '/' to the userID
+            dataloader dataloader({words}, "c50f55b8", BATCH_SIZE, 0.7); // Change '/' to the userID
 
 #endif
-            //float error = 0.0f;
-            //float momentum = 0.0;
+            float error = 0.0f;
+            float momentum = 0.0;
             uint32_t i = 0;
             
             std::vector<float> all_validation_error;
@@ -89,10 +90,10 @@ int  main() {
             std::vector<float> all_validation_accuracies_threshold_85;
             std::vector<float> all_validation_accuracies_threshold_90;
             std::vector<float> all_validation_accuracies_threshold_95;
-            std::vector<std::vector<float>> all_avg_train_activations;
-            std::vector<std::vector<float>> all_avg_validation_activations;
+            std::vector<std::vector<int32_t>> all_avg_train_activations;
+            std::vector<std::vector<int32_t>> all_avg_validation_activations;
             
-            while (i < 1) {
+            while (i < 3) {
                 
                 if (dataloader.get_training_pool_empty()) {
                     auto mybatch = dataloader.get_batch_fixed();
@@ -100,44 +101,44 @@ int  main() {
                     for (auto label : std::get<1>(mybatch)) {
                         std::vector<int32_t> temp;
                         temp = int_to_fixed_onehot(2 + label, 12);
-
+                        std::cout << "ojfoaeijf                            " << std::to_string(label) << std::endl;
                         labels_onehot.insert(labels_onehot.end(), temp.begin(), temp.end());
                     }
                     if (i == 0) {
                         model_forward(model, std::get<0>(mybatch));
-                        //all_avg_train_activations.push_back(model[27].layer_outputs);
-                        /*
-                        for (auto layer : model) {
-                            layer.print_layer_type();
-                            std::cout << "scale_in:        " << std::to_string(layer.get_qparams().scale_in) << std::endl;
-                            std::cout << "scale_out:       " << std::to_string(layer.get_qparams().scale_out) << std::endl;
-                            std::cout << "scale_weight:    " << std::to_string(layer.get_qparams().scale_weight) << std::endl;
-                            std::cout << "weight_bits:     " << std::to_string(layer.get_qparams().weight_bits) << std::endl;
-                            std::cout << "activation_bits: " << std::to_string(layer.get_qparams().activation_bits) << std::endl;
-                            std::cout << "rescale_value:   " << std::to_string(layer.get_rescale_value()) << std::endl;
-                        }
-                        for (auto q :  model[11].layer_outputs) {
-                            std::cout << std::to_string(q) << std::endl;
-                        }
-                        */
+                        all_avg_train_activations.push_back(model[9].layer_outputs);
                     } else {
-                        //model[28].forward(std::get<0>(mybatch).data());
-                        //model[29].forward(model[28].layer_outputs.data());
+                        model[10].forward(std::get<0>(mybatch).data());
+                        model[11].forward(model[10].layer_outputs.data());
                     }
                     softmax.forward(model.back().layer_outputs.data());
+
+
+                    std::vector<float> softmax_outputs;
+                    std::vector<float> labels_onehot_float;
+
                     for (auto q :  softmax.layer_outputs) {
-                        std::cout << std::to_string(q) << std::endl;
+                        //std::cout << std::to_string(q) << std::endl;
+                        softmax_outputs.push_back(static_cast<float>(q));
                     }
-                    //crossentropy.forward(softmax.layer_outputs.data(), labels_onehot.data());
-                    //softmax.backward(labels_onehot.data());
-                    //model[29].backward(softmax.layer_gradient_outputs.data()); //dense
-                    //model[28].backward(model[29].layer_gradient_outputs.data()); //fusion
-                    //float temp_err = 0.0f;
+                    for (auto o :  labels_onehot) {
+                        //std::cout << std::to_string(q) << std::endl;
+                        labels_onehot_float.push_back(static_cast<float>(o));
+                    }
+                    crossentropy.forward(softmax_outputs.data(), labels_onehot_float.data());
+                    softmax.backward(labels_onehot.data());
+                    model[11].backward(softmax.layer_gradient_outputs.data()); //dense
+                    model[10].backward(model[11].layer_gradient_outputs.data()); //fusion
+                   // for (auto q :  softmax.layer_gradient_outputs) {
+                   //    // std::cout << std::to_string(q) << std::endl;
+                   //     //softmax_outputs.push_back(static_cast<float>(q));
+                   // }
+                    float temp_err = 0.0f;
 //
-                    //for (auto output : crossentropy.layer_outputs) {
-                    //    temp_err += output;
-                    //}
-                    //temp_err /= crossentropy.layer_outputs.size()/BATCH_SIZE;
+                    for (auto output : crossentropy.layer_outputs) {
+                        temp_err += output;
+                    }
+                    temp_err /= crossentropy.layer_outputs.size()/BATCH_SIZE;
 
 #if DO_LAYER_ANALYSIS
                     batchnorm_analyzer.print_stats_colnames();
@@ -153,15 +154,14 @@ int  main() {
                     softmax_fw_analyzer.print_stats_raw();
                     softmax_bw_analyzer.print_stats_raw();
 #else
-                //dataloader.print_progress_bar(i+1,error);
+                    dataloader.print_progress_bar(i+1,error);
 
 #endif
 
                 } else {
-                    /*
                     momentum = 0.0;
 
-                    auto myvalset = dataloader.get_validation_set_float();
+                    auto myvalset = dataloader.get_validation_set_fixed();
                     float temp_err = 0.0f;
                     float total = 0;
                     float correct = 0;
@@ -178,8 +178,8 @@ int  main() {
                         // Dummy read for compiler e
                         auto vlabel = std::get<1>(myvalset)[0];
                         auto vinput = std::get<0>(myvalset)[0];
-                        std::vector<float> labels_onehot;
-                        std::vector<float> actual_inputs;
+                        std::vector<int32_t> labels_onehot;
+                        std::vector<int32_t> actual_inputs;
                         for (uint val_index_in_batch = 0; val_index_in_batch < BATCH_SIZE; val_index_in_batch++) {
                             vlabel = std::get<1>(myvalset)[val_index * BATCH_SIZE + val_index_in_batch];
                             vinput = std::get<0>(myvalset)[val_index * BATCH_SIZE + val_index_in_batch];
@@ -190,14 +190,26 @@ int  main() {
                         }
                         if (i == 0) {
                             model_forward(model, actual_inputs);
-                            all_avg_validation_activations.push_back(model[27].layer_outputs);
+                            all_avg_validation_activations.push_back(model[9].layer_outputs);
                         } else {
-                            model[28].forward(actual_inputs.data());
-                            model[29].forward(model[28].layer_outputs.data());
+                            model[10].forward(actual_inputs.data());
+                            model[11].forward(model[10].layer_outputs.data());
                         }
-                        //softmax.forward(model.back().layer_outputs.data());
-                        //crossentropy.forward(softmax.layer_outputs.data(), labels_onehot.data());
-                        
+                        softmax.forward(model.back().layer_outputs.data());
+    
+    
+                        std::vector<float> softmax_outputs;
+                        std::vector<float> labels_onehot_float;
+    
+                        for (auto q :   model[11].layer_outputs) {
+                            // std::cout << std::to_string(q) << std::endl;
+                            softmax_outputs.push_back(static_cast<float>(q));
+                        }
+                        for (auto o :  labels_onehot) {
+                            // std::cout << "std::to_string(o)" << std::endl;
+                            labels_onehot_float.push_back(static_cast<float>(o));
+                        }
+                        crossentropy.forward(softmax_outputs.data(), labels_onehot_float.data());
                         for (auto output : crossentropy.layer_outputs) {
                             temp_err += output;
                         }
@@ -266,7 +278,7 @@ int  main() {
                         dataloader.set_validation_set(all_avg_validation_activations);
                     }
                     
-                    */
+                    
                     i++;
                 }
             }

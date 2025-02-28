@@ -333,28 +333,50 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
     qparam_dense_layer7.scale_weight        = layer_qparams[19];
 
 
-    qparam_conv_layer1.weight_bits = LAYER_1_QPARAM_WEIGHT_BITS;
-    qparam_conv_layer1.activation_bits = LAYER_1_QPARAM_ACTIVA_BITS;
-    qparam_dw_conv_layer2.weight_bits = LAYER_2_QPARAM_WEIGHT_BITS;
-    qparam_dw_conv_layer2.activation_bits = LAYER_2_QPARAM_ACTIVA_BITS;
-    qparam_pw_conv_layer2.weight_bits = LAYER_3_QPARAM_WEIGHT_BITS;
-    qparam_pw_conv_layer2.activation_bits = LAYER_3_QPARAM_ACTIVA_BITS;
-    qparam_dw_conv_layer3.weight_bits = LAYER_4_QPARAM_WEIGHT_BITS;
-    qparam_dw_conv_layer3.activation_bits = LAYER_4_QPARAM_ACTIVA_BITS;
-    qparam_pw_conv_layer3.weight_bits = LAYER_5_QPARAM_WEIGHT_BITS;
-    qparam_pw_conv_layer3.activation_bits = LAYER_5_QPARAM_ACTIVA_BITS;
-    qparam_dw_conv_layer4.weight_bits = LAYER_6_QPARAM_WEIGHT_BITS;
-    qparam_dw_conv_layer4.activation_bits = LAYER_6_QPARAM_ACTIVA_BITS;
-    qparam_pw_conv_layer4.weight_bits = LAYER_7_QPARAM_WEIGHT_BITS;
-    qparam_pw_conv_layer4.activation_bits = LAYER_7_QPARAM_ACTIVA_BITS;
-    qparam_dw_conv_layer5.weight_bits = LAYER_8_QPARAM_WEIGHT_BITS;
-    qparam_dw_conv_layer5.activation_bits = LAYER_8_QPARAM_ACTIVA_BITS;
-    qparam_pw_conv_layer5.weight_bits = LAYER_9_QPARAM_WEIGHT_BITS;
-    qparam_pw_conv_layer5.activation_bits = LAYER_9_QPARAM_ACTIVA_BITS;
-    qparam_fusion_layer6.weight_bits = LAYER_10_QPARAM_WEIGHT_BITS;
-    qparam_fusion_layer6.activation_bits = LAYER_10_QPARAM_ACTIVA_BITS;
-    qparam_dense_layer7.weight_bits = LAYER_11_QPARAM_WEIGHT_BITS;
-    qparam_dense_layer7.activation_bits = LAYER_11_QPARAM_ACTIVA_BITS;
+    qparam_conv_layer1.weight_bits          = LAYER_1_QPARAM_WEIGHT_BITS;
+    qparam_conv_layer1.activation_bits      = LAYER_1_QPARAM_ACTIVA_BITS;
+    qparam_conv_layer1.gradient_bits        = LAYER_1_QPARAM_GRADNT_BITS;
+
+    qparam_dw_conv_layer2.weight_bits       = LAYER_2_QPARAM_WEIGHT_BITS;
+    qparam_dw_conv_layer2.activation_bits   = LAYER_2_QPARAM_ACTIVA_BITS;
+    qparam_dw_conv_layer2.gradient_bits     = LAYER_2_QPARAM_GRADNT_BITS;
+
+    qparam_pw_conv_layer2.weight_bits       = LAYER_3_QPARAM_WEIGHT_BITS;
+    qparam_pw_conv_layer2.activation_bits   = LAYER_3_QPARAM_ACTIVA_BITS;
+    qparam_pw_conv_layer2.gradient_bits     = LAYER_3_QPARAM_GRADNT_BITS;
+
+    qparam_dw_conv_layer3.weight_bits       = LAYER_4_QPARAM_WEIGHT_BITS;
+    qparam_dw_conv_layer3.activation_bits   = LAYER_4_QPARAM_ACTIVA_BITS;
+    qparam_dw_conv_layer3.gradient_bits     = LAYER_4_QPARAM_GRADNT_BITS;
+
+    qparam_pw_conv_layer3.weight_bits       = LAYER_5_QPARAM_WEIGHT_BITS;
+    qparam_pw_conv_layer3.activation_bits   = LAYER_5_QPARAM_ACTIVA_BITS;
+    qparam_pw_conv_layer3.gradient_bits     = LAYER_5_QPARAM_GRADNT_BITS;
+
+    qparam_dw_conv_layer4.weight_bits       = LAYER_6_QPARAM_WEIGHT_BITS;
+    qparam_dw_conv_layer4.activation_bits   = LAYER_6_QPARAM_ACTIVA_BITS;
+    qparam_dw_conv_layer4.gradient_bits     = LAYER_6_QPARAM_GRADNT_BITS;
+
+    qparam_pw_conv_layer4.weight_bits       = LAYER_7_QPARAM_WEIGHT_BITS;
+    qparam_pw_conv_layer4.activation_bits   = LAYER_7_QPARAM_ACTIVA_BITS;
+    qparam_pw_conv_layer4.gradient_bits     = LAYER_7_QPARAM_GRADNT_BITS;
+
+    qparam_dw_conv_layer5.weight_bits       = LAYER_8_QPARAM_WEIGHT_BITS;
+    qparam_dw_conv_layer5.activation_bits   = LAYER_8_QPARAM_ACTIVA_BITS;
+    qparam_dw_conv_layer5.gradient_bits     = LAYER_8_QPARAM_GRADNT_BITS;
+
+    qparam_pw_conv_layer5.weight_bits       = LAYER_9_QPARAM_WEIGHT_BITS;
+    qparam_pw_conv_layer5.activation_bits   = LAYER_9_QPARAM_ACTIVA_BITS;
+    qparam_pw_conv_layer5.gradient_bits     = LAYER_9_QPARAM_GRADNT_BITS;
+
+    qparam_fusion_layer6.weight_bits        = LAYER_10_QPARAM_WEIGHT_BITS;
+    qparam_fusion_layer6.activation_bits    = LAYER_10_QPARAM_ACTIVA_BITS;
+    qparam_fusion_layer6.gradient_bits      = LAYER_10_QPARAM_GRADNT_BITS;
+
+    qparam_dense_layer7.weight_bits         = LAYER_11_QPARAM_WEIGHT_BITS;
+    qparam_dense_layer7.activation_bits     = LAYER_11_QPARAM_ACTIVA_BITS;
+    qparam_dense_layer7.gradient_bits       = LAYER_11_QPARAM_GRADNT_BITS;
+
 
 
     /**********************************************

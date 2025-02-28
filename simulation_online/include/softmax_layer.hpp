@@ -15,5 +15,6 @@ void softmax_layer_backward_fixed(const int32_t* softmax_outputs,
                             int32_t* softmax_gradients, 
                             const uint8_t softmax_batch_size, 
                             const uint8_t softmax_num_labels,
-                            const double rescale_value);
+                            const double rescale_value,
+                            const uint8_t input_activation_bits);
 #endif

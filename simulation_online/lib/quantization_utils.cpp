@@ -61,6 +61,80 @@ int32_t requantize_shift(int32_t large_number, const double rescale_value, const
     
         if ((shifted_large_number >> activation_bits) > 0) {
             shifted_large_number = (int)(pow(2, activation_bits - (1-use_relu)) +0.5)-1;
+        } else if (shifted_large_number < -(int)(pow(2, activation_bits- (1-use_relu)) +0.5)-1) {
+/*
+std::cout << -(int)(pow(2, activation_bits- (1-use_relu)) +0.5)-1 << std::endl;
+std::cout << -(int)(pow(2, activation_bits- (1-use_relu)) +0.5)-1 << std::endl;
+std::cout << -(int)(pow(2, activation_bits- (1-use_relu)) +0.5)-1 << std::endl;
+std::cout << -(int)(pow(2, activation_bits- (1-use_relu)) +0.5)-1 << std::endl;
+std::cout << -(int)(pow(2, activation_bits- (1-use_relu)) +0.5)-1 << std::endl;
+std::cout << shifted_large_number << std::endl;
+std::cout << shifted_large_number << std::endl;
+std::cout << shifted_large_number << std::endl;
+std::cout << shifted_large_number << std::endl;
+std::cout << shifted_large_number << std::endl;
+std::cout << shifted_large_number << std::endl;
+*/
+            shifted_large_number = -(int)(pow(2, activation_bits- (1-use_relu)) +0.5)-1;
+        }
+    }
+    return shifted_large_number;
+}
+
+int32_t requantize_shift_sm(int32_t large_number, const double rescale_value, const uint8_t activation_bits, const bool use_relu) {
+    double distance = 99999999999;
+    double temp_distance = 0;
+    int8_t shift = 0;
+    int8_t one = 1;
+    double interp_rescale_value = 1;
+    int32_t shifted_large_number;
+    
+    double lsb_size =interp_rescale_value / (int)(pow(2, activation_bits+1) + 0.5);
+
+    // find shiftness
+    while (1) {
+        if (rescale_value > 1) {
+            temp_distance = (rescale_value - interp_rescale_value * (int)(pow(2, shift) + 0.5));
+        } else {
+            temp_distance = (rescale_value - interp_rescale_value / (int)(pow(2, shift) + 0.5));
+        }
+        //std::cout << std::to_string(shift) << std::endl;
+        //std::cout << std::to_string(abs(temp_distance)) << std::endl;
+        
+        if (abs(temp_distance) < abs(distance)) {
+            distance = temp_distance;
+        } else {
+            shift--;
+        //std::cout << std::to_string(shift) << std::endl;
+        //std::cout << std::to_string(abs(rescale_value - interp_rescale_value / (2.0 * shift))) << std::endl;
+        //std::cout << std::to_string(abs(interp_rescale_value / (2.0 * shift))) << std::endl;
+
+            break;
+        }
+        shift++;
+    }
+    //std::cout << std::to_string(rescale_value) << std::endl;
+
+    // Round to Odd because I'm too lazy for RTNE...
+    
+    if (large_number < 0 && use_relu) { // relu :)
+        shifted_large_number = 0;
+    } else {
+        if (rescale_value > 1) {
+            shifted_large_number = large_number << shift;
+        } else {
+            shifted_large_number = large_number >> shift;
+            int remainder = large_number & ((1 << shift) - 1);
+            int round_bit = (large_number >> (shift - 1)) & 1;
+            int sticky_bit = remainder != 0;
+            if (round_bit && (shifted_large_number % 2 != 0 || sticky_bit)) {
+                shifted_large_number += 1;
+            }
+
+        }
+    
+        if ((shifted_large_number >> activation_bits) > 0) {
+            shifted_large_number = (int)(pow(2, activation_bits - (1-use_relu)) +0.5)-1;
         } else if ((shifted_large_number >> activation_bits) > (int)(pow(2, activation_bits) +0.5)-1) {
             
             shifted_large_number = -(int)(pow(2, activation_bits- (1-use_relu)) +0.5)-1;

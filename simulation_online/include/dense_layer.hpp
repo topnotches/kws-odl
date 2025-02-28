@@ -20,5 +20,6 @@ void dense_layer_backward_fixed(int32_t* dense_grad_input,
                                 const uint16_t dense_input_size, 
                                 const uint16_t dense_output_size, 
                                 const uint16_t dense_batch_size,
-                                const double rescale_value);
+                                const double rescale_value,
+                                const uint8_t input_activation_bits);
 #endif

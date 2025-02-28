@@ -306,7 +306,10 @@ void layer::forward(float *layer_input, float *labels_input) {
         }
         case LayerTypes::fusion: {
             fusion_mult_float(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_dim_size_out.width, this->layer_dim_size_out.batch);
-
+            //std::cout << std::to_string(this->layer_dim_size_in.full) << std::endl;
+            for (uint32_t i = 0; i < this->layer_dim_size_in.full; i ++) {
+                this->layer_inputs.push_back(layer_input[i]);
+            }
             break;
         }
         default: {
@@ -365,7 +368,7 @@ void layer::backward(float *layer_gradient_input) {
             fusion_mult_backward_float(
                                         this->layer_gradient_outputs.data(), 
                                         layer_gradient_input, 
-                                        this->layer_weights.data(), 
+                                        this->layer_inputs.data(), 
                                         this->layer_dim_size_out.width, 
                                         this->layer_dim_size_out.batch);
             adam_optimize(this->layer_gradient_outputs.data(), this->layer_dim_size_out.width);
