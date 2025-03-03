@@ -6,9 +6,30 @@
 #include <string>
 #include <iostream>
 #include "quantization_utils.hpp"
-#include <math.h>
+
+#include <algorithm>
 
 int32_t requantize_shift(int32_t large_number, const double rescale_value, const uint8_t activation_bits, const bool use_relu) {
+    
+    int32_t my_return = static_cast<int32_t>(rescale_value*static_cast<double>(large_number));
+    if (use_relu && my_return < 0) {
+        my_return = 0;
+    }
+
+    int32_t min;
+    int32_t max;
+
+    if (use_relu ) {
+        min = 0;
+        max = static_cast<int32_t>(pow(2, activation_bits)+0.5);
+    } else {
+        min = -static_cast<int32_t>(pow(2, activation_bits-1)+0.5);
+        max = static_cast<int32_t>(pow(2, activation_bits-1)+0.5)-1;
+    }
+    my_return = std::clamp(my_return, min, max);
+    return my_return;
+}
+int32_t requantize_shift_old(int32_t large_number, const double rescale_value, const uint8_t activation_bits, const bool use_relu) {
     double distance = 99999999999;
     double temp_distance = 0;
     int8_t shift = 0;
@@ -78,6 +99,7 @@ std::cout << shifted_large_number << std::endl;
             shifted_large_number = -(int)(pow(2, activation_bits- (1-use_relu)) +0.5)-1;
         }
     }
+    
     return shifted_large_number;
 }
 

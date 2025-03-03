@@ -7,6 +7,7 @@
 #define DO_FULL_BATCHNORM_LAYER_ANALYSIS false 
 
 
+#define DENSE_BW_OUTPUT_SCALE 1.5641e-09
 
 /***************************/
 /* MODEL FORMAT PARAMETERS */
@@ -14,17 +15,17 @@
 #define DO_FLOAT true
 
 typedef struct quant_param_t {
-    float scale_in = 1;
-    float scale_out = 1;
-    float scale_weight = 1;
+    double scale_in = 1;
+    double scale_out = 1;
+    double scale_weight = 1;
     uint8_t weight_bits = 1;
     uint8_t activation_bits = 1;
     uint8_t gradient_bits = 1;
 } quant_param;
 
 // Layer 10, Fusion
-#define LAYER_10_QPARAM_WEIGHT_BITS 18
-#define LAYER_10_QPARAM_ACTIVA_BITS 16
+#define LAYER_10_QPARAM_WEIGHT_BITS 22
+#define LAYER_10_QPARAM_ACTIVA_BITS 8
 #define LAYER_10_QPARAM_GRADNT_BITS LAYER_10_QPARAM_WEIGHT_BITS
 #define FUSION_QPARAM_WEIGHT_SCALE_SHIFT LAYER_10_QPARAM_WEIGHT_BITS-1 // FIXME & TODO REAL NUMBER BRR
 
@@ -36,53 +37,53 @@ typedef struct quant_param_t {
 #define LAYER_1_QPARAM_GRADNT_BITS 1
 
 // Layer 2, Depthwise Convolution
-#define LAYER_2_QPARAM_WEIGHT_BITS 4
+#define LAYER_2_QPARAM_WEIGHT_BITS 8
 #define LAYER_2_QPARAM_ACTIVA_BITS 8
 #define LAYER_2_QPARAM_GRADNT_BITS 1
 
 // Layer 3, Pointwise Convolution
-#define LAYER_3_QPARAM_WEIGHT_BITS 4
+#define LAYER_3_QPARAM_WEIGHT_BITS 8
 #define LAYER_3_QPARAM_ACTIVA_BITS 8
 #define LAYER_3_QPARAM_GRADNT_BITS 1
 
 // Layer 4, Depthwise Convolution
-#define LAYER_4_QPARAM_WEIGHT_BITS 4
+#define LAYER_4_QPARAM_WEIGHT_BITS 8
 #define LAYER_4_QPARAM_ACTIVA_BITS 8
 #define LAYER_4_QPARAM_GRADNT_BITS 1
 
 // Layer 5, Pointwise Convolution
-#define LAYER_5_QPARAM_WEIGHT_BITS 4
+#define LAYER_5_QPARAM_WEIGHT_BITS 8
 #define LAYER_5_QPARAM_ACTIVA_BITS 8
 #define LAYER_5_QPARAM_GRADNT_BITS 1
 
 // Layer 6, Depthwise Convolution
-#define LAYER_6_QPARAM_WEIGHT_BITS 4
+#define LAYER_6_QPARAM_WEIGHT_BITS 8
 #define LAYER_6_QPARAM_ACTIVA_BITS 8
 #define LAYER_6_QPARAM_GRADNT_BITS 1
 
 // Layer 7, Pointwise Convolution
-#define LAYER_7_QPARAM_WEIGHT_BITS 4
+#define LAYER_7_QPARAM_WEIGHT_BITS 8
 #define LAYER_7_QPARAM_ACTIVA_BITS 8
 #define LAYER_7_QPARAM_GRADNT_BITS 1
 
 // Layer 8, Depthwise Convolution
-#define LAYER_8_QPARAM_WEIGHT_BITS 4
+#define LAYER_8_QPARAM_WEIGHT_BITS 8
 #define LAYER_8_QPARAM_ACTIVA_BITS 8
 #define LAYER_8_QPARAM_GRADNT_BITS 1
 
 // Layer 9, Pointwise Convolution
-#define LAYER_9_QPARAM_WEIGHT_BITS 4
-#define LAYER_9_QPARAM_ACTIVA_BITS 16
+#define LAYER_9_QPARAM_WEIGHT_BITS 8
+#define LAYER_9_QPARAM_ACTIVA_BITS 8
 #define LAYER_9_QPARAM_GRADNT_BITS 1
 
 // Layer 11, Dense
 #define LAYER_11_QPARAM_WEIGHT_BITS 8
-#define LAYER_11_QPARAM_ACTIVA_BITS 16
+#define LAYER_11_QPARAM_ACTIVA_BITS 8
 #define LAYER_11_QPARAM_GRADNT_BITS LAYER_10_QPARAM_WEIGHT_BITS
 
 // Layer 12, SoftMax
-#define LAYER_SOFTMAX_QPARAM_WEIGHT_BITS 1
-#define LAYER_SOFTMAX_QPARAM_ACTIVA_BITS 16
+#define LAYER_SOFTMAX_QPARAM_WEIGHT_BITS 8
+#define LAYER_SOFTMAX_QPARAM_ACTIVA_BITS 8
 #define LAYER_SOFTMAX_QPARAM_GRADNT_BITS LAYER_11_QPARAM_WEIGHT_BITS
 
 /*****************************/

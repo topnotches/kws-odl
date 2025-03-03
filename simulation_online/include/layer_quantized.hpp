@@ -19,20 +19,23 @@ private:
     std::vector<int32_t> layer_bn_variances;
     LayerTypes layer_type;
     // Adam stuff:
-    int32_t layer_adam_learning_rate = 1e-5;
+    float layer_adam_learning_rate = 1e-5;
     float layer_adam_beta_scale;
     const uint8_t layer_adam_beta_scale_shifts = 7;
     const int32_t layer_adam_beta1 = 115;
     const int32_t layer_adam_beta2 = 127;
     std::vector<int32_t> layer_adam_momentum;
     std::vector<int32_t> layer_adam_velocity;
-    int32_t layer_adam_epsilon = 1e-8;
+    float layer_adam_epsilon = 1e-8;
     uint32_t layer_adam_time_step = 1;
 public:
+    std::vector<float> debug_float;
+    std::vector<int32_t> debug_fixed;
     std::vector<int32_t> layer_gradient_outputs;
     std::vector<int32_t> layer_inputs;
     std::vector<int32_t> layer_outputs;
     double get_rescale_value();
+    double get_bw_rescale_value();
     tensor_dim_sizes_t get_input_size();
     tensor_dim_sizes_t get_output_size();
     quant_param_t get_qparams();

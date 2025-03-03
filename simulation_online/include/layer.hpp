@@ -24,6 +24,8 @@ private:
     float layer_adam_epsilon = 1e-8;
     uint32_t layer_adam_time_step = 1;
     public:
+    std::vector<float> debug_float;
+    std::vector<int32_t> debug_fixed;
     std::vector<float> layer_gradient_outputs;
     std::vector<float> layer_inputs;
     std::vector<float> layer_outputs;

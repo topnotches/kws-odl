@@ -438,14 +438,16 @@ void layer::adam_optimize(const float* layer_adam_gradients_backprop, const uint
 
     for (uint32_t index = 0; index < layer_adam_size; index++) {
         this->layer_adam_momentum[index] = this->layer_adam_beta1 * this->layer_adam_momentum[index] + (1.0 - this->layer_adam_beta1) * avg_gradients[index];
-
+        
         this->layer_adam_velocity[index] = this->layer_adam_beta2 * this->layer_adam_velocity[index] + 
-                                   (1.0 - this->layer_adam_beta2) * avg_gradients[index] * avg_gradients[index];
-
+        (1.0 - this->layer_adam_beta2) * avg_gradients[index] * avg_gradients[index];
+        
         float m_hat = this->layer_adam_momentum[index] / (1.0f - pow(this->layer_adam_beta1, this->layer_adam_time_step));
         float v_hat = this->layer_adam_velocity[index] / (1.0f - pow(this->layer_adam_beta2, this->layer_adam_time_step));
-
         this->layer_weights[index] -= this->layer_adam_learning_rate * m_hat / (sqrt(v_hat) + this->layer_adam_epsilon);
+        this->debug_float.push_back(this->layer_weights[index]);
+       
+        // std::cout << this->layer_adam_learning_rate * m_hat / (sqrt(v_hat) + this->layer_adam_epsilon)<<std::endl;
        // std::cout <<this->layer_adam_velocity[index] << "!alkwmdaw" << (1.0f - pow(this->layer_adam_beta2, this->layer_adam_time_step)) << std::endl;
     }
 

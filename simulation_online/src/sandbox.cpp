@@ -26,6 +26,21 @@ extern layer_analyzer softmax_fw_analyzer;
 extern layer_analyzer softmax_bw_analyzer;
 
 
+double calculate_mse(const std::vector<float>& quant_outputs, const std::vector<float>& float_outputs) {
+    if (quant_outputs.size() != float_outputs.size()) {
+        std::cerr << "Error: Output size mismatch!" << std::endl;
+        return -1.0;
+    }
+
+    double mse = 0.0;
+    for (size_t i = 0; i < quant_outputs.size(); i++) {
+        double diff = quant_outputs[i] - float_outputs[i];
+        mse += diff * diff;
+    }
+
+    return mse / quant_outputs.size();
+}
+
 float average(const float* vec, uint16_t size) {
     float sum = 0.0f;
     for (uint16_t i = 0; i < size; i++) {
@@ -58,22 +73,24 @@ int  main() {
             std::vector<std::string> words = {"yes","no","up","down","left","right","on","off","stop","go"};
             
             std::vector<layer_q> model = get_model_fixed(model_params_dir, BATCH_SIZE, NUMBER_OF_CLASSES);
+            std::vector<layer> model_float = get_model_fixed_dequant_ref(model_params_dir, BATCH_SIZE, NUMBER_OF_CLASSES);
             
             quant_param_t qparam_softmax;
             qparam_softmax.scale_in             = model.back().get_qparams().scale_out;
-            qparam_softmax.scale_out            = model.back().get_qparams().scale_out;
-            qparam_softmax.scale_weight         = 1;
+            qparam_softmax.scale_out            = 1.0f;
+            qparam_softmax.scale_weight         = 1.0f;
             qparam_softmax.weight_bits          = LAYER_SOFTMAX_QPARAM_WEIGHT_BITS;
             qparam_softmax.activation_bits      = LAYER_SOFTMAX_QPARAM_ACTIVA_BITS;
             qparam_softmax.gradient_bits        = LAYER_SOFTMAX_QPARAM_GRADNT_BITS;
 
             layer_q softmax(LayerTypes::softmax, model.back().get_output_size(), qparam_softmax);
+            layer softmax_float(LayerTypes::softmax, model_float.back().get_output_size());
             layer crossentropy(LayerTypes::cross_entropy_loss, softmax.get_output_size());
 #if DO_LAYER_ANALYSIS
-            dataloader dataloader(words, "c50f55b8_nohash_19", BATCH_SIZE, 1); // Change '/' to the userID
+            dataloader dataloader(words, "c50f55b8_nohash_5", BATCH_SIZE, 1); // Change '/' to the userID
 #else
             //dataloader dataloader(words, uid, BATCH_SIZE, TRAIN_VAL_SPLIT); // Change '/' to the userID
-            dataloader dataloader({words}, "c50f55b8", BATCH_SIZE, 0.7); // Change '/' to the userID
+            dataloader dataloader({words}, "no/c50f55b8_nohash_10", BATCH_SIZE, 1.0); // Change '/' to the userID
 
 #endif
             float error = 0.0f;
@@ -93,29 +110,40 @@ int  main() {
             std::vector<std::vector<int32_t>> all_avg_train_activations;
             std::vector<std::vector<int32_t>> all_avg_validation_activations;
             
-            while (i < 3) {
+            while (i < 2) {
                 
                 if (dataloader.get_training_pool_empty()) {
                     auto mybatch = dataloader.get_batch_fixed();
                     std::vector<int32_t> labels_onehot;
+                    std::vector<float> labels_onehot_float;
+                    std::vector<int32_t> inputs;
+                    std::vector<float> inputs_float;
                     for (auto label : std::get<1>(mybatch)) {
                         std::vector<int32_t> temp;
+                        std::vector<float> temp_float;
                         temp = int_to_fixed_onehot(2 + label, 12);
+                        temp_float = int_to_float_onehot(2 + label, 12);
                         std::cout << "ojfoaeijf                            " << std::to_string(label) << std::endl;
                         labels_onehot.insert(labels_onehot.end(), temp.begin(), temp.end());
+                        labels_onehot_float.insert(labels_onehot_float.end(), temp_float.begin(), temp_float.end());
+                    }
+                    inputs = std::get<0>(mybatch);
+                    for (auto input_fixed : inputs) {
+                        inputs_float.push_back(input_fixed);
                     }
                     if (i == 0) {
-                        model_forward(model, std::get<0>(mybatch));
+                        model_forward(model, inputs);
+                        model_forward(model_float, inputs_float);
                         all_avg_train_activations.push_back(model[9].layer_outputs);
                     } else {
                         model[10].forward(std::get<0>(mybatch).data());
                         model[11].forward(model[10].layer_outputs.data());
                     }
                     softmax.forward(model.back().layer_outputs.data());
+                    softmax_float.forward(model_float.back().layer_outputs.data());
 
 
                     std::vector<float> softmax_outputs;
-                    std::vector<float> labels_onehot_float;
 
                     for (auto q :  softmax.layer_outputs) {
                         //std::cout << std::to_string(q) << std::endl;
@@ -127,19 +155,76 @@ int  main() {
                     }
                     crossentropy.forward(softmax_outputs.data(), labels_onehot_float.data());
                     softmax.backward(labels_onehot.data());
-                    model[11].backward(softmax.layer_gradient_outputs.data()); //dense
-                    model[10].backward(model[11].layer_gradient_outputs.data()); //fusion
-                   // for (auto q :  softmax.layer_gradient_outputs) {
-                   //    // std::cout << std::to_string(q) << std::endl;
-                   //     //softmax_outputs.push_back(static_cast<float>(q));
-                   // }
+                    model[20].backward(softmax.layer_gradient_outputs.data()); //dense
+                    model[19].backward(model[20].layer_gradient_outputs.data()); //fusion
+                    softmax_float.backward(labels_onehot_float.data());
+                    model_float[20].backward(softmax_float.layer_gradient_outputs.data()); //dense
+                    model_float[19].backward(model_float[20].layer_gradient_outputs.data()); //fusion
+
+
+                    
+                    /*
+                    for (int iii = 0; iii < model[LAYERR].get_output_size().full; iii++) {
+                        quant_outputs[iii] = static_cast<float>(model[LAYERR].layer_outputs[iii])*scale;
+                        float_outputs[iii] = model_float[LAYERR].layer_outputs[iii];
+                        mag_dif_outputs[iii] = model_float[LAYERR].layer_outputs[iii]/static_cast<float>(model[LAYERR].layer_outputs[iii]);
+                        
+                        std::cout << "Quantized: " << quant_outputs[iii] << ", Float: " << float_outputs[iii] << ", mag_dif: " << mag_dif_outputs[iii] << std::endl;
+                    }
+                    
+                    */
+                
+                    uint8_t LAYER = 8;
+                    uint8_t LAYERR = 19;
+                    auto qpram = model[LAYERR].get_qparams();
+                    float scale = qpram.scale_weight;
+                    double mse = 0.0;
+                    int output_size = model[LAYERR].get_input_size().full;
+                
+                    std::vector<float> quant_outputs(output_size);
+                    std::vector<float> float_outputs(output_size);
+                    std::vector<float> mag_dif_outputs(output_size);
+                    std::vector<float> quant_outputs_fuck_you(output_size);
+                    std::vector<float> float_outputs_fuck_you(output_size);
+                    std::vector<float> mag_dif_outputs_fuck_you(output_size);
+                  
+                  
+                    for (int iii = 0; iii < output_size; iii++) {
+
+                        quant_outputs[iii] = static_cast<float>(model[LAYERR].debug_float[iii])*scale;
+                        float_outputs[iii] = model_float[LAYERR].debug_float[iii];
+                        mag_dif_outputs[iii] = model_float[LAYERR].debug_float[iii]/(static_cast<float>(model[LAYERR].debug_float[iii])+.00001f);
+                        
+                        //quant_outputs_fuck_you[iii] = static_cast<float>(model[LAYERR].layer_gradient_outputs[iii])*scale;
+                        //float_outputs_fuck_you[iii] = model_float[LAYERR].layer_gradient_outputs[iii];
+                        //mag_dif_outputs_fuck_you[iii] = model_float[LAYERR].layer_gradient_outputs[iii]/(static_cast<float>(model[LAYERR].layer_gradient_outputs[iii])+.00001f);
+                        //std::cout << "fuck" << std::endl;
+                        std::cout << "Quantized: " << quant_outputs[iii] << ", Float: " << float_outputs[iii] << ", mag_dif: " << mag_dif_outputs[iii] << std::endl;
+                        //std::cout << "Quantized: " << quant_outputs_fuck_you[iii] << ", Float: " << float_outputs_fuck_you[iii] << ", mag_dif: " << mag_dif_outputs_fuck_you[iii] << std::endl;
+                    }
+                
+                    mse = calculate_mse(quant_outputs, float_outputs);
+                    std::cout << "MSE: " << mse << std::endl;
+                    for (auto q : softmax_float.layer_outputs) {
+                        std::cout << std::to_string(q) << std::endl;
+                        //softmax_outputs.push_back(static_cast<float>(q));
+                    }     
+                    
+                    for (auto q : softmax.layer_outputs) {
+                        std::cout << std::to_string(q) << std::endl;
+                        //softmax_outputs.push_back(static_cast<float>(q));
+                    }     
+                    
+                        /*
+                    //softmax_outputs.push_back(static_cast<float>(q));
+                */
                     float temp_err = 0.0f;
 //
                     for (auto output : crossentropy.layer_outputs) {
                         temp_err += output;
                     }
                     temp_err /= crossentropy.layer_outputs.size()/BATCH_SIZE;
-
+                    assert(1==0);
 #if DO_LAYER_ANALYSIS
                     batchnorm_analyzer.print_stats_colnames();
                     batchnorm_analyzer.print_stats_raw();
@@ -201,9 +286,9 @@ int  main() {
                         std::vector<float> softmax_outputs;
                         std::vector<float> labels_onehot_float;
     
-                        for (auto q :   model[11].layer_outputs) {
+                        for (auto q :   softmax.layer_outputs) {
                             // std::cout << std::to_string(q) << std::endl;
-                            softmax_outputs.push_back(static_cast<float>(q));
+                            softmax_outputs.push_back(static_cast<float>(q)/256);
                         }
                         for (auto o :  labels_onehot) {
                             // std::cout << "std::to_string(o)" << std::endl;

@@ -58,7 +58,10 @@ void fusion_mult_fixed(const int32_t* fusion_input, int32_t* fusion_output, cons
 #endif
     for (uint8_t index_batch = 0; index_batch < fusion_batch_size; index_batch++) {
         for (uint8_t index_feature = 0; index_feature < fusion_features; index_feature++) {
+
+
             fusion_output[index_batch * fusion_features + index_feature] = requantize_shift(fusion_input[index_batch * fusion_features + index_feature] * fusion_embeddings[index_feature], rescale_value, activation_bits);
+            //if (fusion_output[index_batch * fusion_features + index_feature] != fusion_input[index_batch * fusion_features + index_feature] * fusion_embeddings[index_feature])
             fusion_fw_analyzer.incr_loads();
             fusion_fw_analyzer.incr_loads();
             fusion_fw_analyzer.incr_stores();
@@ -82,14 +85,14 @@ void fusion_mult_backward_fixed(int32_t* fusion_grad_input,
 #endif
     for (uint8_t index_batch = 0; index_batch < fusion_batch_size; index_batch++) {
         for (uint8_t index_feature = 0; index_feature < fusion_features; index_feature++) {
-            //std::cout << "NEW ONE: "<< std::endl;
-            //std::cout << "GRAD: " << std::to_string(fusion_grad_output[index_batch * fusion_features + index_feature]) << std::endl;
-            //std::cout << "WEIGHT: " << std::to_string(fusion_embeddings[index_feature]) << std::endl;
-            //std::cout << "PROD: " << std::to_string(fusion_grad_output[index_batch * fusion_features + index_feature] * fusion_embeddings[index_feature]) << std::endl;
+            // std::cout << "NEW ONE: "<< std::endl;
+            // std::cout << "GRAD: " << std::to_string(fusion_grad_output[index_batch * fusion_features + index_feature]) << std::endl;
+            // std::cout << "WEIGHT: " << std::to_string(fusion_embeddings[index_feature]) << std::endl;
+            // std::cout << "PROD: " << std::to_string(fusion_grad_output[index_batch * fusion_features + index_feature] * fusion_embeddings[index_feature]) << std::endl;
             fusion_grad_input[index_batch * fusion_features + index_feature] = 
             requantize_shift(fusion_grad_output[index_batch * fusion_features + index_feature] * fusion_embeddings[index_feature], rescale_value, gradient_bits, false);
-            //std::cout << "AFTER SHIFTING: " << fusion_grad_input[index_batch * fusion_features + index_feature]<< std::endl;
-            //std::cout << "RESCALE_VALUE: " << rescale_value << std::endl;
+            // std::cout << "AFTER SHIFTING: " << fusion_grad_input[index_batch * fusion_features + index_feature]<< std::endl;
+            // std::cout << "RESCALE_VALUE: " << rescale_value << std::endl;
             fusion_bw_analyzer.incr_loads();
             fusion_bw_analyzer.incr_loads();
             fusion_bw_analyzer.incr_stores();

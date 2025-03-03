@@ -247,6 +247,85 @@ std::vector<layer> get_model(std::string model_path, uint8_t batch_size, uint8_t
     model.push_back(layer(LayerTypes::dense,        model.back().get_output_size(), layer_params[54].data(),  layer_params[55].data(), {}, param_dense_layer7));
     return model;
 }
+std::vector<layer> get_model_fixed_dequant_ref(std::string model_path, uint8_t batch_size, uint8_t num_classes) {
+    std::vector<layer> model;
+
+
+    std::vector<std::vector<std::string>> layer_params_str = load_layers_from_csv_to_vec(model_path + "weights_dequant.csv");
+    std::vector<std::vector<float>> layer_params;
+    for (auto layer_name: layer_params_str) {
+        layer_params.push_back(str_to_fl32_vec(layer_name[2]));
+    }
+    tensor_dim_sizes_t mfccs_size;
+    mfccs_size.height = 49;
+    mfccs_size.width = 10;
+    mfccs_size.depth = 1;
+    mfccs_size.batch = batch_size;
+    mfccs_size.full = mfccs_size.width *
+                            mfccs_size.height *
+                            mfccs_size.depth *
+                            mfccs_size.batch;
+    /**********************************************
+    ***** Set hyper_parameters for each layer *****
+    **********************************************/
+    // Layer 1, Convolution
+    conv_hypr_param_t param_conv_layer1 = set_conv_param(4,10,2,64,5,5,1,1);
+    // Layer 2, Depth-wise Separable Convolution
+    conv_hypr_param_t param_dw_conv_layer2 = set_conv_param(3,3,1,64,1,1,1,1);
+    conv_hypr_param_t param_pw_conv_layer2 = set_conv_param(1,1,1,64,0,0,0,0);
+    // Layer 3, Depth-wise Separable Convolution
+    conv_hypr_param_t param_dw_conv_layer3 = set_conv_param(3,3,1,64,1,1,1,1);
+    conv_hypr_param_t param_pw_conv_layer3 = set_conv_param(1,1,1,64,0,0,0,0);
+    // Layer 4, Depth-wise Separable Convolution
+    conv_hypr_param_t param_dw_conv_layer4 = set_conv_param(3,3,1,64,1,1,1,1);
+    conv_hypr_param_t param_pw_conv_layer4 = set_conv_param(1,1,1,64,0,0,0,0);
+    // Layer 5, Depth-wise Separable Convolution
+    conv_hypr_param_t param_dw_conv_layer5 = set_conv_param(3,3,1,64,1,1,1,1);
+    conv_hypr_param_t param_pw_conv_layer5 = set_conv_param(1,1,1,64,0,0,0,0);
+    // Layer 6, Average Pooling 
+    conv_hypr_param_t param_ap2d_conv_layer6 = set_conv_param(5,25,1,64,0,0,0,0);
+    // Layer 7, Dense 
+    dense_hypr_param_t param_dense_layer7 = set_dense_param(num_classes);
+
+    /****************************************
+    ***** Create Instantiate Each Layer *****
+    ****************************************/
+
+    // Layer 1, Convolution
+    model.push_back(layer(LayerTypes::conv,         mfccs_size, layer_params[0].data(),  layer_params[1].data(),   param_conv_layer1));
+    model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
+    // Layer 2, Depth-wise Separable Convolution
+    model.push_back(layer(LayerTypes::dw_conv,      model.back().get_output_size(), layer_params[2].data(),  layer_params[3].data(),   param_dw_conv_layer2));
+    model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
+    model.push_back(layer(LayerTypes::conv,         model.back().get_output_size(), layer_params[4].data(),  layer_params[5].data(),   param_pw_conv_layer2));
+    model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
+
+    // Layer 3, Depth-wise Separable Convolution
+    model.push_back(layer(LayerTypes::dw_conv,      model.back().get_output_size(), layer_params[6].data(), layer_params[7].data(),  param_dw_conv_layer3));
+    model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
+    model.push_back(layer(LayerTypes::conv,         model.back().get_output_size(), layer_params[8].data(),  layer_params[9].data(), param_pw_conv_layer3));
+    model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
+
+    // Layer 4, Depth-wise Separable Convolution
+    model.push_back(layer(LayerTypes::dw_conv,      model.back().get_output_size(), layer_params[10].data(),  layer_params[11].data(), param_dw_conv_layer4));
+    model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
+    model.push_back(layer(LayerTypes::conv,         model.back().get_output_size(), layer_params[12].data(),  layer_params[13].data(), param_pw_conv_layer4));
+    model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
+
+    // Layer 5, Depth-wise Separable Convolution
+    model.push_back(layer(LayerTypes::dw_conv,      model.back().get_output_size(), layer_params[14].data(),  layer_params[15].data(), param_dw_conv_layer5));
+    model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
+    model.push_back(layer(LayerTypes::conv,         model.back().get_output_size(), layer_params[16].data(),  layer_params[17].data(), param_pw_conv_layer5));
+    model.push_back(layer(LayerTypes::relu,         model.back().get_output_size()));
+    // Layer 6, Average Pooling
+    model.push_back(layer(LayerTypes::avgpool2d,    model.back().get_output_size(), {}, {}, param_ap2d_conv_layer6));
+    // Layer 7, fusion
+    model.push_back(layer(LayerTypes::fusion,       model.back().get_output_size()));
+
+    // Layer 8, Dense 
+    model.push_back(layer(LayerTypes::dense,        model.back().get_output_size(), layer_params[18].data(),  layer_params[19].data(), {}, param_dense_layer7));
+    return model;
+}
 
 std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size, uint8_t num_classes) {
     std::vector<layer_q> model;
@@ -283,7 +362,7 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
     qparam_conv_layer1.scale_weight         = layer_qparams[1];
 
     quant_param_t qparam_dw_conv_layer2;
-    qparam_dw_conv_layer2.scale_in          =    qparam_conv_layer1.scale_out;
+    qparam_dw_conv_layer2.scale_in          = qparam_conv_layer1.scale_out;
     qparam_dw_conv_layer2.scale_out         = layer_qparams[2];
     qparam_dw_conv_layer2.scale_weight      = layer_qparams[3];
 
@@ -408,21 +487,30 @@ std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size,
     ****************************************/
     // Layer 1, Convolution
     model.push_back(layer_q(LayerTypes::conv,         mfccs_size,                       qparam_conv_layer1, layer_params[0].data(),  layer_params[1].data(),   param_conv_layer1));
+    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
     // Layer 2, Depth-wise Separable Convolution
     model.push_back(layer_q(LayerTypes::dw_conv,      model.back().get_output_size(),   qparam_dw_conv_layer2, layer_params[2].data(),  layer_params[3].data(),   param_dw_conv_layer2));
+    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
     model.push_back(layer_q(LayerTypes::conv,         model.back().get_output_size(),   qparam_pw_conv_layer2, layer_params[4].data(),  layer_params[5].data(),   param_pw_conv_layer2));
+    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
 
     // Layer 3, Depth-wise Separable Convolution
     model.push_back(layer_q(LayerTypes::dw_conv,      model.back().get_output_size(),   qparam_dw_conv_layer3, layer_params[6].data(), layer_params[7].data(),  param_dw_conv_layer3));
+    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
     model.push_back(layer_q(LayerTypes::conv,         model.back().get_output_size(),   qparam_pw_conv_layer3, layer_params[8].data(),  layer_params[9].data(), param_pw_conv_layer3));
+    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
 
     // Layer 4, Depth-wise Separable Convolution
     model.push_back(layer_q(LayerTypes::dw_conv,      model.back().get_output_size(),   qparam_dw_conv_layer4, layer_params[10].data(),  layer_params[11].data(), param_dw_conv_layer4));
+    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
     model.push_back(layer_q(LayerTypes::conv,         model.back().get_output_size(),   qparam_pw_conv_layer4, layer_params[12].data(),  layer_params[13].data(), param_pw_conv_layer4));
+    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
 
     // Layer 5, Depth-wise Separable Convolution
     model.push_back(layer_q(LayerTypes::dw_conv,      model.back().get_output_size(),   qparam_dw_conv_layer5, layer_params[14].data(),  layer_params[15].data(), param_dw_conv_layer5));
+    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
     model.push_back(layer_q(LayerTypes::conv,         model.back().get_output_size(),   qparam_pw_conv_layer5, layer_params[16].data(),  layer_params[17].data(), param_pw_conv_layer5));
+    model.push_back(layer_q(LayerTypes::relu,         model.back().get_output_size()));
 
     // Layer 6, Average Pooling
     model.push_back(layer_q(LayerTypes::avgpool2d,    model.back().get_output_size(), {}, {}, {}, param_ap2d_conv_layer6));

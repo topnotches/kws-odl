@@ -76,7 +76,7 @@ memset(dense_output, 0, dense_batch_size * dense_output_size * sizeof(int32_t));
                     dense_fw_analyzer.incr_additions();
                     dense_fw_analyzer.incr_multiplications();
             }
-            dense_output[batch_offset_output + index_output] = requantize_shift(dense_output[batch_offset_output + index_output] + dense_biases[index_output], rescale_value, activation_bits);
+            dense_output[batch_offset_output + index_output] = requantize_shift(dense_output[batch_offset_output + index_output] + dense_biases[index_output], rescale_value, activation_bits, false);
         }
     }
 }

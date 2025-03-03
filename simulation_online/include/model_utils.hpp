@@ -17,6 +17,7 @@ dense_hypr_param_t set_dense_param(uint32_t output_size, uint32_t input_size = 1
 std::vector<float> str_to_fl32_vec(std::string string_of_floats, std::string delimiter = " ");
 std::vector<int32_t> str_to_int32_vec(std::string string_of_ints, std::string delimiter = " ");
 std::vector<layer> get_model(std::string model_path, uint8_t batch_size, uint8_t num_classes);
+std::vector<layer> get_model_fixed_dequant_ref(std::string model_path, uint8_t batch_size, uint8_t num_classes);
 std::vector<layer_q> get_model_fixed(std::string model_path, uint8_t batch_size, uint8_t num_classes);
 
 void model_forward(std::vector<layer> &model, std::vector<float> data);
