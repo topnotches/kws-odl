@@ -34,7 +34,7 @@ dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::st
         std::string dir_path = dataloader_dataset_path + target_word;
         for (const auto & entry : fs::directory_iterator(dir_path)) {
             if (entry.path().string().find(dataloader_speaker_id) != std::string::npos) {
-                std::cout << entry.path().string() << std::endl;
+            //    std::cout << entry.path().string() << std::endl;
                 temp_dataloader_path_names.push_back(entry.path().string());
                 temp_dataloader_inputs_float.push_back(load_mffcs_bin_float(entry.path().string()));
                 temp_dataloader_inputs_fixed.push_back(load_mffcs_bin_fixed(entry.path().string()));

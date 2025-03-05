@@ -182,7 +182,7 @@ layer_q::layer_q(LayerTypes     layer_type,
                     this->layer_dim_size_out = this->layer_dim_size_in;
                     this->layer_outputs.resize(this->layer_dim_size_out.full);
             this->layer_gradient_outputs.resize(this->layer_dim_size_in.full);
-            std::cout << this->layer_dim_size_in.full<< std::endl;
+            //std::cout << this->layer_dim_size_in.full<< std::endl;
 
             break;
         }
@@ -448,8 +448,8 @@ void layer_q::adam_optimize(const int32_t* layer_adam_gradients_backprop, const 
         float v_hat = (this->layer_adam_velocity[index] / bias_correction2);
         
         float weight_float = static_cast<float>(this->layer_weights[index]);
-        weight_float -= pow(2,LAYER_10_QPARAM_WEIGHT_BITS)*this->layer_adam_learning_rate * (m_hat / (sqrt(v_hat) + this->layer_adam_epsilon));
-        std::cout << (this->layer_adam_learning_rate * m_hat / (sqrt(v_hat) + this->layer_adam_epsilon))<<std::endl;
+        weight_float -= pow(2,LAYER_10_QPARAM_WEIGHT_BITS-1)*this->layer_adam_learning_rate * (m_hat / (sqrt(v_hat) + this->layer_adam_epsilon));
+        //std::cout << (this->layer_adam_learning_rate * m_hat / (sqrt(v_hat) + this->layer_adam_epsilon))<<std::endl;
         this->debug_float.push_back(weight_float);
         
        //s std::cout <<  std::to_string( pow(2,LAYER_10_QPARAM_WEIGHT_BITS)*this->layer_adam_learning_rate * (m_hat / (sqrt(v_hat) + this->layer_adam_epsilon))) << std::endl;

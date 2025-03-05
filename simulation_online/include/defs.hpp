@@ -7,7 +7,7 @@
 #define DO_FULL_BATCHNORM_LAYER_ANALYSIS false 
 
 
-#define DENSE_BW_OUTPUT_SCALE 1.5641e-09
+#define DENSE_BW_OUTPUT_SCALE 5.67463019e-8
 
 /***************************/
 /* MODEL FORMAT PARAMETERS */
@@ -24,7 +24,7 @@ typedef struct quant_param_t {
 } quant_param;
 
 // Layer 10, Fusion
-#define LAYER_10_QPARAM_WEIGHT_BITS 22
+#define LAYER_10_QPARAM_WEIGHT_BITS 20
 #define LAYER_10_QPARAM_ACTIVA_BITS 8
 #define LAYER_10_QPARAM_GRADNT_BITS LAYER_10_QPARAM_WEIGHT_BITS
 #define FUSION_QPARAM_WEIGHT_SCALE_SHIFT LAYER_10_QPARAM_WEIGHT_BITS-1 // FIXME & TODO REAL NUMBER BRR
@@ -91,7 +91,7 @@ typedef struct quant_param_t {
 /*****************************/
 #define NUMBER_OF_CLASSES   12
 #define EPOCHS              10000
-#define TOTAL_RUNS          1
+#define TOTAL_RUNS          5
 #define TRAIN_VAL_SPLIT     0.7
 #define BATCH_SIZE          1
 #define LAYER_SELECT        28
