@@ -3,7 +3,7 @@ import numpy as np
 
 import torch.ao.quantization as quant
 # Path to the quantized model and input GSC file
-QUANTIZED_MODEL_PATH = "quantized_model_complete.pth"
+QUANTIZED_MODEL_PATH = "./run_qat_88_44_44_44_44_816_bs_8_split_5_and_above/model_acc_89.84375_02_20_2025_174404.pth"
 GSC_FILE_PATH = "../dataset_mfccs_raw/yes/d21fd169_nohash_0"
 import torch
 from model import DSCNN_fusable  # Ensure you import the model class
@@ -77,13 +77,16 @@ model.eval()  # Ensure it's in eval mode before converting
 for name, module in model.named_modules():
     if hasattr(module, 'weight_fake_quant'):
         print(f"{name} weight observer dtype: {module.weight_fake_quant.dtype}")
-model_int8 = torch.ao.quantization.convert(model.cpu())
 # Load weights
 
-model_int8.load_state_dict(torch.load(QUANTIZED_MODEL_PATH, map_location=device))
+model.load_state_dict(torch.load(QUANTIZED_MODEL_PATH, map_location=device))
+model_int8 = torch.ao.quantization.convert(model.cpu())
 model_int8.eval()
 
-
+print("double check")
+for name, module in model_int8.named_modules():
+    if hasattr(module, 'weight_fake_quant'):
+        print(f"{name} weight observer dtype: {module.weight_fake_quant.dtype}")
 # Print model parameters
 print("\nModel Parameters:")
 for name, param in model.named_parameters():
@@ -125,18 +128,24 @@ print("\nIntermediate Activations:")
 for layer_name, activation in activations.items():
     print(f"{layer_name}: shape {activation.shape}")
     print(activation.flatten()[:]) 
-#for name, module in model_int8.named_modules():
-#    if hasattr(module, 'weight'):
-#        weight = module.weight()
-#        print(f"\n{name} - Quantized Weight (int representation):")
-#        print(weight.int_repr())  # Get the raw int8/int4 values
-#        
-#        print(f"{name} - Scale: {weight.q_scale()}")
-#        print(f"{name} - Zero Point: {weight.q_zero_point()}")
-#
-#        print(f"{name} - Dequantized Weight:")
-#        print(weight.dequantize())  # Convert back to float
+for name, module in model_int8.named_modules():
+    if hasattr(module, 'weight'):
+        weight = module.weight()
+        print(f"\n{name} - Quantized Weight (int representation):")
+        print(weight.int_repr())  # Get the raw int8/int4 values
+        
+        print(f"{name} - Scale: {weight.q_scale()}")
+        print(f"{name} - Zero Point: {weight.q_zero_point()}")
 
+        print(f"{name} - Dequantized Weight:")
+        print(weight.dequantize())  # Convert back to float
+for name, module in model_int8.named_modules():
+    if isinstance(module, torch.ao.nn.quantized.Linear) or isinstance(module, torch.ao.nn.quantized.Conv2d):
+        print(f"Layer: {name}")
+        print(f"  Input Scale (S_x): {module.activation_post_process.scale.item() if hasattr(module, 'activation_post_process') else 'N/A'}")
+        print(f"  Weight Scale (S_w): {module.weight().q_scale()}")
+        print(f"  Output Scale (S_y): {module.scale}")
+        print("-" * 40)
 # Remove hooks
 for hook in hooks:
     hook.remove()

@@ -85,11 +85,15 @@ if STEP_DO_TRAIN:
             if hasattr(module, 'weight_fake_quant'):
                 print(f"{name} weight observer dtype: {module.weight_fake_quant.dtype}")
         model_int8 = torch.ao.quantization.convert(model.cpu())
-    
+        print("\nModel Parameters:")
+        for name, param in model_int8.named_parameters():
+            print(f"{name}: shape {param.shape}")
+            print(param.detach().cpu().numpy().flatten()[:]) 
+
         torch.save(model_int8.state_dict(), "quantized_model_complete.pth")
 
-if STEP_DO_EXPORT_MODEL:
-    model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=device))
+if STEP_DO_EXPORT_MODEL_FLOAT:
+    model.load_state_dict(torch.load(CHECKPOINT_PATH_FLOAT, map_location=device))
 
     if not os.path.isdir(EXPORT_OUTPUT_DIR_PATH_FLOAT):
         os.mkdir(EXPORT_OUTPUT_DIR_PATH_FLOAT)
@@ -120,8 +124,95 @@ if STEP_DO_EXPORT_MODEL:
 
     except Exception as e:
         print(f"Error exporting model parameters: {e}")
+if STEP_DO_EXPORT_MODEL_FIXED:
+    # Create an instance of your model
+    model_unprep = DSCNN_fusable(use_bias=True)
+    model_unprep.eval()
+
+    model_unprep_fused = torch.ao.quantization.fuse_modules_qat(
+        model_unprep,
+        quant_fuse_list
+    )
+
+    for name, module in model_unprep_fused.named_modules():
+        for key, qconfig in qat_configs.items():
+            if name.startswith(key):  
+                module.qconfig = qconfig
+
+    model = torch.ao.quantization.prepare_qat(model_unprep_fused.train())
+    model.eval()  # Ensure it's in eval mode before converting
+
+    for name, module in model.named_modules():
+        if hasattr(module, 'weight_fake_quant'):
+            print(f"{name} weight observer dtype: {module.weight_fake_quant.dtype}")
+
+    # Load weights
+    model.load_state_dict(torch.load(CHECKPOINT_PATH_FIXED, map_location=device))
+    model_int8 = torch.ao.quantization.convert(model.cpu())
+    model_int8.eval()
 
 
+    if not os.path.isdir(EXPORT_OUTPUT_DIR_PATH_FIXED):
+        os.mkdir(EXPORT_OUTPUT_DIR_PATH_FIXED)
+
+    # File paths for each category
+    weights_file = os.path.join(EXPORT_OUTPUT_DIR_PATH_FIXED, "weights.csv")
+    weights_dequant_file = os.path.join(EXPORT_OUTPUT_DIR_PATH_FIXED, "weights_dequant.csv")
+    scales_file = os.path.join(EXPORT_OUTPUT_DIR_PATH_FIXED, "scales.csv")
+
+    # Open all CSV files for writing
+    with open(weights_file, mode='w', newline='') as weights_csv, \
+        open(weights_dequant_file, mode='w', newline='') as weights_dequant_csv, \
+        open(scales_file, mode='w', newline='') as scales_csv:
+
+        weights_writer = csv.writer(weights_csv)
+        weights_dequant_writer = csv.writer(weights_dequant_csv)
+        scales_writer = csv.writer(scales_csv)
+
+        weights_writer.writerow(["Name", "Shape", "Values"])
+        weights_dequant_writer.writerow(["Name", "Shape", "Values"])
+        scales_writer.writerow(["Name", "Shape", "Values"])
+
+        input_scale = 1 # Starting scale value
+
+        try:
+            for name, module in model_int8.named_modules():
+                temp_input_scale = input_scale
+
+                if hasattr(module, 'weight'):
+                    weight_attr = module.weight
+                    weight = weight_attr() if callable(weight_attr) else weight_attr
+                    weights_writer.writerow([f"{name}.weight", list(weight.shape), 
+                                     weight.int_repr().cpu().numpy().flatten().tolist()])
+                    scales_writer.writerow([f"{name}.output_scale", [1], repr(module.scale)])
+                    scales_writer.writerow([f"{name}.weight_scale", [1], repr(weight.q_scale())])
+
+
+                    weights_dequant_writer.writerow([f"{name}.dequantized_weight", list(weight.shape), 
+                                     weight.dequantize().cpu().numpy().flatten().tolist()])
+                    temp_input_scale = module.scale
+
+
+
+                if hasattr(module, 'bias') and module.bias is not None:
+                    scale_x = input_scale  
+                    scale_w = weight.q_scale()  
+
+                    bias_attr = module.bias
+                    bias = bias_attr() if callable(bias_attr) else bias_attr
+                    bias_float = np.array(bias.cpu().detach().numpy().flatten().tolist())
+                    
+                    weights_dequant_writer.writerow([f"{name}.dequantized_bias", list(weight.shape), 
+                                     bias_float.tolist()])
+                    bias_int32 = (bias_float / (scale_x * scale_w)).round().astype(np.int32)  # Convert bias to int32
+                    weights_writer.writerow([f"{name}.bias", list(bias_int32.shape), bias_int32.tolist()])
+
+                input_scale = temp_input_scale
+
+            print(f"Quantized model parameters exported to {EXPORT_OUTPUT_DIR_PATH_FIXED}.")
+
+        except Exception as e:
+            print(f"Error exporting model parameters: {e}")
 # Recursive function to register hooks on all layers
 def register_hooks(model):
     layer_outputs = []
@@ -149,7 +240,7 @@ def register_hooks(model):
 
     return layer_outputs, layer_names, hooks
 
-if STEP_DO_PROCESS_MFCCS:
+if STEP_DO_PROCESS_MFCCS_FLOAT:
 
     # Main script to process MFCCs from a list of file paths
     print("Processing MFCCs input...")

@@ -47,6 +47,26 @@ def get_qconfig8(bits_w,bits_a):
             qscheme=torch.per_tensor_symmetric
         )
     )
+def get_qconfig8_sign(bits_w,bits_a):
+    qmina_signed = -2**(bits_a-1)
+    qmaxa_signed = 2**(bits_a-1) - 1
+    qminw_signed = -2**(bits_w-1)
+    qmaxw_signed = 2**(bits_w-1) - 1
+
+    return quant.QConfig(
+        activation=quant.FakeQuantize.with_args(
+            observer=quant.MovingAverageMinMaxObserver,
+            quant_min=qmina_signed, quant_max=qmaxa_signed,
+            dtype=torch.qint8,
+            qscheme=torch.per_tensor_symmetric
+        ),
+        weight=quant.FakeQuantize.with_args(
+            observer=quant.MovingAverageMinMaxObserver,
+            quant_min=qminw_signed, quant_max=qmaxw_signed,
+            dtype=torch.qint8,
+            qscheme=torch.per_tensor_symmetric
+        )
+    )
 def get_qconfig16(bits):
     qmax = 2**bits - 1
     qmin_signed = -2**(bits-1)
@@ -149,7 +169,7 @@ def parameter_generation():
     'data_dir':'../dataset',
     'data_url':'https://storage.googleapis.com/download.tensorflow.org/data/speech_commands_v0.02.tar.gz',
     'epochs':40,
-    'batch_size':8,
+    'batch_size':4,
     'silence_percentage':0.0,
     'unknown_percentage':0.0,
     'validation_percentage':10.0,
@@ -179,32 +199,36 @@ quant_fuse_list = [
             ["ConvBNReLU9.0","ConvBNReLU9.1","ConvBNReLU9.2"],
         ]
 qat_configs = {
-    "ConvBNReLU1.0": get_qconfig8(4,4),
-    "ConvBNReLU2.0": get_qconfig8(4,4),
-    "ConvBNReLU3.0": get_qconfig8(4,4),
-    "ConvBNReLU4.0": get_qconfig8(4,4),
-    "ConvBNReLU5.0": get_qconfig8(4,4),
-    "ConvBNReLU6.0": get_qconfig8(4,4),
-    "ConvBNReLU7.0": get_qconfig8(4,4),
-    "ConvBNReLU8.0": get_qconfig8(4,4),
-    "ConvBNReLU9.0": get_qconfig8(4,16),
-    "fc1": get_qconfig8(8,16),
+    "ConvBNReLU1.0": get_qconfig8(8,8),
+    "ConvBNReLU2.0": get_qconfig8(8,8),
+    "ConvBNReLU3.0": get_qconfig8(8,8),
+    "ConvBNReLU4.0": get_qconfig8(8,8),
+    "ConvBNReLU5.0": get_qconfig8(8,8),
+    "ConvBNReLU6.0": get_qconfig8(8,8),
+    "ConvBNReLU7.0": get_qconfig8(8,8),
+    "ConvBNReLU8.0": get_qconfig8(8,8),
+    "ConvBNReLU9.0": get_qconfig8(8,8),
+    "fc1": get_qconfig8_sign(8,8),
 }
 
-STEP_DO_QAT_TRAIN               = True
-STEP_DO_TRAIN                   = True
-STEP_DO_EXPORT_MODEL            = False
-STEP_DO_PROCESS_MFCCS           = False
-CHECKPOINT_PATH                 = 'none'
+STEP_DO_QAT_TRAIN               = False
+STEP_DO_TRAIN                   = False
+STEP_DO_EXPORT_MODEL_FLOAT      = False
+STEP_DO_EXPORT_MODEL_FIXED      = True
+STEP_DO_PROCESS_MFCCS_FLOAT     = False
+STEP_DO_PROCESS_MFCCS_FIXED     = False # not implemented
+CHECKPOINT_PATH_FLOAT           = 'none'
+CHECKPOINT_PATH_FIXED           = './run_qat_88_48_48_48_88_88_bs_4_ACTUAL_split_3/model_acc_91.40625_03_03_2025_184950.pth'
 CLASSES                         = 10
-NOT_PRETRAIN_BUT_OL_WORD_LIMIT  = 5
-HYPERPARAMETER_SETUP            = 'qat_44_44_44_44_416_816_bs_8_split_5_and_above'
+NOT_PRETRAIN_BUT_OL_WORD_LIMIT  = 3
+HYPERPARAMETER_SETUP            = 'qat_88_88_88_88_88_88_bs_8_ACTUAL_split_3'
 CHECKPOINT_SAVE_PATH            = './run_' + HYPERPARAMETER_SETUP
-EXPORT_OUTPUT_DIR_PATH_FLOAT    = '../simulation/exported_models_float/'
-EXPORT_OUTPUT_DIR_PATH_FIXED    = '../simulation/exported_models_fixed/'
+EXPORT_OUTPUT_DIR_PATH_FLOAT    = '../simulation_online/'
+EXPORT_OUTPUT_DIR_PATH_FIXED    = '../simulation_online/'
 EXPORT_OUTPUT_NAME_FLOAT        = 'export_params_nclass_' + str(CLASSES) + '.csv'
 EXPORT_OUTPUT_NAME_FIXED        = 'qat_export_params_nclass_' + str(CLASSES) + '.csv'
 EXPORT_OUTPUT_PATH_FLOAT        = EXPORT_OUTPUT_DIR_PATH_FLOAT + EXPORT_OUTPUT_NAME_FLOAT
+EXPORT_OUTPUT_PATH_FIXED        = EXPORT_OUTPUT_DIR_PATH_FIXED + EXPORT_OUTPUT_NAME_FIXED
 MFCCS_INPUT_PATHS               = ['../dataset_mfccs_raw/yes/d21fd169_nohash_0',
                                     '../dataset_mfccs_raw/yes/d21fd169_nohash_1']  # Path(s) to MFCCs binary file
 MFCCS_OUTPUT_PATH               = './output_mfccs.bin' # Path to save model output
