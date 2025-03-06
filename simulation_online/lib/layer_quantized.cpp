@@ -101,7 +101,7 @@ layer_q::layer_q(LayerTypes     layer_type,
         }
         case LayerTypes::dense: {
             this->layer_type = LayerTypes::dense;
-    this->layer_bw_rescale_value = (layer_quant_params.scale_weight*(1.0f/255.0f))/DENSE_BW_OUTPUT_SCALE;
+            this->layer_bw_rescale_value = (layer_quant_params.scale_weight*(1.0f/255.0f))/DENSE_BW_OUTPUT_SCALE;
 
             //(0.008598939515650272*(1/256)
             this->layer_dense_hypr_params.size_in = this->layer_dim_size_in.full / this->layer_dim_size_in.batch;
@@ -255,7 +255,7 @@ void layer_q::forward(int32_t *layer_input, int32_t *labels_input) {
             break;
         }
         case LayerTypes::dense: {
-
+            
             dense_layer_fixed(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_biases.data(),
                         this->layer_dense_hypr_params.size_in, this->layer_dense_hypr_params.size_out, this->layer_dim_size_out.batch, this->layer_rescale_value, this->layer_quant_params.activation_bits);
 
@@ -481,9 +481,13 @@ std::vector<int32_t> layer_q::get_weights() {
 std::vector<int32_t> layer_q::get_biases() {
     return this->layer_biases;
 }
+void layer_q::set_dense_bw_output_scale(float scale) {
+    this->layer_bw_rescale_value = (this->layer_quant_params.scale_weight*(1.0f/255.0f))/scale;
+}
 LayerTypes layer_q::get_layer_type() {
     return this->layer_type;
 }
+
 std::vector<int32_t> layer_q::get_layer_bn_means() {
     return this->layer_bn_means;
 }

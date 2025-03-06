@@ -41,6 +41,7 @@ public:
     quant_param_t get_qparams();
     std::vector<int32_t> get_weights();
     std::vector<int32_t> get_biases();
+    void set_dense_bw_output_scale(float scale);
     std::vector<int32_t> get_layer_bn_means();
     std::vector<int32_t> get_layer_bn_variances();
     LayerTypes get_layer_type();

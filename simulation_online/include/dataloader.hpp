@@ -20,6 +20,7 @@ private:
     std::vector<uint32_t>           dataloader_pick_list;
 
     uint16_t dataloader_total_size;
+    bool do_shuffle;
     uint16_t dataloader_train_size;
     uint16_t dataloader_validation_size;
     uint8_t  dataloader_batch_size;
@@ -29,7 +30,7 @@ private:
     std::vector<int32_t> shuffle_vector(std::vector<int32_t> vector);
 public:
     
-    dataloader(std::vector<std::string> words, std::string speaker_id, uint8_t dataloader_batch_size = 1, float dataloader_train_split = 0.9, std::string dataset_path = "../dataset_mfccs_raw/");
+    dataloader(std::vector<std::string> words, std::string speaker_id, uint8_t dataloader_batch_size = 1, float dataloader_train_split = 0.9, std::string dataset_path = "../dataset_mfccs_raw/", bool do_shuffle = true);
     ~dataloader();
 
 
@@ -54,6 +55,10 @@ public:
     std::tuple<std::vector<std::vector<int32_t>>,std::vector<uint8_t>> get_validation_set_fixed();
     void set_train_set(std::vector<std::vector<int32_t>>);
     void set_validation_set(std::vector<std::vector<int32_t>>);
+
+    // Both
+    std::tuple<std::tuple<std::vector<int32_t>,std::vector<uint8_t>>, std::tuple<std::vector<float>,std::vector<uint8_t>>> get_batch_fixed_and_float();
+
 };
 
 

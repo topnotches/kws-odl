@@ -19,7 +19,7 @@ TEST_EXEC = $(patsubst $(TEST_DIR)/%.cpp, $(BIN_DIR)/%, $(TEST_SRCS))
 # Targets
 MAIN_EXEC = $(BIN_DIR)/app
 
-.PHONY: all clean tests sandbox float
+.PHONY: all clean tests sandbox float finetune_dense_scale
 
 all: $(MAIN_EXEC) tests
 
@@ -36,6 +36,13 @@ float: $(SRC_DIR)/get_online_perf_float.cpp $(LIB_SRCS) $(HEADERS)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -o $(BIN_DIR)/get_online_perf_float $(SRC_DIR)/get_online_perf_float.cpp $(LIB_SRCS)
 	@echo "Running float model simulation..."
 	@./$(BIN_DIR)/get_online_perf_float || echo "Float model simulation execution failed with exit code $$?"
+	
+finetune_dense_scale: $(SRC_DIR)/finetune_dense_scale.cpp $(LIB_SRCS) $(HEADERS)
+	mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -o $(BIN_DIR)/finetune_dense_scale $(SRC_DIR)/finetune_dense_scale.cpp $(LIB_SRCS)
+	@echo "Running finetune_dense_scale..."
+	@./$(BIN_DIR)/finetune_dense_scale || echo "Finetune gradient scale execution failed with exit code $$?"
+
 sandbox: $(SRC_DIR)/sandbox.cpp $(LIB_SRCS) $(HEADERS)
 	mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -o $(BIN_DIR)/sandbox $(SRC_DIR)/sandbox.cpp $(LIB_SRCS)

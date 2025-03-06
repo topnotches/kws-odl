@@ -7,7 +7,8 @@
 #define DO_FULL_BATCHNORM_LAYER_ANALYSIS false 
 
 
-#define DENSE_BW_OUTPUT_SCALE 5.67463019e-8
+
+extern volatile double DENSE_BW_OUTPUT_SCALE;
 
 /***************************/
 /* MODEL FORMAT PARAMETERS */
@@ -90,8 +91,8 @@ typedef struct quant_param_t {
 /* SIMULATION RUN PARAMETERS */
 /*****************************/
 #define NUMBER_OF_CLASSES   12
-#define EPOCHS              10000
-#define TOTAL_RUNS          5
+#define EPOCHS              4000
+#define TOTAL_RUNS          3
 #define TRAIN_VAL_SPLIT     0.7
 #define BATCH_SIZE          1
 #define LAYER_SELECT        28
