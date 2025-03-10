@@ -1,0 +1,11 @@
+mkdir -p bin
+g++  -std=c++17 -Wall -Wextra -O3 -fopenmp -w -Iinclude -o bin/sandbox src/sandbox.cpp lib/avgpool2d_layer.cpp lib/batch_norm_layer.cpp lib/conv_layer.cpp lib/cross_entropy_loss_layer.cpp lib/dataloader.cpp lib/dense_layer.cpp lib/dw_conv_layer.cpp lib/fusion_layer.cpp lib/layer_analyzer.cpp lib/layer.cpp lib/layer_quantized.cpp lib/misc_utils.cpp lib/model_utils.cpp lib/quantization_utils.cpp lib/relu_layer.cpp lib/softmax_layer.cpp
+Running sandbox...
+12
+Splitting dataset into train/validation: 
+Total size:      70 
+Train size:      49 
+Validation size: 21 
+Batch size:      1 
+q234q3r
+Sandbox execution failed with exit code 139

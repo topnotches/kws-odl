@@ -13,6 +13,7 @@
 namespace fs = std::filesystem;
 
 dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::string dataloader_speaker_id, uint8_t dataloader_batch_size, float dataloader_train_split, std::string dataloader_dataset_path, bool do_shuffle) {
+    //do_shuffle = false;
 
     this->do_shuffle = do_shuffle;
     uint8_t label = 0;
@@ -25,7 +26,6 @@ dataloader::dataloader(std::vector<std::string> dataloader_target_words, std::st
     this->dataloader_inputs_validation_fixed = {};
     this->dataloader_labels_validation = {};
     this->dataloader_pick_list = {};
-    
     std::vector<std::string>        temp_dataloader_path_names;
     std::vector<std::vector<float>> temp_dataloader_inputs_float;
     std::vector<std::vector<int32_t>> temp_dataloader_inputs_fixed;
@@ -204,9 +204,13 @@ void dataloader::print_progress_bar(uint32_t epoch, float error) {
     std::cout << std::endl;
 }
 
+uint16_t dataloader::get_train_size() {
+    return this->dataloader_train_size;
+}
 uint16_t dataloader::get_validation_size() {
     return this->dataloader_validation_size;
 }
+
 bool dataloader::get_training_pool_empty() {
     if (this->dataloader_batch_size <= this->dataloader_pick_list.size()) {
         return 1;

@@ -13,7 +13,9 @@ extern volatile double DENSE_BW_OUTPUT_SCALE;
 /***************************/
 /* MODEL FORMAT PARAMETERS */
 /***************************/
-#define DO_FLOAT true
+// Requantization select and compensation order
+#define USE_SHIFT_REQUANT                 true
+#define DO_THIRD_ORDER_SHIFT_REQUANT      true 
 
 typedef struct quant_param_t {
     double scale_in = 1;
@@ -25,10 +27,10 @@ typedef struct quant_param_t {
 } quant_param;
 
 // Layer 10, Fusion
-#define LAYER_10_QPARAM_WEIGHT_BITS 20
+#define LAYER_10_QPARAM_WEIGHT_BITS 21
 #define LAYER_10_QPARAM_ACTIVA_BITS 8
 #define LAYER_10_QPARAM_GRADNT_BITS LAYER_10_QPARAM_WEIGHT_BITS
-#define FUSION_QPARAM_WEIGHT_SCALE_SHIFT LAYER_10_QPARAM_WEIGHT_BITS-1 // FIXME & TODO REAL NUMBER BRR
+#define FUSION_QPARAM_WEIGHT_SCALE_SHIFT LAYER_10_QPARAM_WEIGHT_BITS-2 // FIXME & TODO REAL NUMBER BRR
 
 // QUANTIZATION PARAMETERS FOR THE REST OF THE LAYERS:
 
@@ -63,7 +65,7 @@ typedef struct quant_param_t {
 #define LAYER_6_QPARAM_GRADNT_BITS 1
 
 // Layer 7, Pointwise Convolution
-#define LAYER_7_QPARAM_WEIGHT_BITS 8
+#define LAYER_7_QPARAM_WEIGHT_BITS 8 
 #define LAYER_7_QPARAM_ACTIVA_BITS 8
 #define LAYER_7_QPARAM_GRADNT_BITS 1
 
@@ -91,8 +93,8 @@ typedef struct quant_param_t {
 /* SIMULATION RUN PARAMETERS */
 /*****************************/
 #define NUMBER_OF_CLASSES   12
-#define EPOCHS              4000
-#define TOTAL_RUNS          3
+#define EPOCHS              20000
+#define TOTAL_RUNS          1
 #define TRAIN_VAL_SPLIT     0.7
 #define BATCH_SIZE          1
 #define LAYER_SELECT        28

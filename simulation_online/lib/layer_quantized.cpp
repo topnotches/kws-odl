@@ -1,4 +1,3 @@
-
 #include "layer_quantized.hpp"
 #include "defs.hpp"
 #include <iostream>
@@ -448,12 +447,13 @@ void layer_q::adam_optimize(const int32_t* layer_adam_gradients_backprop, const 
         float v_hat = (this->layer_adam_velocity[index] / bias_correction2);
         
         float weight_float = static_cast<float>(this->layer_weights[index]);
-        weight_float -= pow(2,LAYER_10_QPARAM_WEIGHT_BITS-1)*this->layer_adam_learning_rate * (m_hat / (sqrt(v_hat) + this->layer_adam_epsilon));
-        //std::cout << (this->layer_adam_learning_rate * m_hat / (sqrt(v_hat) + this->layer_adam_epsilon))<<std::endl;
+        weight_float -= pow(2,FUSION_QPARAM_WEIGHT_SCALE_SHIFT)*this->layer_adam_learning_rate * (m_hat / (sqrt(v_hat) + this->layer_adam_epsilon));
+        //std::cout << pow(2,LAYER_10_QPARAM_WEIGHT_BITS-1)*this->layer_adam_learning_rate * (m_hat / (sqrt(v_hat) + this->layer_adam_epsilon)) <<std::endl;
         this->debug_float.push_back(weight_float);
         
        //s std::cout <<  std::to_string( pow(2,LAYER_10_QPARAM_WEIGHT_BITS)*this->layer_adam_learning_rate * (m_hat / (sqrt(v_hat) + this->layer_adam_epsilon))) << std::endl;
-        this->layer_weights[index] = static_cast<int32_t>(weight_float);
+        this->layer_weights[index] = requantize_shift(static_cast<int32_t>(weight_float), 1.0f, LAYER_10_QPARAM_WEIGHT_BITS, false);
+        
     }
 
     this->layer_adam_time_step++;   

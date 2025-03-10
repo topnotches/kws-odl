@@ -144,8 +144,9 @@ int  main() {
                     float correct_validation_accuracies_threshold_85 = 0;
                     float correct_validation_accuracies_threshold_90 = 0;
                     float correct_validation_accuracies_threshold_95 = 0;
+                    std::vector<float> fusion_weights = {};
 
-                    // Good luck reading this shit
+                    // Good luck reading this stuff
                     for (uint val_index = 0; val_index < dataloader.get_validation_size()/BATCH_SIZE; val_index++) {
                         // Dummy read for compiler e
                         auto vlabel = std::get<1>(myvalset)[0];
@@ -249,11 +250,12 @@ int  main() {
             
             
             // Write CSV header
-            file << "Epoch,Sample_Count,Val_Loss,Val_Acc_Max,Val_Acc_Thr_60,Val_Acc_Thr_65,Val_Acc_Thr_70,Val_Acc_Thr_75,Val_Acc_Thr_80,Val_Acc_Thr_85,Val_Acc_Thr_90,Val_Acc_Thr_95" << std::endl;
+            file << "Epoch,Sample_Count_Train,Sample_Count_Valid,Val_Loss,Val_Acc_Max,Val_Acc_Thr_60,Val_Acc_Thr_65,Val_Acc_Thr_70,Val_Acc_Thr_75,Val_Acc_Thr_80,Val_Acc_Thr_85,Val_Acc_Thr_90,Val_Acc_Thr_95" << std::endl;
 
             // Write error messages and codes
             for (size_t i = 0; i < all_validation_error.size(); ++i) {
                 file << i <<
+                "," << dataloader.get_train_size() <<
                 "," << dataloader.get_validation_size() <<
                 "," << all_validation_error[i] <<
                 "," << all_validation_accuracies_max[i] <<
@@ -264,8 +266,15 @@ int  main() {
                 "," << all_validation_accuracies_threshold_80[i] <<
                 "," << all_validation_accuracies_threshold_85[i] <<
                 "," << all_validation_accuracies_threshold_90[i] <<
-                "," << all_validation_accuracies_threshold_95[i] <<
-                std::endl;
+                "," << all_validation_accuracies_threshold_95[i];
+                
+                file << "\"[ "; 
+                for (auto fusion_weight : model[19].get_weights()){
+                    file << fusion_weight << " ";
+                }
+                file << "]\""; 
+
+                file << std::endl;
             }
 
             // Close file

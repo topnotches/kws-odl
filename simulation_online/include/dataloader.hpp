@@ -36,6 +36,7 @@ public:
 
     std::vector<std::string> get_path_names_train();
     bool get_training_pool_empty();
+    uint16_t get_train_size();
     uint16_t get_validation_size();
     void reset_training_pool();
     void print_progress_bar(uint32_t epoch, float error = 0.1);
