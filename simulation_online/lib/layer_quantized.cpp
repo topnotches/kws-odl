@@ -39,6 +39,7 @@ layer_q::layer_q(LayerTypes     layer_type,
     this->layer_bw_rescale_value = (layer_quant_params.scale_weight*layer_quant_params.scale_in)/layer_quant_params.scale_out;
     this->layer_quant_params = layer_quant_params;
     this->layer_adam_beta_scale = 1/((int)pow(2,this->layer_adam_beta_scale_shifts)+0.5);
+    this->layer_sgd_momentum_scale = 1/((int)pow(2,this->layer_sgd_momentum_scale_shifts)+0.5);
     this->layer_dim_size_in = layer_dim_size_in; // {width, height, depth, batch_size}
 
     switch (layer_type) { 
@@ -215,6 +216,9 @@ layer_q::layer_q(LayerTypes     layer_type,
             this->layer_adam_velocity.resize(this->layer_weights.size());
             std::fill(this->layer_adam_velocity.begin(), this->layer_adam_velocity.end(), 0); 
 
+            this->layer_sgd_velocity.resize(this->layer_weights.size());
+            std::fill(this->layer_sgd_velocity.begin(), this->layer_sgd_velocity.end(), 0); 
+
             this->layer_gradient_outputs.resize(this->layer_dim_size_in.full);
 
 
@@ -365,7 +369,11 @@ void layer_q::backward(int32_t *layer_gradient_input) {
                                         this->layer_dim_size_out.batch,
                                         this->layer_bw_rescale_value,
                                         this->layer_quant_params.gradient_bits);
-            adam_optimize(this->layer_gradient_outputs.data(), this->layer_dim_size_out.width);
+#if DO_SGD_ELSE_ADAM
+        stochastic_gradient_descent_optimize(this->layer_gradient_outputs.data(), this->layer_dim_size_out.width);
+#else
+        adam_optimize(this->layer_gradient_outputs.data(), this->layer_dim_size_out.width);
+#endif
             break;
         }
         default: {
@@ -459,6 +467,37 @@ void layer_q::adam_optimize(const int32_t* layer_adam_gradients_backprop, const 
     this->layer_adam_time_step++;   
 }
 
+void layer_q::stochastic_gradient_descent_optimize(const int32_t* layer_stochastic_gradient_descent_gradients_backprop, const uint32_t layer_stochastic_gradient_descent_size) {
+    std::vector<int32_t> avg_gradients(layer_stochastic_gradient_descent_size, 0);
+
+    for (uint32_t feature_index = 0; feature_index < layer_stochastic_gradient_descent_size; feature_index++) {
+        int32_t sum = 0;
+        for (uint32_t batch_index = 0; batch_index < this->layer_dim_size_in.batch; batch_index++) {
+            sum += layer_stochastic_gradient_descent_gradients_backprop[feature_index * this->layer_dim_size_in.batch + batch_index];
+        }
+        avg_gradients[feature_index] = sum / this->layer_dim_size_in.batch;
+
+    }
+
+
+    for (uint32_t index = 0; index < layer_stochastic_gradient_descent_size; index++) {
+
+        // Compute velocity
+        this->layer_sgd_velocity[index] = requantize_shift(this->layer_sgd_momentum * this->layer_sgd_velocity[index], this->layer_sgd_momentum_scale, this->layer_quant_params.weight_bits, false)
+                                    - requantize_shift(this->layer_sgd_learning_rate * avg_gradients[index], this->layer_sgd_momentum_scale, this->layer_quant_params.weight_bits, false);
+        
+
+        // Update gradient
+#if DO_NESTEROV
+        this->layer_weights[index] += requantize_shift(this->layer_sgd_momentum * this->layer_sgd_velocity[index], this->layer_sgd_momentum_scale, this->layer_quant_params.weight_bits, false)
+        - requantize_shift(this->layer_sgd_learning_rate * avg_gradients[index], this->layer_sgd_momentum_scale, this->layer_quant_params.weight_bits, false); 
+#else
+        this->layer_weights[index] += this->layer_sgd_velocity[index]; 
+#endif
+    }
+
+    this->layer_adam_time_step++;   
+}
 // getters
 double layer_q::get_rescale_value() {
     return this->layer_rescale_value;

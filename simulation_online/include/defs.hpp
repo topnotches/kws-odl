@@ -14,8 +14,14 @@ extern volatile double DENSE_BW_OUTPUT_SCALE;
 /* MODEL FORMAT PARAMETERS */
 /***************************/
 // Requantization select and compensation order
-#define USE_SHIFT_REQUANT                 true
-#define DO_THIRD_ORDER_SHIFT_REQUANT      true 
+#define USE_SHIFT_REQUANT               true
+#define DO_SECOND_ORDER_SHIFT_REQUANT   true 
+#define DO_THIRD_ORDER_SHIFT_REQUANT    true 
+
+// Optimizer select...
+#define DO_SGD_ELSE_ADAM    true
+#define DO_NESTEROV         true
+
 
 typedef struct quant_param_t {
     double scale_in = 1;
@@ -27,7 +33,7 @@ typedef struct quant_param_t {
 } quant_param;
 
 // Layer 10, Fusion
-#define LAYER_10_QPARAM_WEIGHT_BITS 21
+#define LAYER_10_QPARAM_WEIGHT_BITS 20
 #define LAYER_10_QPARAM_ACTIVA_BITS 8
 #define LAYER_10_QPARAM_GRADNT_BITS LAYER_10_QPARAM_WEIGHT_BITS
 #define FUSION_QPARAM_WEIGHT_SCALE_SHIFT LAYER_10_QPARAM_WEIGHT_BITS-2 // FIXME & TODO REAL NUMBER BRR
@@ -93,8 +99,8 @@ typedef struct quant_param_t {
 /* SIMULATION RUN PARAMETERS */
 /*****************************/
 #define NUMBER_OF_CLASSES   12
-#define EPOCHS              20000
-#define TOTAL_RUNS          1
+#define EPOCHS              2000
+#define TOTAL_RUNS          4
 #define TRAIN_VAL_SPLIT     0.7
 #define BATCH_SIZE          1
 #define LAYER_SELECT        28

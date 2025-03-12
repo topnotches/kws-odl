@@ -112,6 +112,7 @@ int  main() {
             std::vector<float> all_validation_accuracies_threshold_85;
             std::vector<float> all_validation_accuracies_threshold_90;
             std::vector<float> all_validation_accuracies_threshold_95;
+            std::vector<std::vector<int32_t>> all_weight_checkpoints;
             std::vector<std::vector<int32_t>> all_avg_train_activations;
             std::vector<std::vector<int32_t>> all_avg_validation_activations;
             
@@ -416,6 +417,7 @@ int  main() {
                     all_validation_accuracies_threshold_85.push_back(correct_validation_accuracies_threshold_85/total);
                     all_validation_accuracies_threshold_90.push_back(correct_validation_accuracies_threshold_90/total);
                     all_validation_accuracies_threshold_95.push_back(correct_validation_accuracies_threshold_95/total);
+                    all_weight_checkpoints.push_back(model[19].get_weights());
                     dataloader.reset_training_pool();
                     //std::cout << std::endl; // New line between epochs
                     if (i == 0) {
@@ -424,7 +426,6 @@ int  main() {
                    //     std::cout << "CHANGED_VALIDATION_SET" << std::endl;
 
                     }
-                    
                     
                     i++;
                 }
@@ -437,7 +438,7 @@ int  main() {
             
 
             // Write CSV header
-            file << "Epoch,Sample_Count_Train,Sample_Count_Valid,Val_Loss,Val_Acc_Max,Val_Acc_Thr_60,Val_Acc_Thr_65,Val_Acc_Thr_70,Val_Acc_Thr_75,Val_Acc_Thr_80,Val_Acc_Thr_85,Val_Acc_Thr_90,Val_Acc_Thr_95" << std::endl;
+            file << "Epoch,Sample_Count_Train,Sample_Count_Valid,Val_Loss,Val_Acc_Max,Val_Acc_Thr_60,Val_Acc_Thr_65,Val_Acc_Thr_70,Val_Acc_Thr_75,Val_Acc_Thr_80,Val_Acc_Thr_85,Val_Acc_Thr_90,Val_Acc_Thr_95,Fusion_Weights" << std::endl;
 
             // Write error messages and codes
             for (size_t i = 0; i < all_validation_error.size(); ++i) {
@@ -455,8 +456,8 @@ int  main() {
                 "," << all_validation_accuracies_threshold_90[i] <<
                 "," << all_validation_accuracies_threshold_95[i];
                 
-                file << "\"[ "; 
-                for (auto fusion_weight : model[19].get_weights()){
+                file << ",\"[ "; 
+                for (auto fusion_weight : all_weight_checkpoints[i]){
                     file << fusion_weight << " ";
                 }
                 file << "]\""; 

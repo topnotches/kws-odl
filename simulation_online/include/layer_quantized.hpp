@@ -22,12 +22,17 @@ private:
     float layer_adam_learning_rate = 1e-5;
     float layer_adam_beta_scale;
     const uint8_t layer_adam_beta_scale_shifts = 7;
-    const int32_t layer_adam_beta1 = 115;
-    const int32_t layer_adam_beta2 = 127;
+    const int32_t layer_adam_beta1 = 115; // 0.9 I think
+    const int32_t layer_adam_beta2 = 127; // 0.99 I think
     std::vector<int32_t> layer_adam_momentum;
     std::vector<int32_t> layer_adam_velocity;
+    float layer_sgd_learning_rate = 1; // Just a bit above 1e-5 for 18 bits
     float layer_adam_epsilon = 1e-8;
     uint32_t layer_adam_time_step = 1;
+    float layer_sgd_momentum_scale;
+    const uint8_t layer_sgd_momentum_scale_shifts = 7;
+    const int32_t layer_sgd_momentum = 127; // 0.99 I think
+    std::vector<int32_t> layer_sgd_velocity;
 public:
     std::vector<float> debug_float;
     std::vector<int32_t> debug_fixed;
@@ -58,6 +63,7 @@ public:
     void forward(int32_t *layer_input, int32_t *labels_input = NULL);
     void backward(int32_t *layer_gradient_input);
     void adam_optimize(const int32_t* layer_adam_gradients_backprop, const uint32_t layer_adam_size);
+    void stochastic_gradient_descent_optimize(const int32_t* layer_stochastic_gradient_descent_gradients_backprop, const uint32_t layer_stochastic_gradient_descent_size);
     void print_layer_type();
 };
 

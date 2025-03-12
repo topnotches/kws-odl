@@ -16,8 +16,6 @@ int32_t requantize_shift(int32_t large_number, const double rescale_value, const
 
     float shift = log2(rescale_value);
 
-
-
     if (shift < 0.0f) {
         // my_return = static_cast<int32_t>(rescale_value*static_cast<double>(large_number));
         uint16_t shift_round = static_cast<uint16_t>(ceil(fabs(shift)+0.1f));
@@ -33,8 +31,12 @@ int32_t requantize_shift(int32_t large_number, const double rescale_value, const
         int32_t result_first_order = 0;
         int32_t result_second_order = 0;
         int32_t result_third = 0;
+
         result_first_order = (large_number >> shift_round);
+
+#if DO_SECOND_ORDER_SHIFT_REQUANT
         result_second_order = (large_number >> shift_round + shift_round_second_order);
+#endif
 
 #if DO_THIRD_ORDER_SHIFT_REQUANT
         result_third = (large_number >> shift_round + shift_round_second_order + shift_round_third_order);
@@ -61,7 +63,7 @@ int32_t requantize_shift(int32_t large_number, const double rescale_value, const
         */
         my_return = shift_result;
     } else {
-         my_return = static_cast<int32_t>(rescale_value*static_cast<double>(large_number));
+        //my_return = static_cast<int32_t>(rescale_value*static_cast<double>(large_number));
         uint16_t shift_round = static_cast<uint16_t>(floor(fabs(shift)+0.1f));
         float fraction = fabs(shift) - (long)fabs(shift);
         float rescale_value_second_order =  fraction;
@@ -77,12 +79,15 @@ int32_t requantize_shift(int32_t large_number, const double rescale_value, const
         
         result_first_order  = (large_number << shift_round);
 
+#if DO_THIRD_ORDER_SHIFT_REQUANT
         if (shift_round != 0 && shift_round_second_order != 0)
             result_second_order = (large_number << shift_round - shift_round_second_order);
-    #if DO_THIRD_ORDER_SHIFT_REQUANT
+#endif
+    
+#if DO_THIRD_ORDER_SHIFT_REQUANT
         if (shift_round != 0 && shift_round_second_order != 0 && shift_round_second_order != 0)
             result_third        = (large_number << shift_round - shift_round_second_order - shift_round_third_order);
-    #endif
+#endif
         int32_t shift_result = result_first_order + result_second_order + result_third;
         
         my_return = shift_result;
