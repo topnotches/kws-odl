@@ -26,12 +26,12 @@ private:
     const int32_t layer_adam_beta2 = 127; // 0.99 I think
     std::vector<int32_t> layer_adam_momentum;
     std::vector<int32_t> layer_adam_velocity;
-    float layer_sgd_learning_rate = 1; // Just a bit above 1e-5 for 18 bits
     float layer_adam_epsilon = 1e-8;
     uint32_t layer_adam_time_step = 1;
     float layer_sgd_momentum_scale;
+    float layer_sgd_learning_rate = 2; // Just a bit above 1e-5 for 18 bits
     const uint8_t layer_sgd_momentum_scale_shifts = 7;
-    const int32_t layer_sgd_momentum = 127; // 0.99 I think
+    const int32_t layer_sgd_momentum = 120; // 0.9 I think
     std::vector<int32_t> layer_sgd_velocity;
 public:
     std::vector<float> debug_float;

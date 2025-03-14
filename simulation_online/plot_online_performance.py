@@ -4,7 +4,7 @@ import glob
 import numpy as np
 MINIMUM_VAL_SAMPS = 1
 # Get a list of all CSV files in the directory
-csv_files = glob.glob("./user_perf_logs/*.csv")
+csv_files = glob.glob("./user_perf_logs_softmaxfixed_export_run_qat_w4a8_bs128_spleq4/*.csv")
 
 # Check if any files were found
 if not csv_files:

@@ -7,12 +7,35 @@
 #define DO_FULL_BATCHNORM_LAYER_ANALYSIS false 
 
 
+/************************/
+/* MAGIC NUMBER REMOVAL */
+/************************/
+
+#define BIT_LENGTH          1
+#define DOS_LENGTH          2
+#define NIBBLE_LENGTH       4
+#define BYE_LENGTH          8
+#define HALFWORD_LENGTH     16
+#define WORD_LENGTH         32
+#define LONG_LENGTH         64
+
 
 extern volatile double DENSE_BW_OUTPUT_SCALE;
+
+
+
+/*****************************/
+/* IMPORT AND EXPORT DEFINES */
+/*****************************/
+
+#define MODEL_QUANT_PARAM_EXPORT_DIR_NAME  "fixed_export_run_qat_w4a8_bs128_spleq4"
+#define MODEL_ONELINE_SIM_RESULTS_DIR_PREFIX "user_perf_logs_softmax"
 
 /***************************/
 /* MODEL FORMAT PARAMETERS */
 /***************************/
+
+
 // Requantization select and compensation order
 #define USE_SHIFT_REQUANT               true
 #define DO_SECOND_ORDER_SHIFT_REQUANT   true 
@@ -20,8 +43,13 @@ extern volatile double DENSE_BW_OUTPUT_SCALE;
 
 // Optimizer select...
 #define DO_SGD_ELSE_ADAM    true
-#define DO_NESTEROV         true
+#define DO_NESTEROV         false
+ 
+// Fusion type select...
+#define DO_ADDITION_ELSE_WEIGHT_FUSION true
 
+// SoftMax type select...
+#define DO_SOFTMAX_SHIFT_ELSE_DIVISION true
 
 typedef struct quant_param_t {
     double scale_in = 1;
@@ -99,7 +127,7 @@ typedef struct quant_param_t {
 /* SIMULATION RUN PARAMETERS */
 /*****************************/
 #define NUMBER_OF_CLASSES   12
-#define EPOCHS              2000
+#define EPOCHS              1000
 #define TOTAL_RUNS          4
 #define TRAIN_VAL_SPLIT     0.7
 #define BATCH_SIZE          1
@@ -150,5 +178,6 @@ typedef struct tensor_dim_sizes_t {
     uint16_t depth = 0;
     uint16_t batch = 0;
 } tensor_dim_sizes;
+
 
 #endif

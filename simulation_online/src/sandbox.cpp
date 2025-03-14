@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <sstream>
+#include <filesystem>
 #include <vector>
 #include <numeric>
 #include <math.h>
@@ -61,6 +62,9 @@ auto load_batch_from_paths(std::vector<std::string> paths) {
 
 int  main() {
     std::vector<std::string> all_user_ids =  {"4cee0c60", "7846fd85", "471a0925", "2da58b32", "f5341341", "ed032775", "fa52ddf6", "97f4c236", "72242187", "3e31dffe", "a77fbcfd", "d3831f6a", "3b195250", "24befdb3", "94d370bf", "9aa21fa9", "eb0676ec", "4e6902d0", "42a99aec", "d9aa8c90", "3bfd30e6", "953fe1ad", "1496195a", "f9643d42", "c4e00ee9", "8b25410a", "ace072ba", "122c5aa7", "cd85758f", "ca4912b6", "4a1e736b", "cb72dfb6", "b528edb3", "70a00e98", "b5552931", "51c5601d", "28e47b1a", "2fee065a", "1dc86f91", "a045368c", "a7200079", "fc3ba625", "333784b7", "7213ed54", "676f8138", "ad63d93c", "beb458a4", "ccca5655", "890cc926", "d070ea86", "6727b579", "bbd0bbd0", "eeaf97c3", "472b8045", "71d0ded4", "f5626af6", "3c257192", "8134f43f", "e4be0cf6", "195c120a", "f822b9bf", "8eb4a1bf", "cd671b5f", "617de221", "c22d3f18", "888a0c49", "a04817c2", "69a1a79f", "b76f6088", "a05a90c1", "72e382bd", "a16013b7", "322d17d3", "5170b77f", "8e05039f", "686d030b", "21832144", "4c3cddb8", "9886d8bf", "6565a81d", "1b4c9b89", "18e910f4", "8dc18a75", "87d5e978", "b97c9f77", "9e92ef0c", "c9b653a0", "179a61b7", "10ace7eb", "92a9c5e6", "3bc21161", "fb8c31a9", "fbb56351", "eaa83485", "c39703ec", "c948d727", "85851131", "b69002d4", "61ab8fbc", "61e2f74f", "834f03fe", "a9ca1818", "0137b3f4", "e41a903b", "c79159aa", "b0ae6326", "fbf3dd31", "28ed6bc9", "964e8cfd", "06f6c194", "067f61e2", "0ff728b5", "5b09db89", "e1469561", "a929f9b9", "64df20d8", "42f81601", "499be02e", "c1e0e8e3", "c7dc7278", "02ade946", "dae01802", "ac9dee0e", "525eaa62", "e9bc5cc2", "099d52ad", "229978fd", "0132a06d", "7fb8d703", "773e26f7", "f68160c0", "617aeb6c", "56eb74ae", "9ff2d2f4", "e53139ad", "321aba74", "5cf1ecce", "f575faf3", "d278d8ef", "0ea9c8ce", "c0445658", "cd7f8c1b", "cb62dbf1", "37dca74f", "0717b9f6", "e11fbc6e"};
+    const std::string MODEL_VAR_QUANT_PARAM_EXPORT_DIR_NAME = MODEL_QUANT_PARAM_EXPORT_DIR_NAME;
+    const std::string MODEL_ONELINE_SIM_RESULTS_DIR_NAME = std::string(MODEL_ONELINE_SIM_RESULTS_DIR_PREFIX) + MODEL_QUANT_PARAM_EXPORT_DIR_NAME;
+    std::filesystem::create_directory(MODEL_ONELINE_SIM_RESULTS_DIR_NAME);
 
     #if DO_LAYER_ANALYSIS
 
@@ -69,9 +73,10 @@ int  main() {
 #endif
     for (auto uid : all_user_ids) {
         for (uint32_t run = 0; run < TOTAL_RUNS; run++) {
-            auto validation_errors_file_name = "./user_perf_logs/"+uid+"_run_"+ std::to_string(run) +".csv";
-//            std::string model_params_dir = "./fixed_export_run_qat_w4a8_start_w8a8_stop_w8a8_b128s3/";
-            std::string model_params_dir = "./fixed_export_run_qat_w4a8_bs128_spleq4/";
+
+            std::string model_params_dir = "./exported_models_fixed/" + MODEL_VAR_QUANT_PARAM_EXPORT_DIR_NAME + "/";
+            
+            auto validation_errors_file_name = "./" + MODEL_ONELINE_SIM_RESULTS_DIR_NAME + "/" + uid + "_run_" + std::to_string(run) + ".csv";
 
             std::vector<std::string> test_mfccs_path = {"../dataset_mfccs_raw/yes/d21fd169_nohash_0","../dataset_mfccs_raw/yes/d21fd169_nohash_0","../dataset_mfccs_raw/yes/d21fd169_nohash_1"};
             std::vector<float> input_mfccs = load_batch_from_paths(test_mfccs_path);
@@ -156,25 +161,26 @@ int  main() {
                     } else {
                         model[19].forward(std::get<0>(mybatch).data());
                         model[20].forward(model[19].layer_outputs.data());
+                        softmax.forward(model.back().layer_outputs.data());
+                        //softmax_float.forward(model_float.back().layer_outputs.data());
+    
+    
+                        std::vector<float> softmax_outputs;
+    
+                        for (auto q :  softmax.layer_outputs) {
+                            //std::cout << std::to_string(q) << std::endl;
+                            softmax_outputs.push_back(static_cast<float>(q));
+                        }
+                        for (auto o :  labels_onehot) {
+                            //std::cout << std::to_string(q) << std::endl;
+                            labels_onehot_float.push_back(static_cast<float>(o));
+                        }
+                        crossentropy.forward(softmax_outputs.data(), labels_onehot_float.data());
+                        softmax.backward(labels_onehot.data());
+                        model[20].backward(softmax.layer_gradient_outputs.data()); //dense
+                        model[19].backward(model[20].layer_gradient_outputs.data()); //fusion
                     }
-                    softmax.forward(model.back().layer_outputs.data());
-                    //softmax_float.forward(model_float.back().layer_outputs.data());
-
-
-                    std::vector<float> softmax_outputs;
-
-                    for (auto q :  softmax.layer_outputs) {
-                        //std::cout << std::to_string(q) << std::endl;
-                        softmax_outputs.push_back(static_cast<float>(q));
-                    }
-                    for (auto o :  labels_onehot) {
-                        //std::cout << std::to_string(q) << std::endl;
-                        labels_onehot_float.push_back(static_cast<float>(o));
-                    }
-                    crossentropy.forward(softmax_outputs.data(), labels_onehot_float.data());
-                    softmax.backward(labels_onehot.data());
-                    model[20].backward(softmax.layer_gradient_outputs.data()); //dense
-                    model[19].backward(model[20].layer_gradient_outputs.data()); //fusion
+               
                     if (i == 2) {
                        // assert (1==2);
                     }

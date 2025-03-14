@@ -200,16 +200,23 @@ layer_q::layer_q(LayerTypes     layer_type,
             break;
         }
         case LayerTypes::fusion: {
-            this->layer_bw_rescale_value = (layer_quant_params.scale_in*DENSE_BW_OUTPUT_SCALE)/layer_quant_params.scale_weight;
 
+#if DO_ADDITION_ELSE_WEIGHT_FUSION
+            this->layer_bw_rescale_value = (DENSE_BW_OUTPUT_SCALE)/layer_quant_params.scale_weight;            
+#else
+            this->layer_bw_rescale_value = (layer_quant_params.scale_in*DENSE_BW_OUTPUT_SCALE)/layer_quant_params.scale_weight;
+#endif
             this->layer_type = LayerTypes::fusion;
             this->layer_dim_size_out = this->layer_dim_size_in; 
             srand((unsigned)time(NULL));
             this->layer_outputs.resize(this->layer_dim_size_out.full);
             this->layer_dim_size_out.width = this->layer_dim_size_out.full / this->layer_dim_size_out.batch;
-            this->layer_weights.resize(this->layer_dim_size_out.width); 
-            std::fill(this->layer_weights.begin(), this->layer_weights.end(), (int)(pow(2, this->layer_quant_params.weight_bits-1) + 0.5)); 
-
+            this->layer_weights.resize(this->layer_dim_size_out.width);
+#if DO_ADDITION_ELSE_WEIGHT_FUSION
+            std::fill(this->layer_weights.begin(), this->layer_weights.end(), 0); // Fill with zeros if multiplication fusion
+#else
+            std::fill(this->layer_weights.begin(), this->layer_weights.end(), (int)(pow(2, this->layer_quant_params.weight_bits-1) + 0.5)); // Fill with ones if multiplication fusion
+#endif
             this->layer_adam_momentum.resize(this->layer_weights.size());
             std::fill(this->layer_adam_momentum.begin(), this->layer_adam_momentum.end(), 0); 
 
@@ -296,10 +303,15 @@ void layer_q::forward(int32_t *layer_input, int32_t *labels_input) {
             break;
         }
         case LayerTypes::fusion: {
+#if DO_ADDITION_ELSE_WEIGHT_FUSION
+            fusion_add_fixed(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_dim_size_out.width, this->layer_dim_size_out.batch, this->layer_rescale_value, this->layer_quant_params.activation_bits);
+#else
             fusion_mult_fixed(layer_input, this->layer_outputs.data(), this->layer_weights.data(), this->layer_dim_size_out.width, this->layer_dim_size_out.batch, this->layer_rescale_value, this->layer_quant_params.activation_bits);
             for (uint32_t i = 0; i < this->layer_dim_size_in.full; i ++) {
                 this->layer_inputs.push_back(layer_input[i]);
             }
+#endif
+
 
             break;
         }
@@ -362,13 +374,25 @@ void layer_q::backward(int32_t *layer_gradient_input) {
         }
         case LayerTypes::fusion: {
 
+#if DO_ADDITION_ELSE_WEIGHT_FUSION
+            fusion_add_backward_fixed(this->layer_gradient_outputs.data(), 
+                        layer_gradient_input, 
+                        this->layer_inputs.data(),
+                        this->layer_dim_size_out.width, 
+                        this->layer_dim_size_out.batch,
+                        this->layer_bw_rescale_value,
+                        this->layer_quant_params.gradient_bits);
+#else
             fusion_mult_backward_fixed(this->layer_gradient_outputs.data(), 
-                                        layer_gradient_input, 
-                                        this->layer_inputs.data(),
-                                        this->layer_dim_size_out.width, 
-                                        this->layer_dim_size_out.batch,
-                                        this->layer_bw_rescale_value,
-                                        this->layer_quant_params.gradient_bits);
+                        layer_gradient_input, 
+                        this->layer_inputs.data(),
+                        this->layer_dim_size_out.width, 
+                        this->layer_dim_size_out.batch,
+                        this->layer_bw_rescale_value,
+                        this->layer_quant_params.gradient_bits);
+#endif
+                
+
 #if DO_SGD_ELSE_ADAM
         stochastic_gradient_descent_optimize(this->layer_gradient_outputs.data(), this->layer_dim_size_out.width);
 #else
